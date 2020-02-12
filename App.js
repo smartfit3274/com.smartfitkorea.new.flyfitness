@@ -1,13 +1,19 @@
 import React from 'react';
 import {
-  Text,
+  View,
+  Text
 } from 'react-native';
-import styled from 'styled-components';
+import styled from 'styled-components/native';
 
-function App() {
+const MainText = styled.Text`
+  font-size:20;
+  color: red;
+`;
+
+export default function App() {
   return (
-    <Text>aaaa</Text>
+    <View>
+      <MainText>aaaa</MainText>
+    </View>
   );
 };
-
-export default App;
