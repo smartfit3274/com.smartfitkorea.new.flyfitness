@@ -16,6 +16,7 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import { CheckBox } from "react-native-elements";
+import {useNavigation} from 'react-navigation-hooks'
 
 const Container = styled.View`
   flex:1;
@@ -78,9 +79,16 @@ function TitleSectionComp(props) {
 }
 
 function CheckSectionComp() {
+
+  const { navigate } = useNavigation();
+
+  function agreeBtnPressed(){
+    navigate('Agree');
+  }  
+
   return (
   <SectionCheck>     
-    <CheckBox title='1조 센터 가입원칙 관련 사항에 대하여 동의합니다. { 약관보기 }'></CheckBox>
+    <CheckBox title='1조 센터 가입원칙 관련 사항에 대하여 동의합니다. { 약관보기 }' onPress={() => agreeBtnPressed()}>></CheckBox>
     <CheckBox title='2조 센터 사용관련 회원 준수사항에 대하여 동의합니다. {약관보기} '></CheckBox>
     <CheckBox title='3,4조 명의 변경 및 휴회(정지)적용에 대하여 이해하였습니다. {약관보기}'></CheckBox>
     <CheckBox title='5조 환불약정금(위약금10%) 및 환불금 지급방식에 대하여 동의합니다. {약관보기}'></CheckBox>
@@ -89,7 +97,11 @@ function CheckSectionComp() {
   )
 }
 
+
 export default function JoinScreen() {
+  
+  
+  
 
   return (  
       <ScrollView>
