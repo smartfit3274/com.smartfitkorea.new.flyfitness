@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Title,
@@ -81,18 +81,33 @@ function TitleSectionComp(props) {
 function CheckSectionComp() {
 
   const { navigate } = useNavigation();
+  const [check1, setCheck1] = useState(false);
+  const [check2, setCheck2] = useState(false);
+  const [check3, setCheck3] = useState(false);
+  const [check4, setCheck4] = useState(false);
+  const [check5, setCheck5] = useState(false);
 
-  function agreeBtnPressed(){
-    navigate('Agree');
+  function callback() {
+    console.log('TAG: callback fired');
+  }
+
+  function agreeBtnPressed(no){
+    
+    navigate('Agree',{no:no});
+
+    // console.log(1111);
+    // setCheck1(true);
+    console.log('TAG - aaaa');
+    console.log(no);
   }  
 
   return (
   <SectionCheck>     
-    <CheckBox title='1조 센터 가입원칙 관련 사항에 대하여 동의합니다. { 약관보기 }' onPress={() => agreeBtnPressed()}>></CheckBox>
-    <CheckBox title='2조 센터 사용관련 회원 준수사항에 대하여 동의합니다. {약관보기} '></CheckBox>
-    <CheckBox title='3,4조 명의 변경 및 휴회(정지)적용에 대하여 이해하였습니다. {약관보기}'></CheckBox>
-    <CheckBox title='5조 환불약정금(위약금10%) 및 환불금 지급방식에 대하여 동의합니다. {약관보기}'></CheckBox>
-    <CheckBox title='6조 영업시간 및 서비스 시간과 각종사고 책임범위에 대하여 동의합니다. {약관보기}'></CheckBox>    
+    <CheckBox title='1조 센터 가입원칙 관련 사항에 대하여 동의합니다. { 약관보기 }' onPress={()=>agreeBtnPressed('1')}  checked={check1} item="1"></CheckBox>
+    <CheckBox title='2조 센터 사용관련 회원 준수사항에 대하여 동의합니다. {약관보기} ' onPress={()=>agreeBtnPressed('2')}  checked={check2}></CheckBox>
+    <CheckBox title='3,4조 명의 변경 및 휴회(정지)적용에 대하여 이해하였습니다. {약관보기}' onPress={()=>agreeBtnPressed('3')}  checked={check3}></CheckBox>
+    <CheckBox title='5조 환불약정금(위약금10%) 및 환불금 지급방식에 대하여 동의합니다. {약관보기}' onPress={()=>agreeBtnPressed('5')}  checked={check4}></CheckBox>
+    <CheckBox title='6조 영업시간 및 서비스 시간과 각종사고 책임범위에 대하여 동의합니다. {약관보기}' onPress={()=>agreeBtnPressed('6')}  checked={check5}></CheckBox>    
   </SectionCheck>
   )
 }

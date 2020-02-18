@@ -14,11 +14,17 @@ const AppNavigator = createStackNavigator({
   //     title: 'SMART@PASS'
   //   })
   // },
-  // Join: {
-  //   screen: JoinScreen,
-  // },
+  Join: {
+    screen: JoinScreen,
+    navigationOptions: ({
+      title: '회원가입'
+    })       
+  },
   Agree: {
     screen: AgreeScreen,
+    navigationOptions: ({
+      title: '약관동의'
+    })    
   }, 
 }, 
 {    
