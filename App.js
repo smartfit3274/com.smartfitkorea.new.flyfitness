@@ -8,12 +8,12 @@ import JoinScreen from './components/JoinScreen';
 import AgreeScreen from './components/AgreeScreen';
 
 const AppNavigator = createStackNavigator({
-  // Home: {
-  //   screen: HomeScreen,
-  //   navigationOptions: ({
-  //     title: 'SMART@PASS'
-  //   })
-  // },
+  Home: {
+    screen: HomeScreen,
+    navigationOptions: ({
+      title: 'SMART@PASS'
+    })
+  },
   Join: {
     screen: JoinScreen,
     navigationOptions: ({
