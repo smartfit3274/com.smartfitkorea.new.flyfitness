@@ -82,7 +82,7 @@ const Logo = styled.Image`
 `;
 
 const TitleView = styled.View`
-  margin-top: 40px;
+  margin-top: 30px;
   align-items:center;
 
 `;

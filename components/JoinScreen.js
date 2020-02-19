@@ -25,11 +25,12 @@ const Container = styled.View`
 const TopContainer = styled.View`
   flex:1;
   width: 90%;
+  padding-bottom:30px;
 `;
 
 const BottomContainer = styled.View`
   height: 60px;
-  flex-direction:row;
+  flex-direction:row;  
 `;
 
 const MyTitle = styled.Text`
@@ -207,16 +208,18 @@ export default function JoinScreen(props) {
   return (  
         <Container>
           <TopContainer>
+            <ScrollView>
             <MyTitle>회원가입 (약관동의)</MyTitle>
             <AgreeSectionComp/> 
             <TitleSectionComp title="이용약관 (필수)"/>
             <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>        
             <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
             <CheckPriComp data={{ check10:check10 }} />
+            </ScrollView>
           </TopContainer>
           <BottomContainer>
             <ButtonNotAgree onPress={()=>BtnPress(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>
-            <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnPress(true)}><ButtonText>동의함</ButtonText></ButtonAgree> 
+            <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnPress(true)}><ButtonText>동의 완료</ButtonText></ButtonAgree> 
           </BottomContainer>
         </Container>       
 
