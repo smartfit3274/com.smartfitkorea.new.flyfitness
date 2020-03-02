@@ -14,7 +14,6 @@ import {
   Text,
 } from 'react-native';
 import styled from 'styled-components/native';
-import { CheckBox } from "react-native-elements";
 import {useNavigation} from 'react-navigation-hooks'
 
 const Container = styled.View`

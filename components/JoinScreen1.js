@@ -15,10 +15,9 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation } from 'react-navigation-hooks'
-import { CheckBox, Input
-} from "react-native-elements";
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/dist/MaterialIcons';
+import {CheckBox,Input, Item} from 'native-base';
 
 const Container = styled.View`
   flex:1;
@@ -148,6 +147,13 @@ export default function JoinScreen1(props) {
       <SubContainer>
           <ScrollView style={{paddingRight:10,paddingLeft:10}}>        
           <Title>회원정보를 입력하세요.</Title>
+
+          <Item>
+            <Icon active name=''/>
+            <Input placeholder="이름" />
+          </Item>
+
+
           <Input
           idx="1"
           ref={phoneRef}
