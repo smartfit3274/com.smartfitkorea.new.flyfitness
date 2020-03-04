@@ -27,12 +27,12 @@ const AppNavigator = createStackNavigator({
   //     title: '약관동의'
   //   })    
   // }, 
-  Join1: {
+  Join: {
     screen: JoinScreen1,
     navigationOptions: ({
       title: '회원가입'
     })       
-  },  
+  },
 }, 
 {    
   defaultNavigationOptions: {
