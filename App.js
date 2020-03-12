@@ -4,9 +4,8 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {Image} from 'react-native';
 import HomeScreen from './components/HomeScreen';
-import AgreeScreen from './components/AgreeScreen';
-import JoinScreen from './components/JoinScreen';
 import JoinScreen1 from './components/JoinScreen1';
+import JoinScreen2 from './components/JoinScreen2';
 
 const AppNavigator = createStackNavigator({
   // Home: {
@@ -15,24 +14,18 @@ const AppNavigator = createStackNavigator({
   //     title: 'SMART@PASS'
   //   })
   // },
-  // Join: {
-  //   screen: JoinScreen,
+  Join1: {
+    screen: JoinScreen1,
+    navigationOptions: ({
+      title: '약관동의'
+    })       
+  },
+  // Join2: {
+  //   screen: JoinScreen2,
   //   navigationOptions: ({
   //     title: '회원가입'
   //   })       
   // },
-  // Agree: {
-  //   screen: AgreeScreen,
-  //   navigationOptions: ({
-  //     title: '약관동의'
-  //   })    
-  // }, 
-  Join: {
-    screen: JoinScreen1,
-    navigationOptions: ({
-      title: '회원가입'
-    })       
-  },
 }, 
 {    
   defaultNavigationOptions: {

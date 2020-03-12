@@ -123,7 +123,7 @@ export default function HomeScreen() {
   const { navigate } = useNavigation();
 
   function BtnJoinPress() {    
-    navigate('Join');    
+    navigate('Join1');    
   }
 
   return (  
