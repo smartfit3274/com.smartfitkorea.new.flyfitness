@@ -11,7 +11,6 @@ import {
   ScrollView,
   Keyboard,
   TouchableOpacity,
-  Text,  
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
@@ -19,7 +18,8 @@ import {
   ListItem,
   CheckBox,
   Body,
-  Button
+  Button,
+  Text
 } from 'native-base';
 
 const Container = styled.View`
@@ -92,6 +92,11 @@ const ButtonText = styled.Text`
   font-weight: bold;
 `;
 
+const TextStyle = styled.Text`
+  margin-left:10px;
+  font-size:16px;  
+`;
+
 function AgreeSectionComp () {
   return (
     <SectionHelp>
@@ -120,19 +125,18 @@ function CheckSectionComp(props) {
   let check5 = props.data.check5;
   let check6 = props.data.check6;
 
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
 
   function agreeBtnPressed(no){    
-    navigate('Agree',{no:no});
+    navigation.navigate('Test',{no:no});
   }  
 
   return (
   <SectionCheck>     
     <ListItem>
-      <CheckBox onPress={()=>agreeBtnPressed('1')}  checked={check1}></CheckBox>      
-      <Text style={{ marginLeft:10,fontSize:16}}>1조 센터 가입원칙 관련 사항에 대하여 동의합니다. [약관보기] </Text>              
+      <CheckBox color="gray" checked={check1} onPress={()=>agreeBtnPressed(1)}></CheckBox>      
+      <TextStyle onPress={()=>agreeBtnPressed(1)}>1조 센터 가입원칙 관련 사항에 대하여 동의합니다. [약관보기] </TextStyle>              
     </ListItem>
-
 
     <CheckBox title='2조 센터 사용관련 회원 준수사항에 대하여 동의합니다. {약관보기} ' onPress={()=>agreeBtnPressed('2')}  checked={check2}></CheckBox>
     <CheckBox title='3,4조 명의 변경 및 휴회(정지)적용에 대하여 이해하였습니다. {약관보기}' onPress={()=>agreeBtnPressed('3')}  checked={check3}></CheckBox>

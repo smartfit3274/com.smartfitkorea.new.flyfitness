@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styled from 'styled-components/native';
-import {useNavigation} from 'react-navigation-hooks'
+import {useNavigation} from 'react-navigation-hooks';
 
 const MainText = styled.Text`
   font-size:25px;  
@@ -73,7 +73,6 @@ const CompanyTextItem = styled.Text`
 const Container = styled.View`
   flex:1;
   background:#ecf0f1;
-
 `;
 
 const Logo = styled.Image`
@@ -84,7 +83,6 @@ const Logo = styled.Image`
 const TitleView = styled.View`
   margin-top: 30px;
   align-items:center;
-
 `;
 
 const InputView = styled.View`  
@@ -120,10 +118,10 @@ function CompanyText() {
 
 export default function HomeScreen() {
 
-  const { navigate } = useNavigation();
+  const navigation = useNavigation();
 
   function BtnJoinPress() {    
-    navigate('Join1');    
+    navigation.navigate('Join1');    
   }
 
   return (  
