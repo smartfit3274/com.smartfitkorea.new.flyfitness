@@ -45,12 +45,15 @@ const ButtonText = styled.Text`
 
 export default function AgreeScreen (props) {
 
-  const { navigate, goBack } = useNavigation();
+  const navigation = useNavigation();
   const no = props.navigation.state.params.no;
 
-  function BtnClose(flag) {
-    if(flag==true) navigate('Join',{no:no});
-    else navigate('Join',{no:0});
+  function BtnNotAgree(flag) {
+    navigation.pop();  
+  }
+
+  function BtnAgree(){
+    navigation.navigate('Join1',{no:no});
   }
   
   const HeaderData = Array();
@@ -160,8 +163,8 @@ export default function AgreeScreen (props) {
         </ScrollView>
       </TextContainer>        
       <ButtonContainer>
-        <Button Agree onPress={()=>BtnClose(false)}><ButtonText>동의 안함</ButtonText></Button>
-        <Button notAgree onPress={()=>BtnClose(true)}><ButtonText>동의함</ButtonText></Button>          
+        <Button Agree onPress={()=>BtnNotAgree()}><ButtonText>동의 안함</ButtonText></Button>
+        <Button notAgree onPress={()=>BtnAgree()}><ButtonText>동의함</ButtonText></Button>          
       </ButtonContainer>        
     </Container>
 

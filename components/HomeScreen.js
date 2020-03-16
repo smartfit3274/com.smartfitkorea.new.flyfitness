@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
+import cfg from "./data/cfg.json";
 
 const MainText = styled.Text`
   font-size:25px;  
@@ -105,13 +106,12 @@ const CompanyTextContainer = styled.View`
 function CompanyText() {
   return(
     <CompanyTextContainer>
-      <CompanyTextItem>상호명 : 스마트짐 | 사업자번호 : 294-22-00344</CompanyTextItem>
-      <CompanyTextItem>주소 : 경남 거제시 옥포대첩로 38,9층</CompanyTextItem>
-      <CompanyTextItem>통신판매업신고번호 : 제2018-경남거제-0161호</CompanyTextItem>
-      <CompanyTextItem>대표 : 박일봉 | 개인정보관리 책임자:노근역</CompanyTextItem>
-      <CompanyTextItem>고객센터 : fitboss@naver.com</CompanyTextItem>
-      <CompanyTextItem>유선연락처 : 051-583-9645</CompanyTextItem>
-      <CompanyTextItem>모든 책임은 스마트짐에게 있습니다.</CompanyTextItem>
+      <CompanyTextItem>{cfg.company}</CompanyTextItem>
+      <CompanyTextItem>{cfg.addr}</CompanyTextItem>
+      <CompanyTextItem>{cfg.reg}</CompanyTextItem>
+      <CompanyTextItem>{cfg.charge}</CompanyTextItem>
+      <CompanyTextItem>{cfg.phone}</CompanyTextItem>
+      <CompanyTextItem>{cfg.resp}</CompanyTextItem>
     </CompanyTextContainer>
   )
 }
@@ -121,16 +121,17 @@ export default function HomeScreen() {
   const navigation = useNavigation();
 
   function BtnJoinPress() {    
-    navigation.navigate('Join1');    
+    navigation.navigate('Join1');   // Agree 
+    // navigation.navigate('Join2'); // Input
   }
-
+  
   return (  
     
     <Container>     
       <ScrollView style={{width: '100%'}}>
           
           <TitleView>
-            <MainText>스마트패스 출입시스템</MainText>
+            <MainText>{cfg.name}</MainText>
             <Logo source={require('./images/logo.png')} resizeMode="contain"></Logo>
           </TitleView>
 

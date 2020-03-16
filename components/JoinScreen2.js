@@ -24,6 +24,7 @@ import {
   Footer,
 } from 'native-base';
 import styled from 'styled-components/native';
+import cfg from './data/cfg.json';
 
 const SubContainer = styled.View`
   flex:1;  
@@ -81,48 +82,72 @@ export default function JoinScreen1(props) {
   }
 
   function BtnOk() {
-    console.log('[TAG] BtnOk()');
 
-    if( mode == "https") url = "https://pass.smartg.kr/rest/join1";
-    if( mode == "http") url = "http://192.168.76.51/rest/join1";    
-    
-    let data = {
+    if( mode == "https") url = "https://pass.smartg.kr/rest/join2";
+    if( mode == "http") url = "http://192.168.76.51/rest/join2"; 
+
+    const sid = cfg.sid;
+
+    const data = {
       sid:sid,
       phone:phone,
       name:name,
       pass:pass,
       passConfirm:passConfirm,
-    }  
-
+    } 
+    
     axios.post(url, data)
-    .then(function(res){       
-      
-      console.log('[TAG] ',res.data);
+    .then(function(res){  
       if(res.data.ret=='Y') {   
         Alert.alert(
-          '안내',
-          '회원가입이 완료되었습니다.',
+        '안내',
+        '회원가입이 완료되었습니다.',
+        [{text:'ok',onPress:()=>console.log('OK pressed')}],
+        {
+          cancelable:false,
+        }
+        ); 
+        navigation.navigate('Home');
+      } else {
+        Alert.alert(
+          '입력오류',
+          res.data.msg,
           [{text:'ok',onPress:()=>console.log('OK pressed')}],
           {
             cancelable:false,
           }
-        ); 
-        navigation.navigate('Home');
-        
-      } else {
-        Alert.alert(
-            '오류',
-            res.data.msg,
-            [{text:'ok',onPress:()=>console.log('OK pressed')}],
-            {
-              cancelable:false,
-            }
-        );
+          );        
       }
-    })
-    .catch(function(e){
-      console.log(e);
+    }).catch(function (e){
+      console.log("TAG - ", e);
     });
+      
+    //   console.log('[TAG] ',res.data);
+    //   if(res.data.ret=='Y') {   
+    //     Alert.alert(
+    //       '안내',
+    //       '회원가입이 완료되었습니다.',
+    //       [{text:'ok',onPress:()=>console.log('OK pressed')}],
+    //       {
+    //         cancelable:false,
+    //       }
+    //     ); 
+    //     navigation.navigate('Home');
+        
+    //   } else {
+    //     Alert.alert(
+    //         '오류',
+    //         res.data.msg,
+    //         [{text:'ok',onPress:()=>console.log('OK pressed')}],
+    //         {
+    //           cancelable:false,
+    //         }
+    //     );
+    //   }
+    // })
+    // .catch(function(e){
+    //   console.log(e);
+    // });
 
   }  
 
