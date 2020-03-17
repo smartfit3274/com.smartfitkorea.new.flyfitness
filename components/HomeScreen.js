@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   View,
-  Text,
   SafeAreaView,
   Image,
   Dimensions,
@@ -10,12 +9,12 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Keyboard,
-  Button,
   TouchableOpacity,
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
 import cfg from "./data/cfg.json";
+import { Button,Text } from 'native-base';
 
 const MainText = styled.Text`
   font-size:25px;  
@@ -37,30 +36,6 @@ const PassInput = styled.TextInput`
   width: 80%;
   max-width: 300px;
   padding:10px;
-`;
-
-const LoginButton = styled.TouchableOpacity`
-  background: #e67e22;
-  margin-top: 20px; 
-  justify-content:center;
-  align-items:center;
-  font-size: 14px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  width: 90%;
-  max-width: 300px;
-`;
-
-const JoinButton = styled.TouchableOpacity`
-  background: #2980b9;
-  margin-top: 5px; 
-  justify-content:center;
-  align-items:center;
-  font-size: 14px;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  width: 90% ;
-  max-width: 300px;
 `;
 
 const LostText = styled.Text`
@@ -92,22 +67,35 @@ const InputView = styled.View`
   align-items:center;
 `;
 
-const ButtonView = styled.View`  
-  margin-top: 20px;
-  align-items:center;
-`;
-
 const CompanyTextContainer = styled.View`
   margin-top: 40px;
   align-items:center;
-  padding-bottom: 30px;
+  padding-bottom: 30px;  
+`;
+
+const ButtonContainer = styled.View`
+  width: 80%;
+  margin:0 auto;
+`;
+
+const LoginButton = styled(Button)`  
+  margin-top: 20px;
+`;
+
+const JoinButton = styled(Button)`
+  margin-top: 5px;  
+`;
+
+const LostPassContainer = styled.View`
+  align-items:center;
+  margin-top: 10px;
 `;
 
 function CompanyText() {
   return(
     <CompanyTextContainer>
       <CompanyTextItem>{cfg.company}</CompanyTextItem>
-      <CompanyTextItem>{cfg.addr}</CompanyTextItem>
+      <CompanyTextItem>{cfg.address}</CompanyTextItem>
       <CompanyTextItem>{cfg.reg}</CompanyTextItem>
       <CompanyTextItem>{cfg.charge}</CompanyTextItem>
       <CompanyTextItem>{cfg.phone}</CompanyTextItem>
@@ -140,15 +128,14 @@ export default function HomeScreen() {
             <PassInput placeholder="비밀번호"></PassInput>
           </InputView>
 
-          <ButtonView>
-            <LoginButton>
-              <Text style={{color:'#fff',fontSize:14}}>로그인</Text>
-            </LoginButton>
-            <JoinButton onPress={()=>BtnJoinPress()}>
-              <Text style={{color:'#fff',fontSize:14}}>회원가입</Text>
-            </JoinButton>    
-            <LostText>비밀번호를 잊어버리셨나요?</LostText> 
-          </ButtonView>
+          <ButtonContainer>            
+            <LoginButton full><Text>로그인</Text></LoginButton>
+            <JoinButton full onPress={()=>BtnJoinPress()}><Text>회원가입</Text></JoinButton>                     
+          </ButtonContainer>
+
+          <LostPassContainer>
+            <Text>비밀번호를 잊어버리셨나요?</Text>
+          </LostPassContainer>
 
           <CompanyText></CompanyText>
       </ScrollView>
@@ -157,3 +144,28 @@ export default function HomeScreen() {
     
   );
 };
+
+
+// const LoginButton = styled.TouchableOpacity`
+//   background: #e67e22;
+//   margin-top: 20px; 
+//   justify-content:center;
+//   align-items:center;
+//   font-size: 14px;
+//   padding-top: 15px;
+//   padding-bottom: 15px;
+//   width: 90%;
+//   max-width: 300px;
+// `;
+
+// const JoinButton = styled.TouchableOpacity`
+//   background: #2980b9;
+//   margin-top: 5px; 
+//   justify-content:center;
+//   align-items:center;
+//   font-size: 14px;
+//   padding-top: 15px;
+//   padding-bottom: 15px;
+//   width: 90% ;
+//   max-width: 300px;
+// `;
