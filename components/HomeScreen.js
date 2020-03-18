@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {
   View,
   SafeAreaView,
@@ -9,12 +9,14 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Keyboard,
-  TouchableOpacity,
+  Alert
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
 import cfg from "./data/cfg.json";
 import { Button,Text } from 'native-base';
+import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 const MainText = styled.Text`
   font-size:25px;  
@@ -106,11 +108,104 @@ function CompanyText() {
 
 export default function HomeScreen() {
 
+  const mode = "http";  
   const navigation = useNavigation();
+  const [phone,setPhone] = useState('');
+  const [pass,setPass] = useState('');
 
   function BtnJoinPress() {    
     navigation.navigate('Join1');   // Agree 
     // navigation.navigate('Join2'); // Input
+  }
+
+  async function _storeData(key,value) {
+    try {
+      await AsyncStorage.setItem(key, value);
+    } catch (error) {
+      console.log('Error saving data');
+    }
+  };
+
+  async function _retrieveData (key) {
+    console.log('TAG : _retriveData');
+    try {
+      const value = await AsyncStorage.getItem(key);
+      if (value !== null) {
+        console.log(value);
+      }
+    } catch (error) {
+      console.log('Error retrieving data');
+    }
+  };
+
+  function getAccessToken() {
+    console.log('TAG: getAccessToken()');
+    let url = '';
+    if(mode =='http') {
+      url = cfg.http + '/token/getAccessToken';
+    }
+    if(mode == 'https') {
+      url = cfg.https + '/token/getAccessToken';
+    }
+    const data = {
+      sid:cfg.sid,
+    }
+    axios.post(url,data)
+    .then(function(res){    
+      if(res.data.ret=='Y') {        
+        console.log('done!');        
+      } else {
+        console.log(res.data.msg);
+      }
+    })
+    .catch(function (e){
+      console.log(e);
+    });
+  }
+
+  function BtnLoginPress () {
+    
+    console.log('TAG: BtnLoginPress!');
+    let url = '';
+    if(mode =='http') {
+      url = cfg.http + '/token/getRefreshToken';
+    }
+    if(mode == 'https') {
+      url = cfg.https + '/token/getRefreshToken';
+    }
+    const data = {
+      sid:cfg.sid,
+      phone:phone,
+      pass:pass
+    }
+
+    // get refresh token
+    axios.post(url,data)
+    .then(function(res){
+      if(res.data.ret=='Y') {        
+        console.log('done!');
+        
+        // save token
+        _storeData('refresh_token',res.data.refresh_token);
+        // _retrieveData('refresh_token');
+        getAccessToken();
+
+      }
+      else {
+        Alert.alert(
+          '로그인 오류',
+          res.data.msg,
+          [{text:'ok',onPress:()=>console.log('OK pressed')}],
+          {
+            cancelable:false,
+          }
+        );
+      }
+    })
+    .catch(function(e){
+      console.log(e);
+    });  
+   
   }
   
   return (  
@@ -124,12 +219,16 @@ export default function HomeScreen() {
           </TitleView>
 
           <InputView>        
-            <LoginInput placeholder="휴대폰번호 - 없이 입력" keyboardType={'numeric'}></LoginInput>    
-            <PassInput placeholder="비밀번호"></PassInput>
+            <LoginInput placeholder="휴대폰번호 - 없이 입력" 
+            onChange={(e)=>setPhone(e.nativeEvent.text)}
+            keyboardType={'numeric'}></LoginInput>    
+            <PassInput placeholder="비밀번호" onChange={(e)=>setPass(e.nativeEvent.text)}
+            secureTextEntry={true}
+            ></PassInput>
           </InputView>
 
           <ButtonContainer>            
-            <LoginButton full><Text>로그인</Text></LoginButton>
+            <LoginButton full onPress={()=>BtnLoginPress()}><Text>로그인</Text></LoginButton>
             <JoinButton full onPress={()=>BtnJoinPress()}><Text>회원가입</Text></JoinButton>                     
           </ButtonContainer>
 
@@ -144,28 +243,3 @@ export default function HomeScreen() {
     
   );
 };
-
-
-// const LoginButton = styled.TouchableOpacity`
-//   background: #e67e22;
-//   margin-top: 20px; 
-//   justify-content:center;
-//   align-items:center;
-//   font-size: 14px;
-//   padding-top: 15px;
-//   padding-bottom: 15px;
-//   width: 90%;
-//   max-width: 300px;
-// `;
-
-// const JoinButton = styled.TouchableOpacity`
-//   background: #2980b9;
-//   margin-top: 5px; 
-//   justify-content:center;
-//   align-items:center;
-//   font-size: 14px;
-//   padding-top: 15px;
-//   padding-bottom: 15px;
-//   width: 90% ;
-//   max-width: 300px;
-// `;

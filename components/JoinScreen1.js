@@ -101,8 +101,7 @@ function AgreeSectionComp () {
   return (
     <SectionHelp>
       <SectionAText>
-      이용약관, 개인정보 수집 및 이용,
-      프로모션 안내 SNS 수신(선택)에 모두 동의합니다. 
+      이용약관, 개인정보 수집 및 이용에 관한 내용을 각각 확인 후 동의하시기 바랍니다. 
       </SectionAText>
     </SectionHelp>
   );
