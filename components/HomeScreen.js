@@ -16,7 +16,7 @@ import {useNavigation} from 'react-navigation-hooks';
 import cfg from "./data/cfg.json";
 import { Button,Text } from 'native-base';
 import axios from 'axios';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const MainText = styled.Text`
   font-size:25px;  
@@ -118,54 +118,9 @@ export default function HomeScreen() {
     // navigation.navigate('Join2'); // Input
   }
 
-  async function _storeData(key,value) {
-    try {
-      await AsyncStorage.setItem(key, value);
-    } catch (error) {
-      console.log('Error saving data');
-    }
-  };
-
-  async function _retrieveData (key) {
-    console.log('TAG : _retriveData');
-    try {
-      const value = await AsyncStorage.getItem(key);
-      if (value !== null) {
-        console.log(value);
-      }
-    } catch (error) {
-      console.log('Error retrieving data');
-    }
-  };
-
-  function getAccessToken() {
-    console.log('TAG: getAccessToken()');
-    let url = '';
-    if(mode =='http') {
-      url = cfg.http + '/token/getAccessToken';
-    }
-    if(mode == 'https') {
-      url = cfg.https + '/token/getAccessToken';
-    }
-    const data = {
-      sid:cfg.sid,
-    }
-    axios.post(url,data)
-    .then(function(res){    
-      if(res.data.ret=='Y') {        
-        console.log('done!');        
-      } else {
-        console.log(res.data.msg);
-      }
-    })
-    .catch(function (e){
-      console.log(e);
-    });
-  }
-
-  function BtnLoginPress () {
+  function getRefreshtoken() {
+    console.log('TAG: getRefreshtoken()');
     
-    console.log('TAG: BtnLoginPress!');
     let url = '';
     if(mode =='http') {
       url = cfg.http + '/token/getRefreshToken';
@@ -179,16 +134,16 @@ export default function HomeScreen() {
       pass:pass
     }
 
-    // get refresh token
     axios.post(url,data)
     .then(function(res){
       if(res.data.ret=='Y') {        
-        console.log('done!');
         
-        // save token
-        _storeData('refresh_token',res.data.refresh_token);
-        // _retrieveData('refresh_token');
-        getAccessToken();
+        // 토큰저장
+        const refresh_token = res.data.refresh_token;
+        AsyncStorage.setItem('refresh_token',refresh_token,function(){
+          console.log('TAG: get refres_token ---> success');          
+          getAccessToken();
+        });
 
       }
       else {
@@ -205,7 +160,55 @@ export default function HomeScreen() {
     .catch(function(e){
       console.log(e);
     });  
-   
+    
+  }
+
+
+  function getAccessToken() {
+    console.log('TAG: getAccessToken()');   
+    
+    AsyncStorage.getItem('refresh_token', (err, value )=>{
+      const refresh_token = value;
+      let url = '';
+      if(mode =='http') {
+        url = cfg.http + '/token/getAccessToken';
+      }
+      if(mode == 'https') {
+        url = cfg.https + '/token/getAccessToken';
+      }    
+      const config = {      
+        headers: { Authorization: `Bearer ${refresh_token}` }
+      }
+
+      const data = {
+        sid:cfg.sid,     
+      }
+      axios.post(url,data,config)
+      .then(function(res){    
+        if(res.data.ret=='Y') {        
+          
+          // 토큰저장
+          const access_token = res.data.access_token;
+          AsyncStorage.setItem('access_token',access_token,function(){
+            console.log('TAG: get access_token ---> success');                      
+          });
+
+        } else {
+          console.log(res.data.msg);
+        }
+      })
+      .catch(function (e){
+        console.log(e);
+      });      
+      
+    });
+    
+ 
+  }
+
+  function BtnLoginPress () { 
+    console.log('TAG: BtnLoginPress()');    
+    getRefreshtoken();   
   }
   
   return (  
@@ -243,3 +246,31 @@ export default function HomeScreen() {
     
   );
 };
+
+
+  /*
+  
+  // 토큰 가져오기
+  AsyncStorage.getItem('refresh_token', (err, value )=>{
+    console.log('refresh_token:',value);
+  });
+
+  // 토큰저장
+  function setItem(key,value) {   
+    AsyncStorage.setItem(key, value, () => {
+      console.log('stored!');
+    });
+  }
+
+  // 토큰가져오기
+  function getItem(key) {
+    AsyncStorage.getItem(key, (err, value )=>{
+      if (err == null){
+        console.log(value);
+      }
+      else {
+        console.log(err);
+      }
+    });      
+  }
+  */
