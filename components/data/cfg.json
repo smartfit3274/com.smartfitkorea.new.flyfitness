@@ -7,7 +7,11 @@
     "charge":"대표 : 박일봉 | 개인정보관리 책임자:노근역",
     "phone":"유선연락처 : 051-583-9645",
     "resp":"모든 책임은 스마트짐에게 있습니다.",
-    
-    "https":"https://pass.smartg.kr",
-    "http":"http://192.168.76.51"
+    "mode":"http",    
+    "http": {
+        "host":"http://192.168.76.51"
+    },   
+    "https": {
+        "host":"https://pass.smartg.kr",
+    }    
 }

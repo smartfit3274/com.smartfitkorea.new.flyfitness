@@ -14,7 +14,8 @@ import {
 } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks'
 import axios from 'axios';
-import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+
 import { 
   Container,
   CheckBox,
@@ -120,34 +121,7 @@ export default function JoinScreen1(props) {
       }
     }).catch(function (e){
       console.log("TAG - ", e);
-    });
-      
-    //   console.log('[TAG] ',res.data);
-    //   if(res.data.ret=='Y') {   
-    //     Alert.alert(
-    //       '안내',
-    //       '회원가입이 완료되었습니다.',
-    //       [{text:'ok',onPress:()=>console.log('OK pressed')}],
-    //       {
-    //         cancelable:false,
-    //       }
-    //     ); 
-    //     navigation.navigate('Home');
-        
-    //   } else {
-    //     Alert.alert(
-    //         '오류',
-    //         res.data.msg,
-    //         [{text:'ok',onPress:()=>console.log('OK pressed')}],
-    //         {
-    //           cancelable:false,
-    //         }
-    //     );
-    //   }
-    // })
-    // .catch(function(e){
-    //   console.log(e);
-    // });
+    });    
 
   }  
 
@@ -167,7 +141,7 @@ export default function JoinScreen1(props) {
           </Item>
 
           <Item>
-            <Icon name="user" style={{ fontSize:18,paddingRight:5,color:'#cccccc' }}/>
+            <Icon name="account-box" style={{ fontSize:18,paddingRight:5,color:'#cccccc' }}/>
             <Input placeholder="이름 (실명)" onChange={(e)=>setName(e.nativeEvent.text)} placeholderTextColor='#cccccc'/>
           </Item>
 
@@ -195,4 +169,29 @@ export default function JoinScreen1(props) {
 
 };
 
-
+//   console.log('[TAG] ',res.data);
+    //   if(res.data.ret=='Y') {   
+    //     Alert.alert(
+    //       '안내',
+    //       '회원가입이 완료되었습니다.',
+    //       [{text:'ok',onPress:()=>console.log('OK pressed')}],
+    //       {
+    //         cancelable:false,
+    //       }
+    //     ); 
+    //     navigation.navigate('Home');
+        
+    //   } else {
+    //     Alert.alert(
+    //         '오류',
+    //         res.data.msg,
+    //         [{text:'ok',onPress:()=>console.log('OK pressed')}],
+    //         {
+    //           cancelable:false,
+    //         }
+    //     );
+    //   }
+    // })
+    // .catch(function(e){
+    //   console.log(e);
+    // });
