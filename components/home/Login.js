@@ -4,6 +4,7 @@ import {
     ScrollView,
     TextInput,
     Alert,
+    Image,
 } from 'react-native';
 import { Button,Text } from 'native-base';
 import styled from 'styled-components/native';
@@ -189,7 +190,7 @@ export default function Login() {
         <ScrollView style={{width: '100%'}}>          
             <TitleView>
                 <MainText>{cfg.name}</MainText>
-                <Logo source={require('../images/logo.png')} resizeMode="contain"></Logo>
+                <Logo source={require('../images/logo_smartpass.png')} resizeMode="contain"></Logo>
             </TitleView>
 
             <InputContainer>        

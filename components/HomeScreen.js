@@ -1,4 +1,4 @@
-import React,{useState, useEffect} from 'react';
+import React,{useState, useEffect } from 'react';
 import {
   View,
   SafeAreaView,
@@ -12,22 +12,23 @@ import {
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
-import { Button,Text } from 'native-base';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import Login from './home/Login';
 import Logged from './home/Logged';
 import cfg from "./data/cfg.json";
+import { Button,Text,Drawer,Container } from 'native-base';
 
-const Container = styled.View`
-  flex:1;
-  background:#ecf0f1;
-`;
+// const Container = styled.View`
+//   flex:1;
+//   background:#ecf0f1;
+// `;
 
 export default function HomeScreen() {
 
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
+  // const drawerEl = useRef(null);
 
   useEffect(()=>{
     console.log('========== START ==========');
@@ -39,9 +40,9 @@ export default function HomeScreen() {
     console.log('TAG: ck_refresh_token()');
 
     AsyncStorage.getItem('refresh_token', (err, value )=>{    
-      const refresh_token = value;
-
+      const refresh_token = value;  
       const mode = cfg.mode;
+
       let url = '';
       if(mode =='http') { 
           url = cfg.http.host;
@@ -63,7 +64,8 @@ export default function HomeScreen() {
           // 토큰저장
           const access_token = res.data.access_token;
           AsyncStorage.setItem('access_token',access_token,function(){
-            console.log('TAG: access_token saved.');                      
+            console.log('TAG: access_token saved.');
+            navigation.replace('Home');
           });
 
         } else {
@@ -123,16 +125,30 @@ export default function HomeScreen() {
     });
   }
   
-  // 상태 
-  return (      
-    <Container>
-      { isLogin =='N' &&
-      <Login></Login>
-      }
-      { isLogin == 'Y'&&
-      <Logged></Logged>
-      }
-    </Container>    
+  // dreawer
+  // function open() {
+  //   drawerEl.current._root.open();
+  // }
+  // <Drawer ref={drawerEl} content={<View><Text>Hello?</Text></View>}>
+  // </Drawer> 
+  /* <Button onPress={()=>open()}>
+  <Text>버튼</Text>
+  </Button> */
+
+  // 뷰 
+  // Drawer
+  // Header
+  return (     
+    
+      <Container>
+        { isLogin =='N' &&
+        <Login></Login>
+        }
+        { isLogin == 'Y'&&
+        <Logged></Logged>
+        }
+      </Container>    
+
   );
 };
 
