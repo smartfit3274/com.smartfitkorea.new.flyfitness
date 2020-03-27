@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { useNavigation } from 'react-navigation-hooks';
 import { 
     View,
     Text,
@@ -13,11 +14,13 @@ import {
     Button
 } from 'native-base';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Image,Dimensions } from 'react-native';
+import { Image,Dimensions, RefreshControlBase } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
+import AsyncStorage from '@react-native-community/async-storage';
 
 function Logged() {
 
+    const navigation = useNavigation();    
     const window = Dimensions.get('window'); 
 
     function bio_isSensorAvailable(){
@@ -46,22 +49,7 @@ function Logged() {
             }
         });
     }
-
-    function bio_isKeyExist() {
-        console.log('TAG: bio_isKeyExist()');
-        
-        ReactNativeBiometrics.biometricKeysExist()
-        .then((resultObject) => {
-          const { keysExist } = resultObject               
-          if (keysExist) {
-            console.log('Keys exist');
-            bio_login();
-          } else {
-            console.log('Keys do not exist or were deleted')
-          }
-        });       
-    }
-    
+   
     function bio_getPublicKey() {
         console.log('TAG: bio_getPublicKey()');
         ReactNativeBiometrics.createKeys('Confirm fingerprint')
@@ -74,7 +62,42 @@ function Logged() {
         });        
     }
 
-    function bio_login() {
+    function btn_logout(){
+        console.log('TAG: btn_logout()');
+        navigation.navigate('home');
+
+        AsyncStorage.setItem('access_token','',function(){
+            AsyncStorage.setItem('refresh_token','',function(){
+                console.log('logout!');
+                navigation.navigate('Home');
+            });
+        });        
+
+    }
+
+    function btn_open_door() {
+        console.log('TAG: btn_open_door()');   
+        bio_is_key_exist();
+    }
+
+    // bio_1
+    function bio_is_key_exist() {
+        console.log('TAG: bio_isKeyExist()');
+        
+        ReactNativeBiometrics.biometricKeysExist()
+        .then((resultObject) => {
+          const { keysExist } = resultObject               
+          if (keysExist) {
+            console.log('[TAG] Keys exist');
+            bio_confirm();
+          } else {
+            console.log('[TAG] Keys do not exist or were deleted');
+          }
+        });    
+    }     
+    
+    // bio_2
+    function bio_confirm() {
         console.log('TAG: bio_login()');        
 
         ReactNativeBiometrics.simplePrompt({promptMessage: 'Confirm fingerprint'})
@@ -82,23 +105,19 @@ function Logged() {
           const { success } = resultObject       
           if (success) {
               console.log('success!');
-              bio_getPublicKey();
+              bio_open_door();
           } else {
               console.log('error!');
           }
         })
-        .catch(() => {
-          console.log('biometrics failed')
+        .catch((e) => {
+          console.log("[TAG] Error!:",e)
         })          
-    }
+    }    
 
-    function open_door() {
-        console.log('TAG: upload bio -->');
-        const ret = await bio_isSensorAvailable();
-    }
-
-    function logout() {
-        console.log('logout!!!');                
+    // bio_3
+    function bio_open_door() {
+        console.log('bio_open_door');
     }
 
     return (
@@ -131,11 +150,11 @@ function Logged() {
                 <Image source={require('../images/card_btn.png')} style={{width:25, height:25}}></Image>
                     <Text>카드결제</Text>
                 </Button>  
-                <Button vertical onPress={()=>open_dorr()}>
+                <Button vertical onPress={()=>btn_open_door()}>
                     <Image source={require('../images/fingerprint_btn.png')} style={{width:25, height:25}}></Image>
                     <Text>문 열기</Text>
                 </Button>           
-                <Button vertical onPress={()=>logout()}>
+                <Button vertical onPress={()=>btn_logout()}>
                     <Image source={require('../images/power-off-btn.png')} style={{width:25, height:25}}></Image>
                     <Text>로그아웃</Text>
                 </Button>

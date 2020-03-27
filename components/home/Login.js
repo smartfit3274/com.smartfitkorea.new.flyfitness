@@ -106,7 +106,8 @@ export default function Login() {
           url = url + '/token/getAccessToken';          
   
           const config = {      
-            headers: { Authorization: `Bearer ${refresh_token}` }
+            headers: { Authorization: `Bearer ${refresh_token}` },
+            timeout: 3000
           }    
           const data = {
             sid:cfg.sid,     
@@ -155,7 +156,12 @@ export default function Login() {
           phone:phone,
           pass:pass
         }    
-        axios.post(url,data)
+
+        const config = {
+          timeout: 3000
+        }
+
+        axios.post(url,data,config)
         .then(function(res){
           if(res.data.ret=='Y') {       
             const refresh_token = res.data.refresh_token;
@@ -177,6 +183,14 @@ export default function Login() {
         })
         .catch(function(e){
           console.log(e);
+          Alert.alert(
+            '네트워크 오류',
+            '인터넷 연결을 확인하세요',
+            [{text:'ok',onPress:()=>console.log('OK pressed')}],
+            {
+              cancelable:false,
+            }
+          );          
         });
 
     }
