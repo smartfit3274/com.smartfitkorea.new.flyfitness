@@ -113,7 +113,6 @@ function Logged() {
                 navigation.navigate('Home');
             });
         });        
-
     }
 
     function btn_open_door() {
@@ -124,6 +123,11 @@ function Logged() {
     function btn_mypage(){
         console.log('TAG: btn_mypage()');
         navigation.push('MyInfo')
+    }
+
+    function btn_cardpay(){
+        console.log('TAG: btn_cardpay()');
+        navigation.push('CardPay')
     }
 
     return (
@@ -152,7 +156,7 @@ function Logged() {
                     <Image source={require('../images/mypage_btn.png')} style={{width:25, height:25}}></Image>
                     <Text>내 정보</Text>
                 </Button>
-                <Button vertical>
+                <Button vertical onPress={()=>btn_cardpay()}>
                 <Image source={require('../images/card_btn.png')} style={{width:25, height:25}}></Image>
                     <Text>카드결제</Text>
                 </Button>  

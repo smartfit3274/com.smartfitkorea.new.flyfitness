@@ -9,6 +9,7 @@ import AgreeScreen from './components/AgreeScreen';
 import JoinScreen1 from './components/JoinScreen1';
 import JoinScreen2 from './components/JoinScreen2';
 import MyInfoScreen from './components/MyInfoScreen';
+import CardPayScreen from './components/CardPayScreen';
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -47,7 +48,12 @@ const AppNavigator = createStackNavigator({
       title: 'MyInfo'
     })       
   },
-
+  CardPay: {
+    screen: CardPayScreen,
+    navigationOptions: ({
+      title: 'CardPay'
+    })       
+  },
 }, 
 {    
   defaultNavigationOptions: {
