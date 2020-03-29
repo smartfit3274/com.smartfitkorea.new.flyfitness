@@ -20,6 +20,8 @@ import cfg from "./data/cfg.json";
 import { Button,Text,Drawer,Container } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import { DeviceEventEmitter } from 'react-native'
+import Beacons from 'react-native-beacons-manager'
 
 let refresh_token = '';
 let access_token = '';
@@ -33,14 +35,26 @@ export default function HomeScreen() {
   useEffect(()=>{
     console.log('========== START ==========');
     // read_refresh_token();
-    setIsLogin('Y')
-    //init();
+    //setIsLogin('Y')
+    init();
   },[])  
 
   async function init() {
+
+    // const region = {
+    //   identifier: 'Estimotes',
+    //   uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'
+    // };
+    // Beacons.requestWhenInUseAuthorization();
+    // Beacons.startMonitoringForRegion(region);
     
     console.log('init...');
     console.log(1);
+    setIsLogin('Y')
+    
+
+
+    return;
 
     // Read refresh token
     await AsyncStorage.getItem('refresh_token', (err, value )=>{
@@ -131,7 +145,7 @@ export default function HomeScreen() {
     .catch(function (e){
       console.log('ERROR: ',e);  
       console.log('TAG: internet error!');
-      create_access_token();     
+      create_access_token();
     });    
   }
 
