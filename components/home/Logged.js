@@ -13,7 +13,7 @@ import {
     Content,
     Button
 } from 'native-base';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Image,Dimensions, RefreshControlBase } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -62,24 +62,6 @@ function Logged() {
         });        
     }
 
-    function btn_logout(){
-        console.log('TAG: btn_logout()');
-        navigation.navigate('home');
-
-        AsyncStorage.setItem('access_token','',function(){
-            AsyncStorage.setItem('refresh_token','',function(){
-                console.log('logout!');
-                navigation.navigate('Home');
-            });
-        });        
-
-    }
-
-    function btn_open_door() {
-        console.log('TAG: btn_open_door()');   
-        bio_is_key_exist();
-    }
-
     // bio_1
     function bio_is_key_exist() {
         console.log('TAG: bio_isKeyExist()');
@@ -120,12 +102,36 @@ function Logged() {
         console.log('bio_open_door');
     }
 
+
+    function btn_logout(){
+        console.log('TAG: btn_logout()');
+        navigation.navigate('home');
+
+        AsyncStorage.setItem('access_token','',function(){
+            AsyncStorage.setItem('refresh_token','',function(){
+                console.log('logout!');
+                navigation.navigate('Home');
+            });
+        });        
+
+    }
+
+    function btn_open_door() {
+        console.log('TAG: btn_open_door()');   
+        bio_is_key_exist();
+    }
+
+    function btn_mypage(){
+        console.log('TAG: btn_mypage()');
+        navigation.push('MyInfo')
+    }
+
     return (
       <>
         <Header>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>console.log('menu pressed!')}>
-                    <Icon name="menu" style={{color:"white", fontSize:20}}></Icon>
+                    <Icon name="menu" style={{color:"red", fontSize:20}}></Icon>
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
@@ -142,7 +148,7 @@ function Logged() {
 
         <Footer>
             <FooterTab>
-                <Button vertical>
+                <Button vertical onPress={()=>btn_mypage()}>
                     <Image source={require('../images/mypage_btn.png')} style={{width:25, height:25}}></Image>
                     <Text>내 정보</Text>
                 </Button>

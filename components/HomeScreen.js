@@ -18,6 +18,8 @@ import Login from './home/Login';
 import Logged from './home/Logged';
 import cfg from "./data/cfg.json";
 import { Button,Text,Drawer,Container } from 'native-base';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 let refresh_token = '';
 let access_token = '';
@@ -30,7 +32,8 @@ export default function HomeScreen() {
 
   useEffect(()=>{
     console.log('========== START ==========');
-    read_refresh_token();
+    //read_refresh_token();
+    setIsLogin('Y')
   },[])  
 
   function read_refresh_token() {

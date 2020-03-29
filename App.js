@@ -8,6 +8,7 @@ import HomeScreen from './components/HomeScreen';
 import AgreeScreen from './components/AgreeScreen';
 import JoinScreen1 from './components/JoinScreen1';
 import JoinScreen2 from './components/JoinScreen2';
+import MyInfoScreen from './components/MyInfoScreen';
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -40,12 +41,12 @@ const AppNavigator = createStackNavigator({
       title: 'TEST'
     })       
   }, 
-  // Join2: {
-  //   screen: JoinScreen2,
-  //   navigationOptions: ({
-  //     title: '회원가입'
-  //   })       
-  // },
+  MyInfo: {
+    screen: MyInfoScreen,
+    navigationOptions: ({
+      title: 'MyInfo'
+    })       
+  },
 
 }, 
 {    
