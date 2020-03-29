@@ -32,34 +32,70 @@ export default function HomeScreen() {
 
   useEffect(()=>{
     console.log('========== START ==========');
-    //read_refresh_token();
+    // read_refresh_token();
     setIsLogin('Y')
+    //init();
   },[])  
 
-  function read_refresh_token() {
-    console.log('TAG: read_refresh_token()');
+  async function init() {
     
-    AsyncStorage.getItem('refresh_token', (err, value )=>{
-      if(value==null) {
-        console.log('TAG: no refresh token.');
-        setIsLogin('N');
-        return;
-      }
+    console.log('init...');
+    console.log(1);
+
+    // Read refresh token
+    await AsyncStorage.getItem('refresh_token', (err, value )=>{
+      // if(value==null) {
+      //   return;
+      // }
       refresh_token = value;
-      read_access_token();
     });
+
+    // Read access toekn
+    await AsyncStorage.getItem('access_token', (err, value )=>{
+      // if(value==null) {
+      //   return;
+      // }
+      access_token = value;
+    });   
+   
+    // console.log('access_token', access_token);
+    // console.log('refresh_token', refresh_token);
+    if(refresh_token != null) {
+      if(access_token != null) {
+        // ck_access_token();
+      } else {
+          // 로그아웃
+      }
+    } else {
+      // 로그아웃
+    }
+
   }
 
-  function read_access_token() {
-    console.log('TAG: read_access_token()');
-    AsyncStorage.getItem('access_token', (err, value )=>{         
-      access_token = value;
-      if( access_token == null ) {
-        console.log('TAG: access token is null');        
-      }
-      ck_access_token();      
-    });
-  }
+  // function read_refresh_token() {
+  //   console.log('TAG: read_refresh_token()');
+    
+  //   AsyncStorage.getItem('refresh_token', (err, value )=>{
+  //     if(value==null) {
+  //       console.log('TAG: no refresh token.');
+  //       setIsLogin('N');
+  //       return;
+  //     }
+  //     refresh_token = value;
+  //     read_access_token();
+  //   });
+  // }
+
+  // function read_access_token() {
+  //   console.log('TAG: read_access_token()');
+  //   AsyncStorage.getItem('access_token', (err, value )=>{         
+  //     access_token = value;
+  //     if( access_token == null ) {
+  //       console.log('TAG: access token is null');        
+  //     }
+  //     ck_access_token();      
+  //   });
+  // }
 
   function ck_access_token() {
     console.log('TAG: ck_access_token()');
@@ -99,43 +135,45 @@ export default function HomeScreen() {
     });    
   }
 
-  function ck_refresh_token() {
-    
-    console.log('TAG: ck_refresh_token()');
-    let url = '';
-    const mode = cfg.mode;
-    if(mode =='http') {
-        url = cfg.http.host;
-    }
-    if(mode =='https') {
-        url = cfg.https.host;
-    }
-    url = url + '/token/ckRefreshToken'; 
-    console.log(url);
-    const config = {      
-      timeout: 3000
-    }    
-    const data = {
-      refresh_token:refresh_token,
-      sid:cfg.sid,     
-    }
-    axios.post(url,data,config)
-    .then(function(res){    
-      // console.log(res.data);   
-      if(res.data.ret=='Y') {
-        console.log('TAG: Y');
-      }
-      else {
-        console.log('TAG:',res.data.msg);
-      }
-    })
-    .catch(function (e){
-      console.log('ERROR: ',e);  
-      console.log('TAG: internet error!');      
-    });
-    
-  }
+
+  // 필요없음 / 엑세스 토큰 만들때 처리
+  // function ck_refresh_token() {
+  //   console.log('TAG: ck_refresh_token()');
+  //   let url = '';
+  //   const mode = cfg.mode;
+  //   if(mode =='http') {
+  //       url = cfg.http.host;
+  //   }
+  //   if(mode =='https') {
+  //       url = cfg.https.host;
+  //   }
+  //   url = url + '/token/ckRefreshToken'; 
+  //   console.log(url);
+  //   const config = {      
+  //     timeout: 3000
+  //   }    
+  //   const data = {
+  //     refresh_token:refresh_token,
+  //     sid:cfg.sid,     
+  //   }
+  //   axios.post(url,data,config)
+  //   .then(function(res){    
+  //     // console.log(res.data);   
+  //     if(res.data.ret=='Y') {
+  //       console.log('TAG: Y');
+  //     }
+  //     else {
+  //       console.log('TAG:',res.data.msg);
+  //     }
+  //   })
+  //   .catch(function (e){
+  //     console.log('ERROR: ',e);  
+  //     console.log('TAG: internet error!');      
+  //   });
+  // }
   
+
+  // 만들때 리프래시 토큰 채크해야함
   function create_access_token() {
     console.log('TAG: create_access_token()');
 
@@ -173,6 +211,7 @@ export default function HomeScreen() {
     });    
   }
 
+
   function save_access_token() {
     console.log('TAG: save_access_token()');
     AsyncStorage.setItem('access_token',access_token,function(){
@@ -180,8 +219,8 @@ export default function HomeScreen() {
     });
   }
 
-  return (     
-    
+
+  return (      
       <Container>
         { isLogin =='N' &&
         <Login></Login>
@@ -190,6 +229,5 @@ export default function HomeScreen() {
         <Logged></Logged>
         }
       </Container>    
-
   );
 };
