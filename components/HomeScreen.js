@@ -32,27 +32,73 @@ export default function HomeScreen() {
   const [isLogin,setIsLogin] = useState('');
   // const drawerEl = useRef(null);
 
+  
   useEffect(()=>{
     console.log('========== START ==========');
     // read_refresh_token();
-    //setIsLogin('Y')
-    init();
-  },[])  
+    // setIsLogin('Y');
+    // init();    
+    beacon_handler();
+  },[]);
+
+  
+  // ============================================== //
+  // 비콘제어
+  // ============================================== //       
+  async function beacon_handler(){    
+    try {    
+      await detectIBeacons();
+      await startRangingBeaconsInRegion();
+      beacon_add_listener();
+    } catch(error) {
+      console.log('ERROR',error);
+    }
+  }  
+
+  async function detectIBeacons() {
+    try {
+      await Beacons.detectIBeacons();
+      console.log('1. Tells the library to detect iBeacons');
+    } catch (error ) {
+      throw error;
+    }
+  }
+
+
+// 옥포점 fda50693-a4e2-4fb1-afcf-c6eb07647825  
+  async function startRangingBeaconsInRegion () {
+
+    const region = {
+      identifier: 'Estimotes',
+      uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647825'
+    };
+
+    try {
+      await Beacons.startRangingBeaconsInRegion(region)
+      console.log('2. Beacons monitoring started successfully');
+    } catch (error) {
+      throw error;
+    }
+  };
+  // if(Platform.OS === 'android'){
+
+  function beacon_add_listener() {
+    DeviceEventEmitter.addListener('beaconsDidRange', (data) => {
+      console.log('Found beacons!', data.beacons)
+    })       
+  }
+
+  function beacon_remove_listener() {
+    DeviceEventEmitter.removeAllListeners();
+  }
+
 
   async function init() {
 
-    // const region = {
-    //   identifier: 'Estimotes',
-    //   uuid: 'B9407F30-F5F8-466E-AFF9-25556B57FE6D'
-    // };
-    // Beacons.requestWhenInUseAuthorization();
-    // Beacons.startMonitoringForRegion(region);
-    
+   
     console.log('init...');
     console.log(1);
-    setIsLogin('Y')
-    
-
+    setIsLogin('Y');
 
     return;
 
