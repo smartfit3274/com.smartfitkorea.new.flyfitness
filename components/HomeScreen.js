@@ -31,20 +31,161 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
   // const drawerEl = useRef(null);
-
   
   useEffect(()=>{
-    console.log('========== START ==========');
+    init();
     // read_refresh_token();
     // setIsLogin('Y');
-    // init();    
-    beacon_handler();
+    // init();       
+    // 비콘
+    // beacon_handler();    
+    // return () => {
+    //   //console.log('TAG: Cleanup!');
+    //   beacon_remove_listener();
+    // }  
   },[]);
 
+  async function init() {
+    
+    console.log('---------------- START ---------------- ')
+    
+    //await write_access_token('1');
+    //await write_refresh_token('1');
+
+    await read_refresh_token();
+    await read_access_token(); 
+    console.log('access_token:', access_token);
+    console.log('refresh_token:', refresh_token);
+    
+    let ret = '';    
+      try {
+        if(access_token != '') {
+          if(refresh_token != '') {  
+            ret = await check_access_token();            
+            if(ret == 'Y') {
+              setIsLogin('Y');
+            } else {
+              ret = await create_access_token();              
+              if(ret == 'Y') {
+                setIsLogin('Y');
+              }
+              else {
+                setIsLogin('N');
+              }
+            }
+          } 
+        }
+      } catch (error) {
+        console.log(error);
+      }
+  }
+
+  async function check_access_token(){
+    console.log ('check_access_token();');
+ 
+    try {
+      let url = '';    
+      if(cfg.mode =='http') { url = cfg.http.host; }
+      if(cfg.mode =='https') { url = cfg.https.host; }
+      url = url + '/token/ckAccessToken';    
+      const config = {      
+        timeout: 3000
+      } 
+      const data = {
+        sid:cfg.sid,
+        access_token: access_token
+      }      
+      let res = await axios.post(url,data,config);
+      if( res.data.ret == 'Y' )
+      {
+        return 'Y';
+      }      
+      else {
+        return 'N';
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function create_access_token() {
+    console.log('TAG: create_access_token()');
+
+    try {
+      let url = '';    
+      if(cfg.mode =='http') { url = cfg.http.host; }
+      if(cfg.mode =='https') { url = cfg.https.host; }
+      url = url + '/token/createAccessToken';    
+      const config = {      
+        timeout: 3000
+      } 
+      const data = {
+        sid:cfg.sid,
+        refresh_token: refresh_token
+      }      
+      let res = await axios.post(url,data,config);
+      if( res.data.ret == 'Y' )
+      {
+        return 'Y';
+      }      
+      else {
+        return 'N';
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function write_access_token(token) {
+    console.log('TAG: write_access_token()')
+    try {
+      await AsyncStorage.setItem('access_token',token);
+      console.log('TAG: write_access_token success');      
+    } catch (error) {
+      throw error;
+    }    
+  } 
+  
+  async function write_refresh_token(token) {
+    console.log('TAG: write_refresh_token()')
+    try {
+      await AsyncStorage.setItem('refresh_token',token);
+      console.log('TAG: write_refresh_token success');      
+    } catch (error) {
+      throw error;
+    }    
+  }   
+
+  async function read_refresh_token() {
+    refresh_token = '';
+    console.log('TAG: read_refresh_token()')
+    try {
+      await AsyncStorage.getItem('refresh_token',(error,value)=>{
+        if(value==null) return;
+        refresh_token = value;
+      });
+    } catch (error) {
+      throw error;
+    }    
+  }
+
+  async function read_access_token() {
+    read_access_token = '';
+    console.log('TAG: read_access_token()')
+    try {
+      await AsyncStorage.getItem('access_token',(error,value)=>{
+        if(value==null) return;
+        access_token = value;
+      });
+    } catch (error) {
+      throw error;
+    }    
+  }  
   
   // ============================================== //
   // 비콘제어
-  // ============================================== //       
+  // ============================================== //  
+  // if(Platform.OS === 'android'){     
   async function beacon_handler(){    
     try {    
       await detectIBeacons();
@@ -64,10 +205,8 @@ export default function HomeScreen() {
     }
   }
 
-
-// 옥포점 fda50693-a4e2-4fb1-afcf-c6eb07647825  
+  // 옥포점 fda50693-a4e2-4fb1-afcf-c6eb07647825  
   async function startRangingBeaconsInRegion () {
-
     const region = {
       identifier: 'Estimotes',
       uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647825'
@@ -80,11 +219,12 @@ export default function HomeScreen() {
       throw error;
     }
   };
-  // if(Platform.OS === 'android'){
-
+  
   function beacon_add_listener() {
     DeviceEventEmitter.addListener('beaconsDidRange', (data) => {
-      console.log('Found beacons!', data.beacons)
+      // console.log('Found beacons!', data.beacons[0].distance)
+      const {distance} = data.beacons[0];
+      console.log('distance: ',distance);
     })       
   }
 
@@ -92,45 +232,83 @@ export default function HomeScreen() {
     DeviceEventEmitter.removeAllListeners();
   }
 
+  return (      
+      <Container>
+        { isLogin =='N' &&
+        <Login></Login>
+        }
+        { isLogin == 'Y'&&
+        <Logged></Logged>
+        }
+      </Container>    
+  );
+};
 
-  async function init() {
+  // // 만들때 리프래시 토큰 채크해야함
+  // function create_access_token() {
+  //   console.log('TAG: create_access_token()');
 
+  //   let url = '';
+  //   const mode = cfg.mode;
+  //   if(mode =='http') {
+  //       url = cfg.http.host;
+  //   }
+  //   if(mode =='https') {
+  //       url = cfg.https.host;
+  //   }
+  //   url = url + '/token/createAccessToken';
+  //   const config = {      
+  //     timeout: 3000
+  //   }    
+  //   const data = {
+  //     sid:cfg.sid,     
+  //     refresh_token:refresh_token,      
+  //   }
+  //   axios.post(url,data,config)
+  //   .then(function(res){    
+  //     // console.log(res.data);  
+  //     if(res.data.ret=='Y') {
+  //       console.log('TAG: create_access_token = success');        
+  //       access_token = res.data.access_token;
+  //       save_access_token();
+  //     }
+  //     else {
+  //       console.log('TAG:',res.data.msg);
+  //     }
+  //   })
+  //   .catch(function (e){
+  //     console.log('ERROR: ',e);  
+  //     console.log('TAG: internet error!');      
+  //   });    
+  // }
+
+
+  // async function init() {
    
-    console.log('init...');
-    console.log(1);
-    setIsLogin('Y');
+  //   console.log('init...');
+  //   console.log(1);
+  //   setIsLogin('Y');
+  //   return;
+  //   // Read access toekn
+  //   await AsyncStorage.getItem('access_token', (err, value )=>{
+  //     // if(value==null) {
+  //     //   return;
+  //     // }
+  //     access_token = value;
+  //   });   
+  //   // console.log('access_token', access_token);
+  //   // console.log('refresh_token', refresh_token);
+  //   if(refresh_token != null) {
+  //     if(access_token != null) {
+  //       // check_access_token();
+  //     } else {
+  //         // 로그아웃
+  //     }
+  //   } else {
+  //     // 로그아웃
+  //   }
 
-    return;
-
-    // Read refresh token
-    await AsyncStorage.getItem('refresh_token', (err, value )=>{
-      // if(value==null) {
-      //   return;
-      // }
-      refresh_token = value;
-    });
-
-    // Read access toekn
-    await AsyncStorage.getItem('access_token', (err, value )=>{
-      // if(value==null) {
-      //   return;
-      // }
-      access_token = value;
-    });   
-   
-    // console.log('access_token', access_token);
-    // console.log('refresh_token', refresh_token);
-    if(refresh_token != null) {
-      if(access_token != null) {
-        // ck_access_token();
-      } else {
-          // 로그아웃
-      }
-    } else {
-      // 로그아웃
-    }
-
-  }
+  // }
 
   // function read_refresh_token() {
   //   console.log('TAG: read_refresh_token()');
@@ -153,49 +331,12 @@ export default function HomeScreen() {
   //     if( access_token == null ) {
   //       console.log('TAG: access token is null');        
   //     }
-  //     ck_access_token();      
+  //     check_access_token();      
   //   });
   // }
 
-  function ck_access_token() {
-    console.log('TAG: ck_access_token()');
-    
-    let url = '';
-    const mode = cfg.mode;
-    if(mode =='http') {
-        url = cfg.http.host;
-    }
-    if(mode =='https') {
-        url = cfg.https.host;
-    }
-    url = url + '/token/ckAccessToken'; 
-    const config = {      
-      timeout: 3000
-    }    
-    const data = {
-      sid:cfg.sid,
-      access_token: access_token
-    }
-    axios.post(url,data,config)
-    .then(function(res){    
-      // console.log(res.data);   
-      if(res.data.ret=='Y') {
-        console.log('TAG: ck_access_token > Y');
-        setIsLogin('Y');
-      }
-      else {
-        console.log('TAG:',res.data.msg);
-        create_access_token();        
-      }
-    })
-    .catch(function (e){
-      console.log('ERROR: ',e);  
-      console.log('TAG: internet error!');
-      create_access_token();
-    });    
-  }
 
-
+  
   // 필요없음 / 엑세스 토큰 만들때 처리
   // function ck_refresh_token() {
   //   console.log('TAG: ck_refresh_token()');
@@ -231,63 +372,3 @@ export default function HomeScreen() {
   //     console.log('TAG: internet error!');      
   //   });
   // }
-  
-
-  // 만들때 리프래시 토큰 채크해야함
-  function create_access_token() {
-    console.log('TAG: create_access_token()');
-
-    let url = '';
-    const mode = cfg.mode;
-    if(mode =='http') {
-        url = cfg.http.host;
-    }
-    if(mode =='https') {
-        url = cfg.https.host;
-    }
-    url = url + '/token/createAccessToken';
-    const config = {      
-      timeout: 3000
-    }    
-    const data = {
-      sid:cfg.sid,     
-      refresh_token:refresh_token,      
-    }
-    axios.post(url,data,config)
-    .then(function(res){    
-      // console.log(res.data);  
-      if(res.data.ret=='Y') {
-        console.log('TAG: create_access_token = success');        
-        access_token = res.data.access_token;
-        save_access_token();
-      }
-      else {
-        console.log('TAG:',res.data.msg);
-      }
-    })
-    .catch(function (e){
-      console.log('ERROR: ',e);  
-      console.log('TAG: internet error!');      
-    });    
-  }
-
-
-  function save_access_token() {
-    console.log('TAG: save_access_token()');
-    AsyncStorage.setItem('access_token',access_token,function(){
-      console.log('TAG: save_access_succes!');
-    });
-  }
-
-
-  return (      
-      <Container>
-        { isLogin =='N' &&
-        <Login></Login>
-        }
-        { isLogin == 'Y'&&
-        <Logged></Logged>
-        }
-      </Container>    
-  );
-};

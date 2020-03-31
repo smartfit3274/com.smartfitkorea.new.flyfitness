@@ -12,6 +12,7 @@ import cfg from "../data/cfg.json";
 import axios from 'axios';
 import {useNavigation} from 'react-navigation-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
+import { useEffect } from 'react';
 
 const TitleView = styled.View`
   margin-top: 30px;
@@ -81,153 +82,96 @@ const CompanyTextContainer = styled.View`
 
 export default function Login() {
 
-    const [phone,setPhone] = useState('');
-    const [pass,setPass] = useState('');
-    const navigation = useNavigation();
+  const [phone,setPhone] = useState('');
+  const [pass,setPass] = useState('');
+  const navigation = useNavigation();          
 
-    function BtnLoginPress () { 
-        console.log('TAG: BtnLoginPress()');    
-        getRefreshtoken();   
+  useEffect(()=>{
+  },[]);
+
+  async function create_refresh_token () {
+    console.log('create_refresh_token()');
+
+    try {
+      let url = '';    
+      if(cfg.mode =='http') { url = cfg.http.host; }
+      if(cfg.mode =='https') { url = cfg.https.host; }
+      url = url + '/token/getRefreshToken';    
+      const data = {
+        sid:cfg.sid,
+        phone:phone,
+        pass:pass
+      } 
+      const config = {
+        timeout: 3000
+      }      
+      let res = await axios.post(url,data,config);
+      console.log(res.data);
+
+      if( res.data.ret == 'Y' )
+      {
+        return 'Y';
+      }      
+      else {
+        return 'N';
+      }        
+      // -> res.data
+    } catch (error) {
+      throw error;
     }    
+  }
 
-    function getAccessToken() {        
-        console.log('TAG: getAccessToken()');           
-        AsyncStorage.getItem('refresh_token', (err, value )=>{
-          const refresh_token = value;        
-          
-          const mode = cfg.mode;
-          let url = '';
-          if(mode =='http') { 
-              url = cfg.http.host;
-          }
-          if(mode =='https') {
-              url = cfg.https.host;
-          }
-          url = url + '/token/getAccessToken';          
-  
-          const config = {      
-            headers: { Authorization: `Bearer ${refresh_token}` },
-            timeout: 3000
-          }    
-          const data = {
-            sid:cfg.sid,     
-          }
-          axios.post(url,data,config)
-          .then(function(res){    
-            if(res.data.ret=='Y') {        
-              
-              // 토큰저장
-              const access_token = res.data.access_token;
-              AsyncStorage.setItem('access_token',access_token,function(){
-                console.log('TAG: access_token saved.');     
-                
-                // 로그인 새로고침
-                navigation.replace('Home');
-              });
+  async function create_access_token() {
+    console.log('create_access_token()');
+
     
-            } else {
-              console.log(res.data.msg);
-            }
-          })
-          .catch(function (e){
-            console.log(e);
-          });
+  }
 
-        }); 
-    }  
+  async function btn_login_press () { 
+    console.log('btn_login_press()');
 
+    try {
+      const ret = await create_refresh_token();
+      console.log('RET',ret);
 
-    function getRefreshtoken() {
-        console.log('-----------------------------');
-        console.log('TAG: getRefreshtoken()');        
+    } catch ( error ) {
+      console.log(error);
+    }      
+  }  
 
-        const mode = cfg.mode;
-        let url = '';
-        if(mode =='http') { 
-            url = cfg.http.host;
-        }
-        if(mode =='https') {
-            url = cfg.https.host;
-        }
-        url = url + '/token/getRefreshToken';
-        
-        const data = {
-          sid:cfg.sid,
-          phone:phone,
-          pass:pass
-        }    
+  function btn_join_press() {    
+      navigation.navigate('Join1');   // Agree 
+      // navigation.navigate('Join1'); // Input
+  }
 
-        const config = {
-          timeout: 3000
-        }
+  return (
+      <ScrollView style={{width: '100%'}}>          
+          <TitleView>
+              <MainText>{cfg.name}</MainText>
+              <Logo source={require('../images/logo_smartpass.png')} resizeMode="contain"></Logo>
+          </TitleView>
 
-        axios.post(url,data,config)
-        .then(function(res){
-          if(res.data.ret=='Y') {       
-            const refresh_token = res.data.refresh_token;
-            AsyncStorage.setItem('refresh_token',refresh_token,function(){
-              console.log('TAG: access_token saved.');                      
-              getAccessToken();
-            });    
-          }
-          else {
-            Alert.alert(
-              '로그인 오류',
-              res.data.msg,
-              [{text:'ok',onPress:()=>console.log('OK pressed')}],
-              {
-                cancelable:false,
-              }
-            );
-          }
-        })
-        .catch(function(e){
-          console.log(e);
-          Alert.alert(
-            '네트워크 오류',
-            '인터넷 연결을 확인하세요',
-            [{text:'ok',onPress:()=>console.log('OK pressed')}],
-            {
-              cancelable:false,
-            }
-          );          
-        });
+          <InputContainer>        
+              <LoginInput placeholder="휴대폰번호 - 없이 입력" 
+              onChange={(e)=>setPhone(e.nativeEvent.text)}
+              keyboardType={'numeric'}></LoginInput>    
+              <PassInput placeholder="비밀번호" onChange={(e)=>setPass(e.nativeEvent.text)}
+              secureTextEntry={true}
+              ></PassInput>
+          </InputContainer>
 
-    }
+          <ButtonContainer>            
+              <LoginButton full onPress={()=>btn_login_press()}><Text>로그인</Text></LoginButton>
+              <JoinButton full onPress={()=>btn_join_press()}><Text>회원가입</Text></JoinButton>                     
+          </ButtonContainer>
 
-    function BtnJoinPress() {    
-        // navigation.navigate('Join1');   // Agree 
-        navigation.navigate('Join2'); // Input
-    }
+          <LostPassContainer>
+              <Text>비밀번호를 잊어버리셨나요?</Text>
+          </LostPassContainer>
 
-    return (
-        <ScrollView style={{width: '100%'}}>          
-            <TitleView>
-                <MainText>{cfg.name}</MainText>
-                <Logo source={require('../images/logo_smartpass.png')} resizeMode="contain"></Logo>
-            </TitleView>
-
-            <InputContainer>        
-                <LoginInput placeholder="휴대폰번호 - 없이 입력" 
-                onChange={(e)=>setPhone(e.nativeEvent.text)}
-                keyboardType={'numeric'}></LoginInput>    
-                <PassInput placeholder="비밀번호" onChange={(e)=>setPass(e.nativeEvent.text)}
-                secureTextEntry={true}
-                ></PassInput>
-            </InputContainer>
-
-            <ButtonContainer>            
-                <LoginButton full onPress={()=>BtnLoginPress()}><Text>로그인</Text></LoginButton>
-                <JoinButton full onPress={()=>BtnJoinPress()}><Text>회원가입</Text></JoinButton>                     
-            </ButtonContainer>
-
-            <LostPassContainer>
-                <Text>비밀번호를 잊어버리셨나요?</Text>
-            </LostPassContainer>
-
-            <CompanyText></CompanyText>
-        </ScrollView>
-    );  
+          <CompanyText></CompanyText>
+      </ScrollView>
+  );  
 }
 
 function CompanyText() {
@@ -242,3 +186,96 @@ function CompanyText() {
         </CompanyTextContainer>
     )
 }
+
+
+// function getRefreshtoken() {
+    //     console.log('-----------------------------');
+    //     console.log('TAG: getRefreshtoken()');        
+
+    //     const mode = cfg.mode;
+    //     let url = '';
+    //     if(mode =='http') { 
+    //         url = cfg.http.host;
+    //     }
+    //     if(mode =='https') {
+    //         url = cfg.https.host;
+    //     }
+    //     url = url + '/token/getRefreshToken';
+        
+    //     const data = {
+    //       sid:cfg.sid,
+    //       phone:phone,
+    //       pass:pass
+    //     }    
+
+    //     const config = {
+    //       timeout: 3000
+    //     }
+
+    //     axios.post(url,data,config)
+    //     .then(function(res){
+    //       if(res.data.ret=='Y') {       
+    //         const refresh_token = res.data.refresh_token;
+    //         AsyncStorage.setItem('refresh_token',refresh_token,function(){
+    //           console.log('TAG: access_token saved.');                      
+    //           getAccessToken();
+    //         });    
+    //       }
+    //       else {
+    //         Alert.alert(
+    //           '로그인 오류',
+    //           res.data.msg,
+    //           [{text:'ok',onPress:()=>console.log('OK pressed')}],
+    //           {
+    //             cancelable:false,
+    //           }
+    //         );
+    //       }
+    //     })
+    //     .catch(function(e){
+    //       console.log(e);
+    //       Alert.alert(
+    //         '네트워크 오류',
+    //         '인터넷 연결을 확인하세요',
+    //         [{text:'ok',onPress:()=>console.log('OK pressed')}],
+    //         {
+    //           cancelable:false,
+    //         }
+    //       );          
+    //     });
+
+    // }
+
+
+        //     axios.post(url,data,config)
+    //     .then(function(res){
+    //       if(res.data.ret=='Y') {       
+    //         const refresh_token = res.data.refresh_token;
+    //         AsyncStorage.setItem('refresh_token',refresh_token,function(){
+    //           console.log('TAG: access_token saved.');                      
+    //           getAccessToken();
+    //         });    
+    //       }
+    //       else {
+    //         Alert.alert(
+    //           '로그인 오류',
+    //           res.data.msg,
+    //           [{text:'ok',onPress:()=>console.log('OK pressed')}],
+    //           {
+    //             cancelable:false,
+    //           }
+    //         );
+    //       }
+    //     })
+    //     .catch(function(e){
+    //       console.log(e);
+    //       Alert.alert(
+    //         '네트워크 오류',
+    //         '인터넷 연결을 확인하세요',
+    //         [{text:'ok',onPress:()=>console.log('OK pressed')}],
+    //         {
+    //           cancelable:false,
+    //         }
+    //       );          
+    //     });
+    // }
