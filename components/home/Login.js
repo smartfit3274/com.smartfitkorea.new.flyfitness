@@ -92,57 +92,126 @@ export default function Login() {
   async function create_refresh_token () {
     console.log('create_refresh_token()');
 
+    const ret = {
+      "ret":"Y",
+      "refresh_token":"1111"
+    }
     try {
-      let url = '';    
-      if(cfg.mode =='http') { url = cfg.http.host; }
-      if(cfg.mode =='https') { url = cfg.https.host; }
-      url = url + '/token/getRefreshToken';    
-      const data = {
-        sid:cfg.sid,
-        phone:phone,
-        pass:pass
-      } 
-      const config = {
-        timeout: 3000
-      }      
-      let res = await axios.post(url,data,config);
-      console.log(res.data);
-
-      if( res.data.ret == 'Y' )
-      {
-        return 'Y';
-      }      
-      else {
-        return 'N';
-      }        
-      // -> res.data
+      return ret;
     } catch (error) {
       throw error;
-    }    
+    }
+
+    // try {
+    //   let url = '';    
+    //   if(cfg.mode =='http') { url = cfg.http.host; }
+    //   if(cfg.mode =='https') { url = cfg.https.host; }
+    //   url = url + '/token/getRefreshToken';    
+    //   const data = {
+    //     sid:cfg.sid,
+    //     phone:phone,
+    //     pass:pass
+    //   } 
+    //   const config = {
+    //     timeout: 3000
+    //   }      
+    //   let res = await axios.post(url,data,config);
+    //   console.log(res.data);
+
+    //   if( res.data.ret == 'Y' )
+    //   {
+    //     return 'Y';
+    //   }      
+    //   else {
+    //     return 'N';
+    //   }        
+    //   // -> res.data
+    // } catch (error) {
+    //   throw error;
+    // }    
   }
 
   async function create_access_token() {
     console.log('create_access_token()');
 
-    
+    const ret = {
+      "ret":"Y",
+      "access_token":"2222"
+    }
+    try {
+      return ret;
+    } catch (error) {
+      throw error;
+    } 
   }
 
   async function btn_login_press () { 
     console.log('btn_login_press()');
 
-    try {
-      const ret = await create_refresh_token();
-      console.log('RET',ret);
+    var result1 = await create_refresh_token();
+    var result2 = await create_access_token();
+  
+    console.log('result1',result1);
+    console.log('result2',result2);
+    
+      var resultC1 = 'N';
+      if(result1.ret == 'Y' && result2.ret == 'Y') {
 
-    } catch ( error ) {
-      console.log(error);
-    }      
+        var resultA1 = await write_refresh_token(result1.refresh_token);
+        var resultA2 = await write_access_token(result2.access_token);
+
+        if(resultA1 == 'Y' && resultA2=='Y') {
+          navigation.navigate('Home');
+          resultC1 = 'Y';
+          console.log('refresh page...')
+        }
+      }
+
+      
+
+      if(resultC1 == 'N') {
+        Alert.alert(
+          '로그인 오류',
+          '아아디나 암호가 일치하지 않습니다.',
+          [{text:'ok',onPress:()=>console.log('OK pressed')}],
+          {
+            cancelable:false,
+          }
+        );      
+      }
+ 
+   
   }  
 
   function btn_join_press() {    
       navigation.navigate('Join1');   // Agree 
       // navigation.navigate('Join1'); // Input
   }
+
+
+  // 토큰처리
+  async function write_access_token(token) {
+    console.log('TAG: write_access_token()')
+    try {
+      await AsyncStorage.setItem('access_token',token);
+      console.log('TAG: write_access_token success');      
+      return 'Y';
+    } catch (error) {
+      throw error;
+    }    
+  } 
+  
+  async function write_refresh_token(token) {
+    console.log('TAG: write_refresh_token()')
+    try {
+      await AsyncStorage.setItem('refresh_token',token);
+      console.log('TAG: write_refresh_token success');  
+      return 'Y';   
+    } catch (error) {
+      throw error;
+    }    
+  }     
+
 
   return (
       <ScrollView style={{width: '100%'}}>          

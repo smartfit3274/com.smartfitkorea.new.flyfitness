@@ -49,14 +49,28 @@ export default function HomeScreen() {
     
     console.log('---------------- START ---------------- ')
     
-    //await write_access_token('1');
-    //await write_refresh_token('1');
 
-    await read_refresh_token();
-    await read_access_token(); 
+    // await write_access_token('');
+    // await write_refresh_token('');
+
+    access_token = await read_access_token(); 
+    refresh_token = await read_refresh_token();
+    
     console.log('access_token:', access_token);
     console.log('refresh_token:', refresh_token);
     
+    if(access_token != '') {
+      if(refresh_token != '') {
+        // var is_access = await ck_access_token();
+      }
+      else {
+        setIsLogin('N');
+      }
+    } else {
+      setIsLogin('N');
+    }
+
+    /*
     let ret = '';    
       try {
         if(access_token != '') {
@@ -78,8 +92,12 @@ export default function HomeScreen() {
       } catch (error) {
         console.log(error);
       }
+      */
   }
 
+  // ============================================== //
+  // 토큰처리
+  // ============================================== // 
   async function check_access_token(){
     console.log ('check_access_token();');
  
@@ -157,26 +175,22 @@ export default function HomeScreen() {
   }   
 
   async function read_refresh_token() {
-    refresh_token = '';
     console.log('TAG: read_refresh_token()')
     try {
-      await AsyncStorage.getItem('refresh_token',(error,value)=>{
-        if(value==null) return;
-        refresh_token = value;
-      });
+      var result = await AsyncStorage.getItem('refresh_token');
+      if(result==null) return '';
+      return result;
     } catch (error) {
       throw error;
     }    
   }
 
   async function read_access_token() {
-    read_access_token = '';
     console.log('TAG: read_access_token()')
     try {
-      await AsyncStorage.getItem('access_token',(error,value)=>{
-        if(value==null) return;
-        access_token = value;
-      });
+      var result = await AsyncStorage.getItem('access_token');
+      if(result == null) return '';
+      return result;
     } catch (error) {
       throw error;
     }    
