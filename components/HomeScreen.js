@@ -8,7 +8,8 @@ import {
   TextInput,
   KeyboardAvoidingView,  
   Keyboard,
-  Alert
+  Alert,
+  EdgeInsetsPropType
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
@@ -22,6 +23,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { DeviceEventEmitter } from 'react-native'
 import Beacons from 'react-native-beacons-manager'
+import NetInfo from "@react-native-community/netinfo";
 
 let refresh_token = '';
 let access_token = '';
@@ -32,7 +34,7 @@ export default function HomeScreen() {
   const [isLogin,setIsLogin] = useState('');
   // const drawerEl = useRef(null);
   
-  useEffect(()=>{
+  useEffect(()=>{    
     init();
     // read_refresh_token();
     // setIsLogin('Y');
@@ -45,54 +47,57 @@ export default function HomeScreen() {
     // }  
   },[]);
 
-  async function init() {
+  async function init() {    
     
-    console.log('---------------- START ---------------- ')
-    
+    console.log('---------------- START ---------------- ')  
 
     // await write_access_token('');
     // await write_refresh_token('');
 
     access_token = await read_access_token(); 
     refresh_token = await read_refresh_token();
-    
+        
     console.log('access_token:', access_token);
     console.log('refresh_token:', refresh_token);
     
-    if(access_token != '') {
-      if(refresh_token != '') {
-        // var is_access = await ck_access_token();
-      }
-      else {
-        setIsLogin('N');
-      }
-    } else {
+    // 인터넷 연결확인
+    var state = await NetInfo.fetch();
+    if(state.isConnected == false) {
+      navigation.navigate('Network');
+      return;      
+    }  
+    
+    
+    // 로그인 처리
+    if(refresh_token == '' || refresh_token == null) {
       setIsLogin('N');
+      return;
+    }        
+        
+    if(access_token != '') {
+      var result1 = await check_access_token();             
+      if(result1=='Y') {    
+        setIsLogin('Y'); 
+        return;                
+      } 
     }
 
-    /*
-    let ret = '';    
-      try {
-        if(access_token != '') {
-          if(refresh_token != '') {  
-            ret = await check_access_token();            
-            if(ret == 'Y') {
-              setIsLogin('Y');
-            } else {
-              ret = await create_access_token();              
-              if(ret == 'Y') {
-                setIsLogin('Y');
-              }
-              else {
-                setIsLogin('N');
-              }
-            }
-          } 
+    if(access_token == '' || (access_token != '' && result1 == 'N'))
+    {
+      var result2 = await create_access_token();
+      if(result2.ret == 'Y' && result2.access_token != '') {            
+        var result3 = await write_access_token(result2.access_token);
+        if(result3=='Y') {
+          setIsLogin('Y');   
+          return;         
         }
-      } catch (error) {
-        console.log(error);
+        else{
+          setIsLogin('N');
+          return;
+        }        
       }
-      */
+    }
+
   }
 
   // ============================================== //
@@ -105,7 +110,7 @@ export default function HomeScreen() {
       let url = '';    
       if(cfg.mode =='http') { url = cfg.http.host; }
       if(cfg.mode =='https') { url = cfg.https.host; }
-      url = url + '/token/ckAccessToken';    
+      url = url + '/token/checkAccessToken';         
       const config = {      
         timeout: 3000
       } 
@@ -122,12 +127,12 @@ export default function HomeScreen() {
         return 'N';
       }
     } catch (error) {
-      throw error;
+      return error;
     }
   }
 
   async function create_access_token() {
-    console.log('TAG: create_access_token()');
+    console.log('create_access_token()');
 
     try {
       let url = '';    
@@ -144,35 +149,17 @@ export default function HomeScreen() {
       let res = await axios.post(url,data,config);
       if( res.data.ret == 'Y' )
       {
-        return 'Y';
+        return {"ret":"Y","access_token":res.data.access_token}
       }      
       else {
-        return 'N';
+        console.log(res.data.msg);
+        return {"ret":"N"}
       }
     } catch (error) {
-      throw error;
+      console.log(error);
+      return {"ret":"N"}
     }
   }
-
-  async function write_access_token(token) {
-    console.log('TAG: write_access_token()')
-    try {
-      await AsyncStorage.setItem('access_token',token);
-      console.log('TAG: write_access_token success');      
-    } catch (error) {
-      throw error;
-    }    
-  } 
-  
-  async function write_refresh_token(token) {
-    console.log('TAG: write_refresh_token()')
-    try {
-      await AsyncStorage.setItem('refresh_token',token);
-      console.log('TAG: write_refresh_token success');      
-    } catch (error) {
-      throw error;
-    }    
-  }   
 
   async function read_refresh_token() {
     console.log('TAG: read_refresh_token()')
@@ -192,9 +179,21 @@ export default function HomeScreen() {
       if(result == null) return '';
       return result;
     } catch (error) {
-      throw error;
+      console.log(error);
+      return '';
     }    
   }  
+
+  async function write_access_token(token) {
+    console.log('TAG: write_access_token()')
+    try {
+      await AsyncStorage.setItem('access_token',token);
+      return 'Y';
+    } catch (error) {
+      console.log(error);
+      return 'N';
+    }    
+  } 
   
   // ============================================== //
   // 비콘제어
@@ -386,3 +385,39 @@ export default function HomeScreen() {
   //     console.log('TAG: internet error!');      
   //   });
   // }
+
+
+  /*
+    let ret = '';    
+      try {
+        if(access_token != '') {
+          if(refresh_token != '') {  
+            ret = await check_access_token();            
+            if(ret == 'Y') {
+              setIsLogin('Y');
+            } else {
+              ret = await create_access_token();              
+              if(ret == 'Y') {
+                setIsLogin('Y');
+              }
+              else {
+                setIsLogin('N');
+              }
+            }
+          } 
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      */
+
+  
+  // async function write_refresh_token(token) {
+  //   console.log('TAG: write_refresh_token()')
+  //   try {
+  //     await AsyncStorage.setItem('refresh_token',token);
+  //     console.log('TAG: write_refresh_token success');      
+  //   } catch (error) {
+  //     throw error;
+  //   }    
+  // }   

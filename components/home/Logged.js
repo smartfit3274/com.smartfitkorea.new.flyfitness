@@ -102,19 +102,6 @@ function Logged() {
         console.log('bio_open_door');
     }
 
-
-    function btn_logout(){
-        console.log('TAG: btn_logout()');
-        navigation.navigate('home');
-
-        AsyncStorage.setItem('access_token','',function(){
-            AsyncStorage.setItem('refresh_token','',function(){
-                console.log('logout!');
-                navigation.navigate('Home');
-            });
-        });        
-    }
-
     function btn_open_door() {
         console.log('TAG: btn_open_door()');   
         bio_is_key_exist();
@@ -129,6 +116,38 @@ function Logged() {
         console.log('TAG: btn_cardpay()');
         navigation.push('CardPay')
     }
+
+    async function btn_logout(){
+        console.log('TAG: btn_logout()');     
+        await write_refresh_token('');
+        await write_access_token('');  
+        navigation.replace('Home');
+    }    
+
+    // ============================================== //
+    // 토큰처리
+    // ============================================== // 
+    async function write_refresh_token(token) {
+        console.log('TAG: write_refresh_token()')
+        try {
+            await AsyncStorage.setItem('refresh_token',token);
+            return 'Y';
+        } catch (error) {
+            console.log(error);
+            return 'N';
+        }
+    }        
+
+    async function write_access_token(token) {
+        console.log('TAG: write_access_token()')
+        try {
+          await AsyncStorage.setItem('access_token',token);
+          return 'Y';
+        } catch (error) {
+          console.log(error);
+          return 'N';
+        }    
+      }     
 
     return (
       <>

@@ -10,6 +10,7 @@ import JoinScreen1 from './components/JoinScreen1';
 import JoinScreen2 from './components/JoinScreen2';
 import MyInfoScreen from './components/MyInfoScreen';
 import CardPayScreen from './components/CardPayScreen';
+import NetworkScreen from './components/NetworkScreen';
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -54,6 +55,12 @@ const AppNavigator = createStackNavigator({
       title: 'CardPay'
     })       
   },
+  Network: {
+    screen: NetworkScreen,
+    navigationOptions: ({
+      title: 'Network!'
+    })       
+  },  
 }, 
 {    
   defaultNavigationOptions: {
