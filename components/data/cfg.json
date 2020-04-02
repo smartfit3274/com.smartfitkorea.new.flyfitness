@@ -1,17 +1,18 @@
 {
+    "name":"스마트짐 옥포점",
     "sid":"smartgym",    
-    "name":"스마트짐 출입관리 시스템",
+    "cid":"CT14Z01170314.HXZb9",    
     "company":"상호명 : 스마트짐 | 사업자번호 : 294-22-00344",
     "address":"주소 : 경남 거제시 옥포대첩로 38,9층",
     "reg":"통신판매업신고번호 : 제2018-경남거제-0161호",
     "charge":"대표 : 박일봉 | 개인정보관리 책임자:노근역",
     "phone":"유선연락처 : 051-583-9645",
     "resp":"모든 책임은 스마트짐에게 있습니다.",
-    "mode":"http",    
+    "mode":"http",
     "http": {
         "host":"http://192.168.76.51"
     },   
     "https": {
-        "host":"https://pass.smartg.kr",
+        "host":"https://pass.smartg.kr"
     }    
 }

@@ -118,13 +118,8 @@ export default function Login() {
             cancelable:false,
           }
         );           
-
       }
-
-    }
-
- 
-   
+    }   
   }  
 
   function btn_join_press() {    

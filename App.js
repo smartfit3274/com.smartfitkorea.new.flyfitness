@@ -9,8 +9,10 @@ import AgreeScreen from './components/AgreeScreen';
 import JoinScreen1 from './components/JoinScreen1';
 import JoinScreen2 from './components/JoinScreen2';
 import MyInfoScreen from './components/MyInfoScreen';
-import CardPayScreen from './components/CardPayScreen';
 import NetworkScreen from './components/NetworkScreen';
+import CardPayScreen from './components/CardPayScreen';
+import CardPayStartScreen from './components/CardPayStartScreen';
+import CardPayResultScreen from './components/CardPayResultScreen';
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -48,19 +50,32 @@ const AppNavigator = createStackNavigator({
     navigationOptions: ({
       title: 'MyInfo'
     })       
-  },
-  CardPay: {
-    screen: CardPayScreen,
-    navigationOptions: ({
-      title: 'CardPay'
-    })       
-  },
+  },  
   Network: {
     screen: NetworkScreen,
     navigationOptions: ({
       title: 'Network!'
     })       
   },  
+  CardPay: {
+    screen: CardPayScreen,
+    navigationOptions: ({
+      title: 'CardPay'
+    })       
+  },
+  CardPayStart: {
+    screen: CardPayStartScreen,
+    navigationOptions: ({
+      title: 'CardPayStart'
+    })  
+  },
+  CardPayResult: {
+    screen: CardPayResultScreen,
+    navigatResulttions: ({
+      title: 'CardPayResult'
+    })       
+  },     
+
 }, 
 {    
   defaultNavigationOptions: {

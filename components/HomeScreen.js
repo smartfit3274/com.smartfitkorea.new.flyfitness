@@ -57,8 +57,8 @@ export default function HomeScreen() {
     access_token = await read_access_token(); 
     refresh_token = await read_refresh_token();
         
-    console.log('access_token:', access_token);
-    console.log('refresh_token:', refresh_token);
+    //console.log('access_token:', access_token);
+    //console.log('refresh_token:', refresh_token);
     
     // 인터넷 연결확인
     var state = await NetInfo.fetch();
@@ -66,8 +66,7 @@ export default function HomeScreen() {
       navigation.navigate('Network');
       return;      
     }  
-    
-    
+        
     // 로그인 처리
     if(refresh_token == '' || refresh_token == null) {
       setIsLogin('N');
@@ -79,7 +78,11 @@ export default function HomeScreen() {
       if(result1=='Y') {    
         setIsLogin('Y'); 
         return;                
-      } 
+      }  
+      if(result1=='E'){ // 네트워크 응답없음 > 종료
+        navigation.navigate('Network');
+        return;
+      }
     }
 
     if(access_token == '' || (access_token != '' && result1 == 'N'))
@@ -95,6 +98,11 @@ export default function HomeScreen() {
           setIsLogin('N');
           return;
         }        
+      }
+      else
+      {
+        setIsLogin('N');
+        return;
       }
     }
 
@@ -127,7 +135,8 @@ export default function HomeScreen() {
         return 'N';
       }
     } catch (error) {
-      return error;
+      return 'E';
+      console.log(error);
     }
   }
 
