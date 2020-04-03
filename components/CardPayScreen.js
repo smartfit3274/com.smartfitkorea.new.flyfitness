@@ -142,6 +142,7 @@ function MyInfoScreen() {
             return false;                
         }
 
+        amount = 10; //TEST
         var params = {
             userCode : 'iamport',
             name : name,
@@ -150,7 +151,21 @@ function MyInfoScreen() {
             pid : pid,
             sdate: sdate,
         }
+        // console.log(params);
         navigation.navigate('CardPayStart',{params:params});
+    }
+
+
+    // 결제완료페이지 TEST
+    function btn_result() {
+        console.log('result();');        
+        const response = {
+            "imp_success": "success", 
+            "imp_uid": "imp_206903365167", 
+            "merchant_uid": "mid_1585814900301",
+            "error_msg":"오류메시지"
+        }
+        navigation.navigate('CardPayResult',{response:response});
     }
 
     return (
@@ -183,11 +198,11 @@ function MyInfoScreen() {
                     />            
             </View>     
 
-        <Content scrollEnabled={true}>
+            <Button danger onPress={()=>btn_result()}>
+                <Text>카드결제완료창</Text>
+            </Button>
 
-          
-            
-                    
+        <Content scrollEnabled={true}> 
             <List>
             {listItem.map((item,index)=>
                 <ListItem key={index}>                    
@@ -199,9 +214,7 @@ function MyInfoScreen() {
                     </View>
                 </ListItem>
             )}
-            </List>
-            
-
+            </List>          
         </Content>
 
       </>      
@@ -209,11 +222,6 @@ function MyInfoScreen() {
 }
 
 export default MyInfoScreen;
-
-
-
-
-
 
 
 {

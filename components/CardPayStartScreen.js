@@ -47,7 +47,7 @@ function CardPayStartScreen() {
         mcd,
         pid,
         sdate,
-    } = params;  
+    } = params;     
 
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
@@ -61,6 +61,7 @@ function CardPayStartScreen() {
         name: name,
         merchant_uid: merchant_uid,
         amount: amount,
+        buyer_name:'고객',
         buyer_tel: '',
         buyer_email: '',
         buyer_addr: '',
@@ -70,7 +71,7 @@ function CardPayStartScreen() {
         pid: pid,
         sid: cfg.sid,
         sdate: sdate,
-    }        
+    }       
 
     // 결제정보 저장
     let url = '';    
@@ -82,14 +83,15 @@ function CardPayStartScreen() {
     }
     Axios.post(url,data,config)
     .then(function(res){
-        console.log('success');
-        
+        console.log('success');        
     })
     .catch(function(error){
-        console.log(error);        
+        console.log(error);
+        // 결제창 종료
+
     });   
  
-    const debug = 2;
+    // return (<View><Text>DEBUG</Text></View>)
     return (  
         <IMP.Payment
         userCode={userCode}     // 가맹점 식별코드

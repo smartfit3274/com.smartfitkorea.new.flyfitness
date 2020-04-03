@@ -262,7 +262,7 @@ export default function HomeScreen() {
         { isLogin == 'Y'&&
         <Logged></Logged>
         }
-      </Container>    
+      </Container>   
   );
 };
 
