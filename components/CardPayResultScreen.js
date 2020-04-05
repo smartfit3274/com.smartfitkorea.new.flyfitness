@@ -81,9 +81,13 @@ function CardPayResultScreen() {
                 sid:cfg.sid,
                 access_token: access_token
             }    
-            let res = await Axios.post(url,data,config);
-            return res.data.mb_id;           
-
+            Axios.post(url,data,config)
+            .then(function(res){
+              console.log('success');
+            })
+            .catch(function(error) {
+              console.log(error);
+            })
         }
 
     },[]);

@@ -35,9 +35,11 @@ export default function HomeScreen() {
   // const drawerEl = useRef(null);
   
   useEffect(()=>{    
-    init();
+    //init();
+
+
     // read_refresh_token();
-    // setIsLogin('Y');
+    setIsLogin('Y');
     // init();       
     // 비콘
     // beacon_handler();    
