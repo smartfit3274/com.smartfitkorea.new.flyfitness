@@ -14,7 +14,6 @@ import {
     Button,
     List,
     ListItem,
-    DatePicker
 } from 'native-base';
 import { Alert, Image,Dimensions, RefreshControlBase } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
@@ -27,6 +26,7 @@ import IMP from 'iamport-react-native';
 import Loading from './Loading';
 import { WebView } from 'react-native-webview';
 import { initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
+import DatePicker from 'react-native-datepicker';
 
 var access_token = '';
 var mcd = '';
@@ -42,7 +42,7 @@ function MyInfoScreen() {
 
     const navigation = useNavigation();
     const [listItem, setListItem] = useState(Array());
-    const [sdate,setSDate] = useState('');
+    const [sdate,setSDate] = useState(null);
     
     useEffect(()=>{        
         init();        
@@ -52,6 +52,7 @@ function MyInfoScreen() {
         console.log('init()');
         access_token = await read_access_token();
         mcd = await token_decode();
+        console.log('mcd:',mcd);
 
         // 상품로딩
         get_product_list();
@@ -129,11 +130,11 @@ function MyInfoScreen() {
 
     // cfg > usercode
     function btn_cardpay(name,amount,pid){
-
-        if(sdate=='') {
+        
+        if(sdate==null) {
             Alert.alert(
                 '안내',
-                '시작일을 먼저 선택하세요.',
+                '먼저 시작일을 선택하세요.',
                 [{text:'ok',onPress:()=>console.log('OK pressed')}],
                 {
                     cancelable:false,
@@ -155,14 +156,13 @@ function MyInfoScreen() {
         navigation.navigate('CardPayStart',{params:params});
     }
 
-
     // 결제완료페이지 TEST
     function btn_result() {
         console.log('result();');        
         const response = {
             "imp_success": "success", 
-            "imp_uid": "imp_206903365167", 
-            "merchant_uid": "mid_1585814900301",
+            "imp_uid": "imp_206903365199", 
+            "merchant_uid": "mid_1585814900406",
             "error_msg":"오류메시지"
         }
         navigation.navigate('CardPayResult',{response:response});
@@ -180,27 +180,20 @@ function MyInfoScreen() {
                 <Text style={{alignSelf:"center"}}>카드결제</Text>
             </Body>
             <Right style={{flex:1}}></Right>
-        </Header>   
+        </Header>  
 
             <View style={{ marginLeft:25, marginTop:10 }}>
-                <Text style={{fontSize:20}}>시작일을 선택하세요:</Text>
-                <DatePicker
-                    defaultDate={new Date()}
-                    locale={"en"}
-                    modalTransparent={false}
-                    animationType={"fade"}
-                    androidMode={"default"}
-                    placeHolderText="-- 시작일 선택 --"
-                    textStyle={{ color: "green" }}
-                    placeHolderTextStyle={{ color: "#000" }}            
-                    disabled={false}   
-                    onDateChange={(date)=>setSDate(date)}
-                    />            
-            </View>     
-
-            <Button danger onPress={()=>btn_result()}>
-                <Text>카드결제완료창</Text>
-            </Button>
+                <DatePicker 
+                date={sdate}
+                placeholder="시작일"
+                format="YYYY-MM-DD"
+                minDate={new Date()}      
+                onDateChange={(date) => {
+                    setSDate(date);
+                }}          
+                >
+                </DatePicker>
+            </View>           
 
         <Content scrollEnabled={true}> 
             <List>

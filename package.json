@@ -24,6 +24,7 @@
     "react-native-async-storage": "0.0.1",
     "react-native-beacons-manager": "^1.0.7",
     "react-native-biometrics": "^2.1.4",
+    "react-native-datepicker": "^1.7.2",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-safe-area-context": "^0.7.3",
     "react-native-screens": "^2.4.0",

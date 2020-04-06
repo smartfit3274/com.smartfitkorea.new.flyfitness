@@ -35,11 +35,10 @@ export default function HomeScreen() {
   // const drawerEl = useRef(null);
   
   useEffect(()=>{    
-    //init();
+    init();
 
 
-    // read_refresh_token();
-    setIsLogin('Y');
+    // read_refresh_token();    
     // init();       
     // 비콘
     // beacon_handler();    
@@ -47,6 +46,7 @@ export default function HomeScreen() {
     //   //console.log('TAG: Cleanup!');
     //   beacon_remove_listener();
     // }  
+    
   },[]);
 
   async function init() {    

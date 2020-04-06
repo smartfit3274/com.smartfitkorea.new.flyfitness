@@ -73,13 +73,14 @@ function CardPayResultScreen() {
             let url = '';    
             if(cfg.mode =='http') { url = cfg.http.host; }
             if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/rest/createKey';         
+            url = url + '/rest/cardKeyCreate';         
             const config = { 
                 timeout: 3000
             }
             const data = {
                 sid:cfg.sid,
-                access_token: access_token
+                access_token: access_token,
+                cid:cfg.cid,
             }    
             Axios.post(url,data,config)
             .then(function(res){
@@ -102,12 +103,12 @@ function CardPayResultScreen() {
     <Text style={title}>{`결제에 ${isSuccess ? '성공' : '실패'}하였습니다`}</Text>
     <List style={listContainer}>
         <ListItem style={list}>
-        <Text style={label}>아임포트 번호</Text>
+        <Text style={label}>거래코드</Text>
         <Text style={value}>{imp_uid}</Text>
         </ListItem>
         {isSuccess ? (
         <ListItem style={list}>
-            <Text style={label}>주문번호</Text>
+            <Text style={label}>주문코드</Text>
             <Text style={value}>{merchant_uid}</Text>
         </ListItem>
         ) : (
