@@ -28,24 +28,52 @@ import NetInfo from "@react-native-community/netinfo";
 let refresh_token = '';
 let access_token = '';
 
+
+
 export default function HomeScreen() {
 
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
   // const drawerEl = useRef(null);
+
+
+   
   
   useEffect(()=>{    
-    init();
+    init();   
 
-
-    // read_refresh_token();    
-    // init();       
-    // 비콘
+    // // 비콘
     // beacon_handler();    
     // return () => {
-    //   //console.log('TAG: Cleanup!');
-    //   beacon_remove_listener();
+    // //   //console.log('TAG: Cleanup!');
+    // //   beacon_remove_listener();
     // }  
+
+
+    // 비콘처리
+    Beacons.detectIBeacons();
+    // const region = {
+    //   identifier: 'Estimotes',
+    //   uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647824'
+    // };
+  
+    Beacons.startRangingBeaconsInRegion('REGION1')
+    .then(function(){
+      console.log("TAG: Beacon Success!")
+    }).catch(
+      function(err){
+        console.log(err);
+      }
+    );
+
+    // Print a log of the detected iBeacons (1 per second)
+    DeviceEventEmitter.addListener('beaconsDidRange', (data) => {
+      console.log('Found beacons!', data.beacons)
+    })
+
+    return () => {
+      DeviceEventEmitter.removeAllListeners();      
+    }
     
   },[]);
 
@@ -210,6 +238,7 @@ export default function HomeScreen() {
   // 비콘제어
   // ============================================== //  
   // if(Platform.OS === 'android'){     
+  /*
   async function beacon_handler(){    
     try {    
       await detectIBeacons();
@@ -221,24 +250,26 @@ export default function HomeScreen() {
   }  
 
   async function detectIBeacons() {
+    // 1. Tells the library to detect iBeacons
+    console.log( "TAG: detectIBeacons()" );
+
     try {
-      await Beacons.detectIBeacons();
-      console.log('1. Tells the library to detect iBeacons');
+      await Beacons.detectIBeacons();      
     } catch (error ) {
       throw error;
     }
   }
-
-  // 옥포점 fda50693-a4e2-4fb1-afcf-c6eb07647825  
+  
   async function startRangingBeaconsInRegion () {
+    // Beacons monitoring started successfully
+    console.log('TAG: startRangingBeaconsInRegion()')
     const region = {
       identifier: 'Estimotes',
       uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647825'
     };
 
     try {
-      await Beacons.startRangingBeaconsInRegion(region)
-      console.log('2. Beacons monitoring started successfully');
+      await Beacons.startRangingBeaconsInRegion(region)      
     } catch (error) {
       throw error;
     }
@@ -247,14 +278,15 @@ export default function HomeScreen() {
   function beacon_add_listener() {
     DeviceEventEmitter.addListener('beaconsDidRange', (data) => {
       // console.log('Found beacons!', data.beacons[0].distance)
-      const {distance} = data.beacons[0];
-      console.log('distance: ',distance);
+      // const {distance} = data.beacons[0];
+      // console.log('distance: ',distance);
     })       
   }
 
   function beacon_remove_listener() {
     DeviceEventEmitter.removeAllListeners();
   }
+  */
 
   return (      
       <Container>

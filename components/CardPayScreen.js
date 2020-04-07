@@ -160,9 +160,9 @@ function MyInfoScreen() {
     function btn_result() {
         console.log('result();');        
         const response = {
-            "imp_success": "success", 
-            "imp_uid": "imp_206903365199", 
-            "merchant_uid": "mid_1585814900406",
+            "imp_success": "true", 
+            "merchant_uid": "mid_1586262882514",
+            "imp_uid": "imp_1586242315139",            
             "error_msg":"오류메시지"
         }
         navigation.navigate('CardPayResult',{response:response});
@@ -182,27 +182,30 @@ function MyInfoScreen() {
             <Right style={{flex:1}}></Right>
         </Header>  
 
-            <View style={{ marginLeft:25, marginTop:10 }}>
-                <DatePicker 
-                date={sdate}
-                placeholder="시작일"
-                format="YYYY-MM-DD"
-                minDate={new Date()}      
-                onDateChange={(date) => {
-                    setSDate(date);
-                }}          
-                >
-                </DatePicker>
-            </View>           
+        <View style={{ marginTop:10, marginBottom:5,alignItems:"center"}}>
+            <DatePicker
+            date={sdate}
+            placeholder="시작일"
+            format="YYYY-MM-DD"
+            minDate={new Date()}      
+            onDateChange={(date) => {
+                setSDate(date);
+            }}            
+            >
+            </DatePicker>
+            {/* <Button>
+                <Text onPress={()=>btn_result()}>Result</Text>
+            </Button> */}
+        </View>           
 
         <Content scrollEnabled={true}> 
             <List>
             {listItem.map((item,index)=>
                 <ListItem key={index}>                    
                     <View style={{flex:1, paddingTop:10}}>                        
-                        <Text> {item.pas1506} {item.pas1505}</Text>                        
+                        <Text> {item.pas1506} {item.pas1505} / {item.pas1507_format} 원</Text>                        
                         <Button block style={{marginTop:10,marginBottom:15}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}>
-                            <Text>구매하기 ({item.pas1507_format}원)</Text>
+                            <Text>구매하기</Text>
                         </Button>
                     </View>
                 </ListItem>
@@ -215,18 +218,3 @@ function MyInfoScreen() {
 }
 
 export default MyInfoScreen;
-
-
-{
-    /* 
-    <Button onPress={()=>btn_cardpay()}>
-            <Text>카드결제</Text>
-        </Button> 
-
-            <TextContainer>
-                <Text>
-                구매할 상품을 선택하세요.
-                </Text>
-            </TextContainer>             
-     */
-}

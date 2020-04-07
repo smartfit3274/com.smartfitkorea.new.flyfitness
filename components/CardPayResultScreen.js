@@ -39,9 +39,9 @@ function CardPayResultScreen() {
 
     const navigation = useNavigation();
     const response = navigation.getParam('response');   
-    console.log(response);
-    // {"imp_success": "true", "imp_uid": "imp_206903365167", "merchant_uid": "mid_1585814900301"}
-
+    console.log(response);    
+    // {"imp_success": "true", "imp_uid": "imp_206903365167", "merchant_uid": "mid_1585814900301"}  
+    
     const { 
         imp_success, 
         success, 
@@ -64,12 +64,15 @@ function CardPayResultScreen() {
     } = resultStyles;
 
     useEffect(()=>{
-        console.log('useEffect');
+        console.log('useEffect()');        
+        console.log('merchant_uid',merchant_uid);
 
         // 성공인경우 출입키 발급
         if(isSuccess==true) {
-            console.log('isSuccess',isSuccess);
 
+
+            console.log('isSuccess',isSuccess);
+            
             let url = '';    
             if(cfg.mode =='http') { url = cfg.http.host; }
             if(cfg.mode =='https') { url = cfg.https.host; }
@@ -78,10 +81,14 @@ function CardPayResultScreen() {
                 timeout: 3000
             }
             const data = {
-                sid:cfg.sid,
-                access_token: access_token,
+                sid:cfg.sid,                
                 cid:cfg.cid,
-            }    
+                merchant_uid:merchant_uid,
+                imp_success:imp_success,
+                imp_uid:imp_uid,
+            }
+            console.log('data',data);
+
             Axios.post(url,data,config)
             .then(function(res){
               console.log('success');
@@ -97,7 +104,6 @@ function CardPayResultScreen() {
     <View style={wrapper}>
     <Icon
         style={icon}
-        type="AntDesign"
         name={isSuccess ? 'checkbox-marked-circle-outline' : 'alert-circle-outline'}
     />
     <Text style={title}>{`결제에 ${isSuccess ? '성공' : '실패'}하였습니다`}</Text>
