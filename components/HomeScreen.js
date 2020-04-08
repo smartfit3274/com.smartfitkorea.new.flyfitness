@@ -35,9 +35,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
   // const drawerEl = useRef(null);
-
-
-   
+  
   
   useEffect(()=>{    
     init();   
@@ -52,28 +50,22 @@ export default function HomeScreen() {
 
     // 비콘처리
     Beacons.detectIBeacons();
+    
     // const region = {
     //   identifier: 'Estimotes',
     //   uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647824'
     // };
   
     Beacons.startRangingBeaconsInRegion('REGION1')
-    .then(function(){
-      console.log("TAG: Beacon Success!")
-    }).catch(
-      function(err){
-        console.log(err);
-      }
-    );
+    .then( ()=>console.log('TAG: startRangingBeaconsInRegion success') );
 
-    // Print a log of the detected iBeacons (1 per second)
     DeviceEventEmitter.addListener('beaconsDidRange', (data) => {
       console.log('Found beacons!', data.beacons)
-    })
-
-    return () => {
-      DeviceEventEmitter.removeAllListeners();      
-    }
+    })    
+    
+    // return () => {
+    //   DeviceEventEmitter.removeAllListeners();      
+    // }
     
   },[]);
 
