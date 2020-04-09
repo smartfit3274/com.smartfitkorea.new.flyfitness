@@ -151,16 +151,17 @@ function Logged() {
 
     return (
       <>
-        <Header>
+        <Header style={{backgroundColor:'#454545'}}>
             <Left style={{flex:1}}>
-                <Button transparent onPress={()=>console.log('menu pressed!')}>
+                {/* <Button transparent onPress={()=>console.log('menu pressed!')}>
                     <Icon name="menu" style={{color:"red", fontSize:20}}></Icon>
-                </Button>
+                </Button> */}
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
                 <Image source={require('../images/logo_smartgym.jpg')} style={{width:150, height:35, alignSelf:"center"}}></Image>
             </Body>
-            <Right style={{flex:1}}></Right>
+            <Right style={{flex:1}}>                
+            </Right>
         </Header>
 
         <Content scrollEnabled={false}>
@@ -172,19 +173,19 @@ function Logged() {
         <Footer>
             <FooterTab>
                 <Button vertical onPress={()=>btn_mypage()}>
-                    <Image source={require('../images/mypage_btn.png')} style={{width:25, height:25}}></Image>
+                    <Icon name="account-circle" style={{fontSize:30,color:'white'}}></Icon>
                     <Text>내 정보</Text>
                 </Button>
                 <Button vertical onPress={()=>btn_cardpay()}>
-                <Image source={require('../images/card_btn.png')} style={{width:25, height:25}}></Image>
+                    <Icon name="credit-card" style={{fontSize:30,color:'white'}}></Icon>
                     <Text>카드결제</Text>
                 </Button>  
                 <Button vertical onPress={()=>btn_open_door()}>
-                    <Image source={require('../images/fingerprint_btn.png')} style={{width:25, height:25}}></Image>
+                    <Icon name="lock-question" style={{fontSize:30,color:'gray'}}></Icon>                    
                     <Text>문 열기</Text>
                 </Button>           
                 <Button vertical onPress={()=>btn_logout()}>
-                    <Image source={require('../images/power-off-btn.png')} style={{width:25, height:25}}></Image>
+                    <Icon name="power-settings" style={{fontSize:30,color:'white'}}></Icon>                    
                     <Text>로그아웃</Text>
                 </Button>
             </FooterTab>

@@ -21,9 +21,10 @@ import cfg from "./data/cfg.json";
 import { Button,Text,Drawer,Container } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { DeviceEventEmitter } from 'react-native'
+import { PermissionsAndroid, DeviceEventEmitter } from 'react-native'
 import Beacons from 'react-native-beacons-manager'
 import NetInfo from "@react-native-community/netinfo";
+import BleManager from 'react-native-ble-manager';
 
 let refresh_token = '';
 let access_token = '';
@@ -39,33 +40,42 @@ export default function HomeScreen() {
   
   useEffect(()=>{    
     init();   
+   
+    // ===================================== //
+    // 비콘처리: 안드로이드
+    // ===================================== //   
+    // 반복 거부를 하면 앱을 재설치하거나 : 앱설정에서 권한을 넣어줘야 함 
+    console.log('TAG: Beacon android start!')    
+    BleManager.start({ showAlert: false })
+    .then(() => BleManager.enableBluetooth() ) // 블루투스 확인
+    .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) ) // 로케이션 확인
+    .catch(error=>{
+      console.log('TAG: ERROR', error);
+      Alert.alert(
+        '오류',
+        '블루투스 권한이 필요합니다.',
+        [{text:'ok',onPress:()=>console.log('OK pressed')}],
+        {
+          cancelable:false,
+        }
+      );        
+    });
 
-    // // 비콘
-    // beacon_handler();    
-    // return () => {
-    // //   //console.log('TAG: Cleanup!');
-    // //   beacon_remove_listener();
-    // }  
+    Beacons.detectIBeacons();    
+    const region = {
+      identifier: 'Estimotes',
+      uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647825'
+    };    
+    Beacons.startRangingBeaconsInRegion('REGION01')
+    .then(()=>DeviceEventEmitter.addListener('beaconsDidRange', (data) => {
+      console.log('Found beacons!', data)     
+    }))
+    .catch(error=>console.log('TAG: Beacons Error!',error)
+    );
 
-
-    // 비콘처리
-    Beacons.detectIBeacons();
-    
-    // const region = {
-    //   identifier: 'Estimotes',
-    //   uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647824'
-    // };
-  
-    Beacons.startRangingBeaconsInRegion('REGION1')
-    .then( ()=>console.log('TAG: startRangingBeaconsInRegion success') );
-
-    DeviceEventEmitter.addListener('beaconsDidRange', (data) => {
-      console.log('Found beacons!', data.beacons)
-    })    
-    
-    // return () => {
-    //   DeviceEventEmitter.removeAllListeners();      
-    // }
+    return () => {
+      DeviceEventEmitter.removeAllListeners();      
+    }    
     
   },[]);
 
