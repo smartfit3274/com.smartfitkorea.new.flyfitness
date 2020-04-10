@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect,useRef } from 'react';
 import { useNavigation } from 'react-navigation-hooks';
 import { 
     View,
@@ -14,11 +14,11 @@ import {
     Button
 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Image,Dimensions, RefreshControlBase } from 'react-native';
+import { Image,Dimensions, RefreshControlBase, Animated, Alert } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 
-function Logged() {
+function Logged(props) {
 
     const navigation = useNavigation();    
     const window = Dimensions.get('window'); 
@@ -83,29 +83,17 @@ function Logged() {
         console.log('TAG: bio_login()');        
 
         ReactNativeBiometrics.simplePrompt({promptMessage: 'Confirm fingerprint'})
-        .then((resultObject) => {
-          const { success } = resultObject       
-          if (success) {
-              console.log('success!');
-              bio_open_door();
-          } else {
-              console.log('error!');
-          }
+        .then(result => result.success )
+        .then((success)=>{
+            if(success==true) {
+                alert('성공');
+            }
+            else {
+                alert('실패');
+            }
         })
-        .catch((e) => {
-          console.log("[TAG] Error!:",e)
-        })          
+        .catch(error => console.log(error));
     }    
-
-    // bio_3
-    function bio_open_door() {
-        console.log('bio_open_door');
-    }
-
-    function btn_open_door() {
-        console.log('TAG: btn_open_door()');   
-        bio_is_key_exist();
-    }
 
     function btn_mypage(){
         console.log('TAG: btn_mypage()');
@@ -122,6 +110,18 @@ function Logged() {
         await write_refresh_token('');
         await write_access_token('');  
         navigation.replace('Home');
+    }    
+
+    // 출입문 개방   
+    function bio_open_door() {
+        console.log('TAG: bio_open_door()');
+        // ReactNativeBiometrics.biometricKeysExist()
+        ReactNativeBiometrics.isSensorAvailable()                
+        .then( response => response.available )
+        .then( available => {
+            bio_confirm();
+        })
+        .catch(error=>console.log(error));
     }    
 
     // ============================================== //
@@ -149,6 +149,34 @@ function Logged() {
         }    
       }     
 
+    const usePulse = (startDelay = 500) => {     
+        const scale = useRef(new Animated.Value(1)).current;    
+        const pulse = () => {
+            Animated.sequence([
+            Animated.timing(scale, { toValue: 1.2 , useNativeDriver: true }),
+            Animated.timing(scale, { toValue: 0.8 , useNativeDriver: true }),
+            ]).start(() => pulse());
+        };    
+        useEffect(() => {
+            const timeout = setTimeout(() => pulse(), startDelay);
+            return () => clearTimeout(timeout);
+        }, []);
+        return scale;
+    };     
+    
+    const scale = usePulse();
+
+    function no_door_message() {
+        Alert.alert(
+            '*** 출입문 열기 안내 ***',
+            '이용 기간 중 출입문에 가까이 가시면 버튼이 활성화됩니다.',
+            [{text:'ok',onPress:()=>console.log('OK pressed')}],
+            {
+                cancelable:false,
+            }
+        ); 
+    }
+
     return (
       <>
         <Header style={{backgroundColor:'#454545'}}>
@@ -160,7 +188,7 @@ function Logged() {
             <Body style={{flex:1,justifyContent:"center"}}>
                 <Image source={require('../images/logo_smartgym.jpg')} style={{width:150, height:35, alignSelf:"center"}}></Image>
             </Body>
-            <Right style={{flex:1}}>                
+            <Right style={{flex:1}}>           
             </Right>
         </Header>
 
@@ -179,11 +207,34 @@ function Logged() {
                 <Button vertical onPress={()=>btn_cardpay()}>
                     <Icon name="credit-card" style={{fontSize:30,color:'white'}}></Icon>
                     <Text>카드결제</Text>
-                </Button>  
-                <Button vertical onPress={()=>btn_open_door()}>
+                </Button>
+
+                { ( props.isBeacon == 'Y' &&                 
+                <Button vertical onPress={()=>bio_open_door()}>
+                    <Animated.View
+                    style={[
+                        {
+                            transform: [{ scale }]                 
+                        },
+                        {
+                            padding:0,
+                            margin:0
+                        }                        
+                    ]}
+                    >
+                    <Icon name="key" style={{fontSize:30,color:'yellow'}}></Icon>                    
+                    </Animated.View>
+                    <Text>문 열기</Text>
+                </Button>
+                
+                )}
+                { ( (props.isBeacon == 'N' ||  props.isBeacon=='null') && 
+                <Button vertical onPress={()=>no_door_message()}>
                     <Icon name="lock-question" style={{fontSize:30,color:'gray'}}></Icon>                    
                     <Text>문 열기</Text>
-                </Button>           
+                </Button> 
+                )}                
+
                 <Button vertical onPress={()=>btn_logout()}>
                     <Icon name="power-settings" style={{fontSize:30,color:'white'}}></Icon>                    
                     <Text>로그아웃</Text>

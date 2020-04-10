@@ -28,16 +28,15 @@ import BleManager from 'react-native-ble-manager';
 
 let refresh_token = '';
 let access_token = '';
-
-
+const min_door_distance = 1.5; // meter 단위 : 최소 문 거리
 
 export default function HomeScreen() {
 
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
-  // const drawerEl = useRef(null);
-  
-  
+  const [distance, setDistance] = useState(0);
+  const [isBeacon, setIsBeacon] = useState('N');
+      
   useEffect(()=>{    
     init();   
    
@@ -66,12 +65,31 @@ export default function HomeScreen() {
       identifier: 'Estimotes',
       uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647825'
     };    
-    Beacons.startRangingBeaconsInRegion('REGION01')
-    .then(()=>DeviceEventEmitter.addListener('beaconsDidRange', (data) => {
-      console.log('Found beacons!', data)     
-    }))
+
+    Beacons.startRangingBeaconsInRegion(region)
+    .then( console.log('TAG: Success startRanging...') )
     .catch(error=>console.log('TAG: Beacons Error!',error)
     );
+
+    DeviceEventEmitter.addListener(
+      'beaconsDidRange', 
+      ( response => {                
+          response.beacons.forEach(beacon => {
+              // distance = beacon.distance ? beacon.distance : '';
+
+              if(beacon.distance) {
+                console.log('TAG: found beacon', beacon.distance);
+
+                setDistance(beacon.distance);
+                if(beacon.distance > 0 && beacon.distance < min_door_distance ) {
+                  setIsBeacon('Y');
+                } else {
+                  setIsBeacon('N');
+                }                
+              }
+          });
+      })
+    );    
 
     return () => {
       DeviceEventEmitter.removeAllListeners();      
@@ -236,6 +254,20 @@ export default function HomeScreen() {
     }    
   } 
   
+  return (      
+      <Container>       
+
+        { isLogin =='N' &&
+        <Login></Login>
+        }
+        { isLogin == 'Y'&&
+        <Logged isBeacon={isBeacon}></Logged>
+        }
+      </Container>   
+  );
+};
+
+
   // ============================================== //
   // 비콘제어
   // ============================================== //  
@@ -290,17 +322,13 @@ export default function HomeScreen() {
   }
   */
 
-  return (      
-      <Container>
-        { isLogin =='N' &&
-        <Login></Login>
-        }
-        { isLogin == 'Y'&&
-        <Logged></Logged>
-        }
-      </Container>   
-  );
-};
+
+{/* <View>
+          <Text>1.{isBeacon}</Text>
+        </View>
+        <View>
+          <Text>2.{distance}</Text>
+        </View> */}
 
   // // 만들때 리프래시 토큰 채크해야함
   // function create_access_token() {
