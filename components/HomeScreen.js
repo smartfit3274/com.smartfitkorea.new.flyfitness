@@ -63,7 +63,7 @@ export default function HomeScreen() {
     Beacons.detectIBeacons();    
     const region = {
       identifier: 'Estimotes',
-      uuid: 'fda50693-a4e2-4fb1-afcf-c6eb07647825'
+      uuid: cfg.uuid
     };    
 
     Beacons.startRangingBeaconsInRegion(region)

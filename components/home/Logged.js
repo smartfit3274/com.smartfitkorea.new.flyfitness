@@ -17,7 +17,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Image,Dimensions, RefreshControlBase, Animated, Alert } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
+import Axios from 'axios';
+import cfg from '../data/cfg.json';
 
+let access_token = '';
 function Logged(props) {
 
     const navigation = useNavigation();    
@@ -50,18 +53,6 @@ function Logged(props) {
         });
     }
    
-    function bio_getPublicKey() {
-        console.log('TAG: bio_getPublicKey()');
-        ReactNativeBiometrics.createKeys('Confirm fingerprint')
-        .then((resultObject) => {                    
-            const { publicKey } = resultObject
-            
-        })
-        .catch((e)=>{
-            console.log(e);
-        });        
-    }
-
     // bio_1
     function bio_is_key_exist() {
         console.log('TAG: bio_isKeyExist()');
@@ -78,23 +69,6 @@ function Logged(props) {
         });    
     }     
     
-    // bio_2
-    function bio_confirm() {
-        console.log('TAG: bio_login()');        
-
-        ReactNativeBiometrics.simplePrompt({promptMessage: 'Confirm fingerprint'})
-        .then(result => result.success )
-        .then((success)=>{
-            if(success==true) {
-                alert('성공');
-            }
-            else {
-                alert('실패');
-            }
-        })
-        .catch(error => console.log(error));
-    }    
-
     function btn_mypage(){
         console.log('TAG: btn_mypage()');
         navigation.push('MyInfo')
@@ -112,9 +86,9 @@ function Logged(props) {
         navigation.replace('Home');
     }    
 
-    // 출입문 개방   
-    function bio_open_door() {
-        console.log('TAG: bio_open_door()');
+    // 바이오 : 초기화
+    function bio_init() {
+        console.log('TAG: bio_init()');
         // ReactNativeBiometrics.biometricKeysExist()
         ReactNativeBiometrics.isSensorAvailable()                
         .then( response => response.available )
@@ -123,6 +97,47 @@ function Logged(props) {
         })
         .catch(error=>console.log(error));
     }    
+
+    // 바이오 : 지문인식
+    function bio_confirm() {
+        console.log('TAG: bio_login()');        
+        ReactNativeBiometrics.simplePrompt({promptMessage: 'Confirm fingerprint'})
+        .then(result => result.success )
+        .then((success)=>{
+            if(success==true) {
+                bio_door_open();
+            }
+            else {
+                // ignore
+            }
+        })
+        .catch(error => console.log(error));
+    }       
+
+    // 바이오 : 출입문 개방
+    async function bio_door_open() {
+
+       
+        await AsyncStorage.getItem('access_token')
+        .then(result => {            
+            access_token = result
+
+            // 문열기
+            let url = '';    
+            if(cfg.mode =='http') { url = cfg.http.host; }
+            if(cfg.mode =='https') { url = cfg.https.host; }
+            url = url + '/rest/bio_dooropen';
+            const data = {          
+                sid:cfg.sid,
+                cid:cfg.cid,
+                access_token: access_token,
+            }
+            Axios.post(url,data,{timeout:3000})
+            .then((res)=>alert(res.data.ret))
+            .catch((error)=>alert(error));                           
+        })
+        .catch(error=>console.log(error));            
+    }
 
     // ============================================== //
     // 토큰처리
@@ -164,8 +179,6 @@ function Logged(props) {
         return scale;
     };     
     
-    const scale = usePulse();
-
     function no_door_message() {
         Alert.alert(
             '*** 출입문 열기 안내 ***',
@@ -176,6 +189,8 @@ function Logged(props) {
             }
         ); 
     }
+
+    const scale = usePulse();
 
     return (
       <>
@@ -210,7 +225,7 @@ function Logged(props) {
                 </Button>
 
                 { ( props.isBeacon == 'Y' &&                 
-                <Button vertical onPress={()=>bio_open_door()}>
+                <Button vertical onPress={()=>bio_init()}>
                     <Animated.View
                     style={[
                         {
@@ -246,3 +261,18 @@ function Logged(props) {
 }
 
 export default Logged;
+
+
+/*
+function bio_getPublicKey() {
+    console.log('TAG: bio_getPublicKey()');
+    ReactNativeBiometrics.createKeys('Confirm fingerprint')
+    .then((resultObject) => {                    
+        const { publicKey } = resultObject
+        
+    })
+    .catch((e)=>{
+        console.log(e);
+    });        
+}
+*/
