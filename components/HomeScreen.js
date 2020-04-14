@@ -60,6 +60,8 @@ export default function HomeScreen() {
       );        
     });
 
+    // checkTransmissionSupported(): promise 불루투스 권한이 있는지 확인
+
     Beacons.detectIBeacons();    
     const region = {
       identifier: 'Estimotes',
@@ -93,7 +95,7 @@ export default function HomeScreen() {
 
           });
       })
-    );    
+    );
 
     return () => {
       DeviceEventEmitter.removeAllListeners();      
