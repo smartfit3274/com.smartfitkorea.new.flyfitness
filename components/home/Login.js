@@ -20,7 +20,7 @@ const TitleView = styled.View`
 `;
 
 const MainText = styled.Text`
-  font-size:25px;  
+  font-size:18px;  
   text-align:center;
 `
 
@@ -176,8 +176,8 @@ export default function Login() {
   return (
       <ScrollView style={{width: '100%'}}>          
           <TitleView>
-              <MainText>{cfg.name}</MainText>
-              <Logo source={require('../images/logo_smartpass.png')} resizeMode="contain"></Logo>
+              <Image source={require('../images/logo_smartgym2.png')} style={{width:160, height:40, alignSelf:"center"}}></Image>
+              <MainText>{cfg.name}</MainText>              
           </TitleView>
 
           <InputContainer>        

@@ -248,7 +248,13 @@ function Logged(props) {
                     <Icon name="lock-question" style={{fontSize:30,color:'gray'}}></Icon>                    
                     <Text>문 열기</Text>
                 </Button> 
-                )}                
+                ) }                
+                { ( (props.isBeacon == 'F') && 
+                <Button vertical onPress={()=>no_door_message()}>
+                    <Icon name="lock-question" style={{fontSize:30,color:'white'}}></Icon>                    
+                    <Text>문 열기</Text>
+                </Button> 
+                ) }                                
 
                 <Button vertical onPress={()=>btn_logout()}>
                     <Icon name="power-settings" style={{fontSize:30,color:'white'}}></Icon>                    

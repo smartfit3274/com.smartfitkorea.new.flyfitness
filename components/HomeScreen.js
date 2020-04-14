@@ -28,14 +28,14 @@ import BleManager from 'react-native-ble-manager';
 
 let refresh_token = '';
 let access_token = '';
-const min_door_distance = 1.5; // meter 단위 : 최소 문 거리
 
 export default function HomeScreen() {
 
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
-  const [distance, setDistance] = useState(0);
+  // const [distance, setDistance] = useState(0);
   const [isBeacon, setIsBeacon] = useState('N');
+  const [distance, setDistance] = useState(0);
       
   useEffect(()=>{    
     init();   
@@ -75,18 +75,22 @@ export default function HomeScreen() {
       'beaconsDidRange', 
       ( response => {                
           response.beacons.forEach(beacon => {
-              // distance = beacon.distance ? beacon.distance : '';
+              
+            // distance = beacon.distance ? beacon.distance : '';
+            
+            if(beacon.distance) {
+            
+              console.log('TAG: found beacon', beacon.distance);              
+              setDistance(beacon.distance);
 
-              if(beacon.distance) {
-                console.log('TAG: found beacon', beacon.distance);
-
-                setDistance(beacon.distance);
-                if(beacon.distance > 0 && beacon.distance < min_door_distance ) {
+                if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
                   setIsBeacon('Y');
                 } else {
-                  setIsBeacon('N');
+                  setIsBeacon('F'); // 근처에 없슴
                 }                
               }
+
+
           });
       })
     );    
@@ -255,7 +259,8 @@ export default function HomeScreen() {
   } 
   
   return (      
-      <Container>       
+      <Container>
+        <Text>{distance}</Text>
 
         { isLogin =='N' &&
         <Login></Login>
