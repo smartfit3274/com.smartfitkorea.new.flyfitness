@@ -29,6 +29,7 @@ import { initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import DatePicker from 'react-native-datepicker';
 
 var access_token = '';
+var refresh_token = '';
 var mcd = '';
 
 const TextContainer = styled(View)`
@@ -41,85 +42,62 @@ const TextContainer = styled(View)`
 function MyInfoScreen() {
 
     const navigation = useNavigation();
-    const [listItem, setListItem] = useState(Array());
+    const [listItem, setListItem] = useState([]);
     const [sdate,setSDate] = useState(null);
     
     useEffect(()=>{        
-        init();        
-    },[]);
+        console.log('TAG: start --------');
 
-    async function init() {
-        console.log('init()');
-        access_token = await read_access_token();
-        mcd = await token_decode();
-        console.log('mcd:',mcd);
-
-        // 상품로딩
-        get_product_list();
-    }
-
-    async function token_decode() {
-        console.log('token_decode();');
-        try {
+        AsyncStorage.getItem('access_token')
+        .then( result => { 
+            access_token = result
+            return AsyncStorage.getItem('refresh_token')            
+        }).then ( result => {
+            refresh_token = result;
+            
+            // 회원코드 가져오기
             let url = '';    
             if(cfg.mode =='http') { url = cfg.http.host; }
             if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/token/decode';         
-            const config = { 
-                timeout: 3000
-            }
+            url = url + '/token/decode';            
             const data = {
                 sid:cfg.sid,
                 access_token: access_token
             }    
-            let res = await Axios.post(url,data,config);
-            return res.data.mb_id;
+            return Axios.post(url,data,{timeout:3000});
+        })
+        .then( result => {
+            mcd = result.data.mb_id;
 
-        } catch (error) {
-            console.log(error);
-        }        
+            // 상품로딩
+            get_product_list();
 
-    }
+        })        
+        .catch( error => console.log(error));
 
-    async function read_access_token() {
-        console.log('TAG: read_access_token()')
-        try {
-            var result = await AsyncStorage.getItem('access_token');
-            if(result == null) return '';
-            return result;
-        } catch (error) {
-            console.log(error);
-            return '';
-        }    
-    }     
+    },[]);  
 
     function btn_close() {
         navigation.pop();
     }
 
+    async function get_product_list() {     
+    
+        let url = '';    
+        if(cfg.mode =='http') { url = cfg.http.host; }
+        if(cfg.mode =='https') { url = cfg.https.host; }
+        url = url + '/rest/get_product_list';         
 
-    async function get_product_list() {       
-        
-        try {
-            let url = '';    
-            if(cfg.mode =='http') { url = cfg.http.host; }
-            if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/rest/get_product_list';         
-            const config = { 
-                timeout: 3000
-            } 
-            const data = {
-                sid:cfg.sid,
-                cid:cfg.cid,
-                access_token: access_token
-            }    
-            let res = await Axios.post(url,data,config);
+        const data = {
+            sid:cfg.sid,
+            cid:cfg.cid,
+            access_token: access_token
+        }    
+        Axios.post(url,data,{timeout:3000})
+        .then(res=>{
             setListItem(res.data);          
-            
-        } catch (error) {
-            console.log(error);
-        }
-   
+        })
+        .catch(error => console.log(error));
     }
   
     
@@ -143,16 +121,19 @@ function MyInfoScreen() {
             return false;                
         }
 
-        amount = 10; //TEST
+        // testmode:
+        // amount = 10;
+        // userCode = "iamport";
+
         var params = {
-            userCode : 'iamport',
+            userCode : cfg.iamport,
             name : name,
             amount: amount,
             mcd : mcd,
             pid : pid,
             sdate: sdate,
         }
-        // console.log(params);
+        console.log(params);
         navigation.navigate('CardPayStart',{params:params});
     }
 
@@ -170,14 +151,14 @@ function MyInfoScreen() {
 
     return (
       <>
-        <Header>
+        <Header style={{backgroundColor:'#454545'}}>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
-                    <Icon name="close" style={{fontSize:30}}></Icon>
+                    <Icon name="close" style={{fontSize:30, color:"white"}}></Icon>
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
-                <Text style={{alignSelf:"center"}}>카드결제</Text>
+                <Text style={{alignSelf:"center",color:"white"}}>카드결제</Text>
             </Body>
             <Right style={{flex:1}}></Right>
         </Header>  

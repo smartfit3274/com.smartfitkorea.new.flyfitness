@@ -154,7 +154,7 @@ function MyInfoScreen() {
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
-                <Image source={require('./images/logo_smartgym.jpg')} style={{width:150, height:35, alignSelf:"center"}}></Image>
+                <Text style={{alignSelf:"center",color:"white"}}>내 정보</Text>
             </Body>
             <Right style={{flex:1}}></Right>
         </Header>
