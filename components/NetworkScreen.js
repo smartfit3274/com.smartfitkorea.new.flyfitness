@@ -43,7 +43,7 @@ function NetworkScreen() {
   
     return (
       <>
-        <Header>
+         <Header style={{backgroundColor:'#454545'}}>
             <Left style={{flex:1}}></Left>
             <Body style={{flex:1,justifyContent:"center"}}>
             <Image source={require('./images/logo_smartgym.jpg')} style={{width:150, height:35, alignSelf:"center"}}></Image>
