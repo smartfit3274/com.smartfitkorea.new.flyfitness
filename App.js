@@ -13,6 +13,7 @@ import NetworkScreen from './components/NetworkScreen';
 import CardPayScreen from './components/CardPayScreen';
 import CardPayStartScreen from './components/CardPayStartScreen';
 import CardPayResultScreen from './components/CardPayResultScreen';
+import PinScreen from './components/PinScreen';
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -74,8 +75,13 @@ const AppNavigator = createStackNavigator({
     navigatResulttions: ({
       title: 'CardPayResult'
     })       
-  },     
-
+  },  
+  Pin: {
+    screen: PinScreen,
+    navigatResulttions: ({
+      title: 'PinScreen'
+    })       
+  },       
 }, 
 {    
   defaultNavigationOptions: {

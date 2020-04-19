@@ -86,17 +86,24 @@ function Logged(props) {
         navigation.replace('Home');
     }    
 
-    // 바이오 : 초기화
+
+    // 핀번호 팝업
     function bio_init() {
-        console.log('TAG: bio_init()');
-        // ReactNativeBiometrics.biometricKeysExist()
-        ReactNativeBiometrics.isSensorAvailable()                
-        .then( response => response.available )
-        .then( available => {
-            bio_confirm();
-        })
-        .catch(error=>console.log(error));
-    }    
+        navigation.navigate('Pin');
+    }
+
+
+    // 바이오 : 초기화
+    // function bio_init() {
+    //     console.log('TAG: bio_init()');
+    //     // ReactNativeBiometrics.biometricKeysExist()
+    //     ReactNativeBiometrics.isSensorAvailable()                
+    //     .then( response => response.available )
+    //     .then( available => {
+    //         bio_confirm();
+    //     })
+    //     .catch(error=>console.log(error));
+    // }    
 
     // 바이오 : 지문인식
     function bio_confirm() {

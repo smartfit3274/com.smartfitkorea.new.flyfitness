@@ -153,9 +153,11 @@ export default function HomeScreen() {
 
       // Access_token
       access_token = await get_access_token();
+      // console.log('access_token:', access_token);
       
       // Refresh_token
       refresh_token = await get_refresh_token();
+      // console.log('refresh_token:', refresh_token);
       if(refresh_token == '') {
         setIsLogin('N');
         return;
@@ -164,16 +166,20 @@ export default function HomeScreen() {
       // Check access_token
       is_access_token = await check_access_token();
       if(is_access_token == 'Y') {
+        console.log('TAG: 로그인 성공')
         setIsLogin('Y');
         return;
       }
 
       // Get new access token
       if(is_access_token=='N') {
+        console.log('is_access_token:', is_access_token);
         access_token = await create_access_token();
+        //console.log('access_token:',access_token);
 
-        if(access_token=='Y')
+        if(access_token != '')
         {
+          console.log('TAG: 자동로그인')
           await write_access_token(access_token);
           setIsLogin('Y');
           return;
@@ -191,42 +197,12 @@ export default function HomeScreen() {
     
   }
 
-  useEffect(()=>{    
-     start(); 
-  },[]);
-  
-  return (      
-      <Container>
-        <Text>최소거리: {cfg.beacon_range} / 비콘과의 거리: {distance}</Text>
-
-        { isLogin =='N' &&
-        <Login></Login>
-        }
-        { isLogin == 'Y' &&
-        <Logged isBeacon={isBeacon}></Logged>
-        }
-      </Container>   
-  );
-};
+  function startBeacon() {
 
 
-
-
-    /*
-
-    // 로그인 검사
-    if(refresh_token == '' || refresh_token==null) {
-      setIsLogin('N');
-      return;
-    }     
-
-    // 자동 로그인
-
-    */
-/*
-    init();   
-   
-    // ===================================== //
+  }
+  /*
+    // ================================== //
     // 비콘처리: 안드로이드
     // ===================================== //   
     // 반복 거부를 하면 앱을 재설치하거나 : 앱설정에서 권한을 넣어줘야 함 
@@ -265,7 +241,6 @@ export default function HomeScreen() {
           response.beacons.forEach(beacon => {
               
             // distance = beacon.distance ? beacon.distance : '';
-            
             if(beacon.distance) {
             
               console.log('TAG: found beacon', beacon.distance);              
@@ -277,8 +252,6 @@ export default function HomeScreen() {
                   setIsBeacon('F'); // 근처에 없슴
                 }                
               }
-
-
           });
       })
     );
@@ -289,64 +262,24 @@ export default function HomeScreen() {
     */ 
 
 
-      /*
-  function init() {    
-        
+  useEffect(()=>{    
+    start();
 
+    // startBeacon();
+    setIsBeacon('Y');
+  },[]);
+  
 
-    if(access_token == '' || (access_token != '' && result1 == 'N'))
-    {
-      var result2 = await create_access_token();
-      if(result2.ret == 'Y' && result2.access_token != '') {            
-        var result3 = await write_access_token(result2.access_token);
-        if(result3=='Y') {
-          setIsLogin('Y');   
-          return;         
+  return (      
+      <Container>
+        <Text>최소거리: {cfg.beacon_range} / 비콘과의 거리: {distance}</Text>
+
+        { isLogin =='N' &&
+        <Login></Login>
         }
-        else{
-          setIsLogin('N');
-          return;
-        }        
-      }
-      else
-      {
-        setIsLogin('N');
-        return;
-      }
-    }
-
-  }
-  */
-
-  // ============================================== //
-  // 토큰처리
-  // ============================================== // 
-  /* async function check_access_token(){
-    console.log ('check_access_token();');
- 
-    try {
-      let url = '';    
-      if(cfg.mode =='http') { url = cfg.http.host; }
-      if(cfg.mode =='https') { url = cfg.https.host; }
-      url = url + '/token/checkAccessToken';         
-      const config = {      
-        timeout: 3000
-      } 
-      const data = {
-        sid:cfg.sid,
-        access_token: access_token
-      }      
-      let res = await axios.post(url,data,config);
-      if( res.data.ret == 'Y' )
-      {
-        return 'Y';
-      }      
-      else {
-        return 'N';
-      }
-    } catch (error) {
-      return 'E';
-      console.log(error);
-    }
-  }
-  */
+        { isLogin == 'Y' &&
+        <Logged isBeacon={isBeacon}></Logged>
+        }
+      </Container>   
+  );
+};
