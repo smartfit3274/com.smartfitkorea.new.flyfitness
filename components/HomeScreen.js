@@ -9,7 +9,8 @@ import {
   KeyboardAvoidingView,  
   Keyboard,
   Alert,
-  EdgeInsetsPropType
+  EdgeInsetsPropType,
+  Platform
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
@@ -22,9 +23,9 @@ import { Button,Text,Drawer,Container } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { PermissionsAndroid, DeviceEventEmitter } from 'react-native'
-import Beacons from 'react-native-beacons-manager'
 import NetInfo from "@react-native-community/netinfo";
 import BleManager, { start } from 'react-native-ble-manager';
+import Beacons from 'react-native-beacons-manager'
 
 let refresh_token = '';
 let access_token = '';
@@ -138,6 +139,10 @@ export default function HomeScreen() {
     }  
   } 
 
+  useEffect(()=>{    
+    start();
+    startBeacon();    
+  },[]);
 
   async function start() {
     
@@ -197,18 +202,61 @@ export default function HomeScreen() {
     
   }
 
-  function startBeacon() {
+  async function startBeacon() {
 
 
+    if(Platform.OS == 'android') {
+      console.log('TAG: Beacon android start!');
+     
+        
+        // 블루투스 권한
+        BleManager.start({ showAlert: false })
+        .then(() => BleManager.enableBluetooth() )
+        .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) ) // 위치권한
+        .catch(console.log(error));
+
+
+        Beacons.detectIBeacons();
+        const region = {
+          identifier: "Estimotes",
+          uuid: cfg.uuid
+        };        
+        
+        try {
+          await Beacons.startRangingBeaconsInRegion(region);
+          console.log('TAG: success')
+        } catch (error) {
+          console.log("TAG:",error);
+        }
+
+        DeviceEventEmitter.addListener(
+          'beaconsDidRange', 
+          response=> {          
+            response.beacons.forEach(beacon => {                                 
+              
+                if(beacon.distance) {                
+                  setDistance(beacon.distance);
+                  console.log('TAG: found beacon', beacon.distance);                              
+                    if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
+                      setIsBeacon('Y');
+                    } else {
+                      setIsBeacon('F'); // 근처에 없슴
+                    }                
+                  }
+              });       
+        });                
+     
+    }
+
+    if(Platform.OS == 'ios') {
+      console.log('TAG: Beacon ios start!');
+    }
   }
+  
   /*
-    // ================================== //
-    // 비콘처리: 안드로이드
-    // ===================================== //   
-    // 반복 거부를 하면 앱을 재설치하거나 : 앱설정에서 권한을 넣어줘야 함 
-    console.log('TAG: Beacon android start!')    
+
     BleManager.start({ showAlert: false })
-    .then(() => BleManager.enabl`eBluetooth() ) // 블루투스 확인
+    .then(() => BleManager.enableBluetooth() ) // 블루투스 확인
     .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) ) // 로케이션 확인
     .catch(error=>{
       console.log('TAG: ERROR', error);
@@ -259,15 +307,7 @@ export default function HomeScreen() {
     return () => {
       DeviceEventEmitter.removeAllListeners();      
     }   
-    */ 
-
-
-  useEffect(()=>{    
-    start();
-
-    // startBeacon();
-    setIsBeacon('Y');
-  },[]);
+    */   
   
 
   return (      
@@ -283,3 +323,6 @@ export default function HomeScreen() {
       </Container>   
   );
 };
+
+
+// distance = beacon.distance ? beacon.distance : '';
