@@ -21,6 +21,9 @@ import Axios from 'axios';
 import cfg from '../data/cfg.json';
 
 let access_token = '';
+let result = '';
+let pin = '';
+
 function Logged(props) {
 
     const navigation = useNavigation();    
@@ -104,6 +107,7 @@ function Logged(props) {
     //     })
     //     .catch(error=>console.log(error));
     // }    
+
 
     // 바이오 : 지문인식
     function bio_confirm() {
@@ -199,6 +203,20 @@ function Logged(props) {
 
     const scale = usePulse();
 
+    async function handle_pin() {
+
+        try {
+            result = await AsyncStorage.getItem('pin')
+        } catch (error) {
+            console.log(error);
+        }
+
+        if(result == null || result == '') {
+            navigation.navigate('Pin',{mode:'create'});
+        }
+ 
+    }
+
     return (
       <>
         <Header style={{backgroundColor:'#454545'}}>
@@ -215,9 +233,13 @@ function Logged(props) {
         </Header>
 
         <Content scrollEnabled={false}>
-            <Image source={require('../images/bg.jpg')}
+            {/* <Image source={require('../images/bg.jpg')}
             style={{ width: window.width, height: window.height}}            
-            ></Image>
+            ></Image> */}
+
+            <Button onPress={()=>handle_pin()}>
+                <Text>핀번호 로그인</Text>
+            </Button>
         </Content>
 
         <Footer>

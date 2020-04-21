@@ -51,27 +51,30 @@ const LabelBodyStyle = styled(Label)`
 
 let access_token = '';
 let refresh_token = '';
-let pin = "";
+let mode = '';
+let pin = '';
 
-function PinScreen() {
+function PinScreen(props) {
 
     const pinView = useRef(null)
     const navigation = useNavigation();
+    const {mode} = props.navigation.state.params; 
+    console.log('mode=',mode);
     
-    useEffect(()=>{
-    },[]);    
+
 
     function btn_close() {
         navigation.pop();
     }
 
     function handlePin(value) {
-        pin = value;
-        console.log(pin.length);
+        console.log('handlePin()');
+        /* pin = value;
+        // console.log(pin.length);
         if(pin.length==4) {
           // pinView.current.clearAll();
           alert('OK!');
-        }
+        } */
     }
   
     return (
@@ -89,7 +92,12 @@ function PinScreen() {
         </Header>
 
         <Content scrollEnabled={false}>
-            <Message><Text>비밀번호를 입력하세요.</Text></Message>
+            
+            { mode === 'create' && 
+            <Message><Text>등록할 비밀번호를 입력하세요.</Text></Message>
+            }
+
+
             <PinView
             pinLength={4}
             ref={pinView}
