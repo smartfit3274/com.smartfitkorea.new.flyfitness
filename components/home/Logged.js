@@ -33,9 +33,10 @@ function Logged(props) {
     const window = Dimensions.get('window'); 
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
-    const [isBeacon, setIsBeacon] = useState('Y');  // 기본값 N
+    const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
 
     // 출입문 열기 : 숫자로 문열기
+    // 팝업이 닫힐때 호출됨
     const confirm = props.confirm ? props.confirm : '';
     if(confirm == 'Y') {
         door_open();
@@ -44,7 +45,7 @@ function Logged(props) {
     // 시작
     useEffect(()=>{
         startBeacon();
-    },[]);  
+    },[]);
     
     function btn_mypage(){
         console.log('TAG: btn_mypage()');
@@ -248,7 +249,7 @@ function Logged(props) {
 
 
     function startBeacon() {
-        /*
+
         console.log('TAG: startBeacon()');
 
         const region = {
@@ -285,8 +286,7 @@ function Logged(props) {
                 })                               
             })
             .catch( error => alert('Error',error) );            
-        }   
-        */                    
+        }                
     }
       
 
