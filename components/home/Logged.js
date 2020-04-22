@@ -26,8 +26,14 @@ let pin = '';
 
 function Logged(props) {
 
-    const navigation = useNavigation();    
     const window = Dimensions.get('window'); 
+    const navigation = useNavigation();
+
+    // 출입문 열기 : 숫자로 문열기
+    const confirm = props.confirm ? props.confirm : '';
+    if(confirm == 'Y') {
+        door_open();
+    }
 
     function bio_isSensorAvailable(){
         console.log('TAG: bio_isSensorAvailable()');
@@ -85,7 +91,8 @@ function Logged(props) {
     async function btn_logout(){
         console.log('TAG: btn_logout()');     
         await write_refresh_token('');
-        await write_access_token('');  
+        await write_access_token(''); 
+        write_pin('');
         navigation.replace('Home');
     }    
 
@@ -116,7 +123,7 @@ function Logged(props) {
         .then(result => result.success )
         .then((success)=>{
             if(success==true) {
-                bio_door_open();
+                door_open();
             }
             else {
                 // ignore
@@ -126,7 +133,7 @@ function Logged(props) {
     }       
 
     // 바이오 : 출입문 개방
-    async function bio_door_open() {
+    async function door_open() {
 
        
         await AsyncStorage.getItem('access_token')
@@ -144,7 +151,20 @@ function Logged(props) {
                 access_token: access_token,
             }
             Axios.post(url,data,{timeout:3000})
-            .then((res)=>alert(res.data.ret))
+            .then((res)=>{ 
+                if( res.data.ret == 'Y') {
+                    Alert.alert(
+                        '성공',
+                        '출입문이 개방되었습니다.',
+                        [{text:'ok',onPress:()=>console.log('OK pressed')}],
+                        {
+                        cancelable:false,
+                        }
+                    );  
+                } else {
+                    alert('출입문 개방 실패 : 유효한 스마트키가 없습니다.');
+                }
+            })
             .catch((error)=>alert(error));                           
         })
         .catch(error=>console.log(error));            
@@ -153,6 +173,12 @@ function Logged(props) {
     // ============================================== //
     // 토큰처리
     // ============================================== // 
+    function write_pin(pin) {
+        AsyncStorage.setItem('pin',pin)
+        .then(()=>{console.log('pin cleard!')})
+        .catch(error=>console.log(error));
+    }    
+
     async function write_refresh_token(token) {
         console.log('TAG: write_refresh_token()')
         try {
@@ -192,8 +218,8 @@ function Logged(props) {
     
     function no_door_message() {
         Alert.alert(
-            '*** 출입문 열기 안내 ***',
-            '이용 기간 중 출입문에 가까이 가시면 버튼이 활성화됩니다.',
+            '* 출입문 열기 안내 *',
+            '출입문 근처에서 문 열기 버튼이 활성화됩니다. 블루트스 기능이 필요합니다.',
             [{text:'ok',onPress:()=>console.log('OK pressed')}],
             {
                 cancelable:false,
@@ -203,19 +229,19 @@ function Logged(props) {
 
     const scale = usePulse();
 
-    async function handle_pin() {
-
-        try {
-            result = await AsyncStorage.getItem('pin')
-        } catch (error) {
-            console.log(error);
-        }
-
-        if(result == null || result == '') {
-            navigation.navigate('Pin',{mode:'create'});
-        }
- 
-    }
+    function handle_pin() {
+        
+        AsyncStorage.getItem('pin')
+        .then( result => { 
+            if ( result == null || result == '') {
+                navigation.navigate('Pin',{mode:'create'}); // 신규등록
+            }
+            else {
+                navigation.navigate('Pin',{mode:'confirm'}); // 번호확인
+            }           
+        })
+        .catch( error => console.log(error));
+    }   
 
     return (
       <>
@@ -233,13 +259,9 @@ function Logged(props) {
         </Header>
 
         <Content scrollEnabled={false}>
-            {/* <Image source={require('../images/bg.jpg')}
-            style={{ width: window.width, height: window.height}}            
-            ></Image> */}
-
-            <Button onPress={()=>handle_pin()}>
-                <Text>핀번호 로그인</Text>
-            </Button>
+            <Image source={require('../images/bg.jpg')}
+                style={{ width: window.width, height: window.height}}            
+            ></Image>
         </Content>
 
         <Footer>
@@ -298,6 +320,9 @@ function Logged(props) {
 export default Logged;
 
 
+{/* <Button onPress={()=>handle_pin()}>
+                <Text>핀번호 로그인</Text>
+            </Button> */}
 /*
 function bio_getPublicKey() {
     console.log('TAG: bio_getPublicKey()');

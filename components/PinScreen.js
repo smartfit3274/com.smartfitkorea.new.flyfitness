@@ -18,7 +18,8 @@ import {
 } from 'native-base';
 import { 
     Image,Dimensions, RefreshControlBase,
-    Alert
+    Alert,
+    SnapshotViewIOSComponent
 } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -31,7 +32,7 @@ import PinView from 'react-native-pin-view'
 
 const Message = styled(View)`    
     align-items:center;
-    margin-top:15px
+    margin-top:15px;    
 `;
 
 const LabelTitleStyle = styled(Label)` 
@@ -51,30 +52,82 @@ const LabelBodyStyle = styled(Label)`
 
 let access_token = '';
 let refresh_token = '';
-let mode = '';
+let mode = ''; // create / login
 let pin = '';
+let result = '';
+let title = '';
+let message = '';
+let savedPin = '';
 
 function PinScreen(props) {
 
     const pinView = useRef(null)
     const navigation = useNavigation();
-    const {mode} = props.navigation.state.params; 
-    console.log('mode=',mode);
+    const {mode} = props.navigation.state.params;  // navigation.getParam('') ?
+
+    // 핀번호 GET
+    AsyncStorage.getItem('pin')
+    .then( result => savedPin = result )
+    .catch( error => console.log(error));
     
-
-
+    if(mode=='create') {
+        title = '비밀번호 등록'
+        message = '등록할 번호를 입력하세요.'
+    }
+    if(mode=='confirm') {
+        title = '출입문 개방'
+        message = '등록된 번호를 입력하세요.'
+    }
+    
     function btn_close() {
         navigation.pop();
     }
 
+    function savePin() {     
+        alert(pin);   
+        AsyncStorage.setItem('pin',pin)
+        .then ( ()=> {        
+            Alert.alert(
+                '등록완료',
+                '비밀번호 등록이 완료되었습니다.',
+                [{text:'ok',onPress:()=>console.log('OK pressed')}],
+                {
+                cancelable:false,
+                }
+            );  
+        })
+        .catch(error => {
+            alert('비밀번호 등록 오류');
+        });
+        navigation.pop();
+    }
+
+    function confirmPin() {
+        if(savedPin == pin) {
+            navigation.navigate('Home',{confirm:'Y'});
+        } else {
+            alert('비밀번호가 일치하지 않습니다.', savedPin);
+            navigation.navigate('Home',{confirm:'N'});
+        }
+    }
+
     function handlePin(value) {
-        console.log('handlePin()');
-        /* pin = value;
-        // console.log(pin.length);
+        console.log('handlePin()');        
+        pin = value;
         if(pin.length==4) {
-          // pinView.current.clearAll();
-          alert('OK!');
-        } */
+
+            if(mode=='create') {
+                savePin();
+            }
+
+            if(mode=='confirm') {
+                confirmPin();
+            }
+        } 
+        
+        // console.log(pin.length);
+        // pinView.current.clearAll();
+        
     }
   
     return (
@@ -82,22 +135,22 @@ function PinScreen(props) {
         <Header style={{backgroundColor:'#454545'}}>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
-                    <Icon name="close" style={{fontSize:30}}></Icon>
+                    <Icon name="close" style={{fontSize:30, color:'white'}}></Icon>
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
-                <Text style={{alignSelf:"center",color:"white"}}>비밀번호 입력</Text>
+                <Text style={{alignSelf:"center",color:"white"}}>{title}</Text>
             </Body>
             <Right style={{flex:1}}></Right>
         </Header>
 
         <Content scrollEnabled={false}>
             
-            { mode === 'create' && 
-            <Message><Text>등록할 비밀번호를 입력하세요.</Text></Message>
-            }
+           
+            <Message><Text>{message}</Text></Message>
+            <Message><Text style={{color:"green"}}>비밀번호는 로그아웃 시 초기화됩니다.</Text></Message>
 
-
+                
             <PinView
             pinLength={4}
             ref={pinView}

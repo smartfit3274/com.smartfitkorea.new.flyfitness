@@ -1,4 +1,4 @@
-import React,{useState, useEffect } from 'react';
+import React,{useState, useEffect, useCallback } from 'react';
 import {
   View,
   SafeAreaView,
@@ -33,7 +33,7 @@ let result = '';
 let is_access_token = '';
 let is_refresh_token = '';
 
-export default function HomeScreen() {
+export default function HomeScreen(props) {
 
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
@@ -204,10 +204,8 @@ export default function HomeScreen() {
 
   async function startBeacon() {
 
-
     if(Platform.OS == 'android') {
-      console.log('TAG: Beacon android start!');
-     
+      console.log('TAG: Beacon android start!');     
         
         // 블루투스 권한
         BleManager.start({ showAlert: false })
@@ -309,6 +307,11 @@ export default function HomeScreen() {
     }   
     */   
   
+  // 문열기 암호검사  
+  let confirm = props.navigation.getParam('confirm');
+  if(typeof(confirm) == 'undefined') {
+    confirm = '';
+  }
 
   return (      
       <Container>
@@ -318,7 +321,7 @@ export default function HomeScreen() {
         <Login></Login>
         }
         { isLogin == 'Y' &&
-        <Logged isBeacon={isBeacon}></Logged>
+        <Logged isBeacon={isBeacon} confirm={confirm}></Logged>
         }
       </Container>   
   );
