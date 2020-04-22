@@ -21,11 +21,7 @@ import Logged from './home/Logged';
 import cfg from "./data/cfg.json";
 import { Button,Text,Drawer,Container } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import { PermissionsAndroid, DeviceEventEmitter } from 'react-native'
 import NetInfo from "@react-native-community/netinfo";
-import BleManager, { start } from 'react-native-ble-manager';
-import Beacons from 'react-native-beacons-manager'
 
 let refresh_token = '';
 let access_token = '';
@@ -37,11 +33,7 @@ export default function HomeScreen(props) {
 
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
-  // const [distance, setDistance] = useState(0);
-  const [isBeacon, setIsBeacon] = useState('N');
-  const [distance, setDistance] = useState(0);
-      
-
+  
   // 인터넷 연결확인
   async function check_internet() {
     try {
@@ -141,7 +133,6 @@ export default function HomeScreen(props) {
 
   useEffect(()=>{    
     start();
-    startBeacon();    
   },[]);
 
   async function start() {
@@ -202,111 +193,6 @@ export default function HomeScreen(props) {
     
   }
 
-  async function startBeacon() {
-
-    if(Platform.OS == 'android') {
-      console.log('TAG: Beacon android start!');     
-        
-        // 블루투스 권한
-        BleManager.start({ showAlert: false })
-        .then(() => BleManager.enableBluetooth() )
-        .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) ) // 위치권한
-        .catch(console.log(error));
-
-
-        Beacons.detectIBeacons();
-        const region = {
-          identifier: "Estimotes",
-          uuid: cfg.uuid
-        };        
-        
-        try {
-          await Beacons.startRangingBeaconsInRegion(region);
-          console.log('TAG: success')
-        } catch (error) {
-          console.log("TAG:",error);
-        }
-
-        DeviceEventEmitter.addListener(
-          'beaconsDidRange', 
-          response=> {          
-            response.beacons.forEach(beacon => {                                 
-              
-                if(beacon.distance) {                
-                  setDistance(beacon.distance);
-                  console.log('TAG: found beacon', beacon.distance);                              
-                    if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
-                      setIsBeacon('Y');
-                    } else {
-                      setIsBeacon('F'); // 근처에 없슴
-                    }                
-                  }
-              });       
-        });                
-     
-    }
-
-    if(Platform.OS == 'ios') {
-      console.log('TAG: Beacon ios start!');
-    }
-  }
-  
-  /*
-
-    BleManager.start({ showAlert: false })
-    .then(() => BleManager.enableBluetooth() ) // 블루투스 확인
-    .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) ) // 로케이션 확인
-    .catch(error=>{
-      console.log('TAG: ERROR', error);
-      Alert.alert(
-        '오류',
-        '블루투스 권한이 필요합니다.',
-        [{text:'ok',onPress:()=>console.log('OK pressed')}],
-        {
-          cancelable:false,
-        }
-      );        
-    });
-
-    // checkTransmissionSupported(): promise 불루투스 권한이 있는지 확인
-
-    Beacons.detectIBeacons();    
-    const region = {
-      identifier: 'Estimotes',
-      uuid: cfg.uuid
-    };    
-
-    Beacons.startRangingBeaconsInRegion(region)
-    .then( console.log('TAG: Success startRanging...') )
-    .catch(error=>console.log('TAG: Beacons Error!',error)
-    );
-
-    DeviceEventEmitter.addListener(
-      'beaconsDidRange', 
-      ( response => {                
-          response.beacons.forEach(beacon => {
-              
-            // distance = beacon.distance ? beacon.distance : '';
-            if(beacon.distance) {
-            
-              console.log('TAG: found beacon', beacon.distance);              
-              setDistance(beacon.distance);
-
-                if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
-                  setIsBeacon('Y');
-                } else {
-                  setIsBeacon('F'); // 근처에 없슴
-                }                
-              }
-          });
-      })
-    );
-
-    return () => {
-      DeviceEventEmitter.removeAllListeners();      
-    }   
-    */   
-  
   // 문열기 암호검사  
   let confirm = props.navigation.getParam('confirm');
   if(typeof(confirm) == 'undefined') {
@@ -315,13 +201,11 @@ export default function HomeScreen(props) {
 
   return (      
       <Container>
-        <Text>최소거리: {cfg.beacon_range} / 비콘과의 거리: {distance}</Text>
-
         { isLogin =='N' &&
         <Login></Login>
         }
         { isLogin == 'Y' &&
-        <Logged isBeacon={isBeacon} confirm={confirm}></Logged>
+        <Logged confirm={confirm}></Logged>
         }
       </Container>   
   );
