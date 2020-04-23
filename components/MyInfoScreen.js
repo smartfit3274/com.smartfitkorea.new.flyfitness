@@ -150,7 +150,7 @@ function MyInfoScreen() {
         <Header style={{backgroundColor:'#454545'}}>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
-                    <Icon name="close" style={{fontSize:30}}></Icon>
+                    <Icon name="close" style={{fontSize:30, color:"white"}}></Icon>
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
@@ -166,7 +166,7 @@ function MyInfoScreen() {
                     <LabelBodyStyle>{MbInfo.mb_name}</LabelBodyStyle>
                 </ItemStyle>
                 <ItemStyle fixedLabel>
-                    <LabelTitleStyle>이용상품</LabelTitleStyle>
+                    <LabelTitleStyle>구매상품</LabelTitleStyle>
                     <LabelBodyStyle>{MbInfo.p_name}</LabelBodyStyle>
                 </ItemStyle>
                 <ItemStyle fixedLabel>

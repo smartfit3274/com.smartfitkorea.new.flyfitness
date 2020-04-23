@@ -53,13 +53,14 @@ function Logged() {
         navigation.push('CardPay')
     }
 
-    async function btn_logout(){
+    function btn_logout(){               
         console.log('TAG: btn_logout()');     
-        await write_refresh_token('');
-        await write_access_token(''); 
-        write_pin('');
-        navigation.replace('Home');
-    }    
+        AsyncStorage.setItem('refresh_token','')
+        .then( () => AsyncStorage.setItem('access_token','') )
+        .then( () => AsyncStorage.setItem('pin','') )
+        .then( () => navigation.replace('Home') )
+        .catch(error => alert(error));       
+    } 
 
 
     // 번호로 로그인처리
@@ -150,35 +151,7 @@ function Logged() {
 
     // ============================================== //
     // 토큰처리
-    // ============================================== // 
-    function write_pin(pin) {
-        AsyncStorage.setItem('pin',pin)
-        .then(()=>{console.log('pin cleard!')})
-        .catch(error=>console.log(error));
-    }    
-
-    async function write_refresh_token(token) {
-        console.log('TAG: write_refresh_token()')
-        try {
-            await AsyncStorage.setItem('refresh_token',token);
-            return 'Y';
-        } catch (error) {
-            console.log(error);
-            return 'N';
-        }
-    }        
-
-    async function write_access_token(token) {
-        console.log('TAG: write_access_token()')
-        try {
-          await AsyncStorage.setItem('access_token',token);
-          return 'Y';
-        } catch (error) {
-          console.log(error);
-          return 'N';
-        }    
-      }     
-
+    // ============================================== //    
     const usePulse = (startDelay = 500) => {     
         const scale = useRef(new Animated.Value(1)).current;    
         const pulse = () => {
@@ -323,7 +296,7 @@ function Logged() {
                     <Text>로그아웃</Text>
                 </Button>
             </FooterTab>
-        </Footer>        
+        </Footer>
       </>      
     );  
 }
@@ -331,55 +304,56 @@ function Logged() {
 export default Logged;
 
 
-    // function bio_isSensorAvailable(){
-    //     console.log('TAG: bio_isSensorAvailable()');
 
-    //     ReactNativeBiometrics.isSensorAvailable()
-    //     .then((resultObject)=>{
-    //         const { available, biometryType } = resultObject;
 
-    //         // ios
-    //         if (biometryType === ReactNativeBiometrics.TouchID) {
-    //             console.log(ReactNativeBiometrics.TouchID);
-    //         }  
-            
-    //         // ios
-    //         if (biometryType === ReactNativeBiometrics.FaceID) {
-    //             console.log('Face ID');
-    //         }  
-            
-    //         // andorid
-    //         if (biometryType === ReactNativeBiometrics.Biometrics) {
-    //             console.log('[TAG] biometryType : ', biometryType);
-    //             console.log('Biometrics supported!!!');
-    //             console.log('[TAG] available',available);
-    //             bio_isKeyExist();
-    //         }
-    //     });
-    // }
-   
-    // bio_1
-    // function bio_is_key_exist() {
-    //     console.log('TAG: bio_isKeyExist()');
+// function bio_isSensorAvailable(){
+//     console.log('TAG: bio_isSensorAvailable()');
+
+//     ReactNativeBiometrics.isSensorAvailable()
+//     .then((resultObject)=>{
+//         const { available, biometryType } = resultObject;
+
+//         // ios
+//         if (biometryType === ReactNativeBiometrics.TouchID) {
+//             console.log(ReactNativeBiometrics.TouchID);
+//         }  
         
-    //     ReactNativeBiometrics.biometricKeysExist()
-    //     .then((resultObject) => {
-    //       const { keysExist } = resultObject               
-    //       if (keysExist) {
-    //         console.log('[TAG] Keys exist');
-    //         bio_confirm();
-    //       } else {
-    //         console.log('[TAG] Keys do not exist or were deleted');
-    //       }
-    //     });    
-    // }   
-
+//         // ios
+//         if (biometryType === ReactNativeBiometrics.FaceID) {
+//             console.log('Face ID');
+//         }  
+        
+//         // andorid
+//         if (biometryType === ReactNativeBiometrics.Biometrics) {
+//             console.log('[TAG] biometryType : ', biometryType);
+//             console.log('Biometrics supported!!!');
+//             console.log('[TAG] available',available);
+//             bio_isKeyExist();
+//         }
+//     });
+// }
+   
+// bio_1
+// function bio_is_key_exist() {
+//     console.log('TAG: bio_isKeyExist()');
+    
+//     ReactNativeBiometrics.biometricKeysExist()
+//     .then((resultObject) => {
+//       const { keysExist } = resultObject               
+//       if (keysExist) {
+//         console.log('[TAG] Keys exist');
+//         bio_confirm();
+//       } else {
+//         console.log('[TAG] Keys do not exist or were deleted');
+//       }
+//     });    
+// }   
 
 
 // distance = beacon.distance ? beacon.distance : '';
-{/* <Button onPress={()=>handle_number()}>
+/* <Button onPress={()=>handle_number()}>
                 <Text>핀번호 로그인</Text>
-            </Button> */}
+            </Button> */
 /*
 function bio_getPublicKey() {
     console.log('TAG: bio_getPublicKey()');
@@ -395,79 +369,78 @@ function bio_getPublicKey() {
 */
 
 
- // if(Platform.OS == 'ios') {
-        //   console.log('TAG: Beacon ios start!');
-        // }      
-      /*
-    
-        BleManager.start({ showAlert: false })
-        .then(() => BleManager.enableBluetooth() ) // 블루투스 확인
-        .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) ) // 로케이션 확인
-        .catch(error=>{
-          console.log('TAG: ERROR', error);
-          Alert.alert(
-            '오류',
-            '블루투스 권한이 필요합니다.',
-            [{text:'ok',onPress:()=>console.log('OK pressed')}],
-            {
-              cancelable:false,
-            }
-          );        
-        });
-    
-        // checkTransmissionSupported(): promise 불루투스 권한이 있는지 확인
-    
-        Beacons.detectIBeacons();    
-        const region = {
-          identifier: 'Estimotes',
-          uuid: cfg.uuid
-        };    
-    
-        Beacons.startRangingBeaconsInRegion(region)
-        .then( console.log('TAG: Success startRanging...') )
-        .catch(error=>console.log('TAG: Beacons Error!',error)
-        );
-    
-        DeviceEventEmitter.addListener(
-          'beaconsDidRange', 
-          ( response => {                
-              response.beacons.forEach(beacon => {
-                  
-                // distance = beacon.distance ? beacon.distance : '';
-                if(beacon.distance) {
+// if(Platform.OS == 'ios') {
+    //   console.log('TAG: Beacon ios start!');
+    // }      
+    /*
+
+    BleManager.start({ showAlert: false })
+    .then(() => BleManager.enableBluetooth() ) // 블루투스 확인
+    .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) ) // 로케이션 확인
+    .catch(error=>{
+        console.log('TAG: ERROR', error);
+        Alert.alert(
+        '오류',
+        '블루투스 권한이 필요합니다.',
+        [{text:'ok',onPress:()=>console.log('OK pressed')}],
+        {
+            cancelable:false,
+        }
+        );        
+    });
+
+    // checkTransmissionSupported(): promise 불루투스 권한이 있는지 확인
+
+    Beacons.detectIBeacons();    
+    const region = {
+        identifier: 'Estimotes',
+        uuid: cfg.uuid
+    };    
+
+    Beacons.startRangingBeaconsInRegion(region)
+    .then( console.log('TAG: Success startRanging...') )
+    .catch(error=>console.log('TAG: Beacons Error!',error)
+    );
+
+    DeviceEventEmitter.addListener(
+        'beaconsDidRange', 
+        ( response => {                
+            response.beacons.forEach(beacon => {
                 
-                  console.log('TAG: found beacon', beacon.distance);              
-                  setDistance(beacon.distance);
-    
-                    if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
-                      setIsBeacon('Y');
-                    } else {
-                      setIsBeacon('F'); // 근처에 없슴
-                    }                
-                  }
-              });
-          })
-        );
-    
-        return () => {
-          DeviceEventEmitter.removeAllListeners();      
-        }   
-        */   
+            // distance = beacon.distance ? beacon.distance : '';
+            if(beacon.distance) {
+            
+                console.log('TAG: found beacon', beacon.distance);              
+                setDistance(beacon.distance);
 
-            // 바이오 : 초기화
-    // function bio_init() {
-    //     console.log('TAG: bio_init()');
-    //     // ReactNativeBiometrics.biometricKeysExist()
-    //     ReactNativeBiometrics.isSensorAvailable()                
-    //     .then( response => response.available )
-    //     .then( available => {
-    //         bio_confirm();
-    //     })
-    //     .catch(error=>console.log(error));
-    // }    
+                if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
+                    setIsBeacon('Y');
+                } else {
+                    setIsBeacon('F'); // 근처에 없슴
+                }                
+                }
+            });
+        })
+    );
 
-        // console.log('TAG: logged confirm:', confirm);
-    // if(confirm == 'Y') {
-    //     door_open();
-    // }    
-  
+    return () => {
+        DeviceEventEmitter.removeAllListeners();      
+    }   
+    */   
+
+        // 바이오 : 초기화
+// function bio_init() {
+//     console.log('TAG: bio_init()');
+//     // ReactNativeBiometrics.biometricKeysExist()
+//     ReactNativeBiometrics.isSensorAvailable()                
+//     .then( response => response.available )
+//     .then( available => {
+//         bio_confirm();
+//     })
+//     .catch(error=>console.log(error));
+// }    
+
+    // console.log('TAG: logged confirm:', confirm);
+// if(confirm == 'Y') {
+//     door_open();
+// }    

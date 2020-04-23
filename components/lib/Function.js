@@ -25,7 +25,7 @@ export function open_door() {
         .then((res)=>{ 
             if( res.data.ret == 'Y') {
                 Alert.alert(
-                    '* Door Unlocked *',
+                    '* 잠금해제 *',
                     cfg.name + '을 이용해주셔서 감사합니다.',
                     [{text:'ok',onPress:()=>console.log('OK pressed')}],
                     {
