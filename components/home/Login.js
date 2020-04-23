@@ -80,6 +80,8 @@ const CompanyTextContainer = styled.View`
   padding-bottom: 30px;  
 `;
 
+let result = '';
+
 export default function Login() {
 
   const [phone,setPhone] = useState('');
@@ -89,37 +91,42 @@ export default function Login() {
   useEffect(()=>{
   },[]);
 
-  async function btn_login_press () { 
-    console.log('btn_login_press()');
-    var result1 = await create_refresh_token();
-    if(result1.ret!='Y')
-    {
-      Alert.alert(
-        '로그인 오류',
-        result1.msg,
-        [{text:'ok',onPress:()=>console.log('OK pressed')}],
+ 
+  function create_refresh_token(){
+    console.log('create_refresh_token()');
+    
+      
+    let url = '';    
+    if(cfg.mode =='http') { url = cfg.http.host; }
+    if(cfg.mode =='https') { url = cfg.https.host; }
+    url = url + '/token/createRefreshToken';    
+    const data = {
+      sid:cfg.sid,
+      phone:phone,
+      pass:pass
+    } 
+    const config = {
+      timeout: 3000
+    }    
+    axios.post(url,data,config)
+    .then( result => {
+        if( result.data.ret == 'Y' )
         {
-          cancelable:false,
+          // 로그인성공
+          // 리프레시 토큰저장
+          AsyncStorage.setItem('refresh_token',result.data.refresh_token)
+          .then(()=> navigation.replace('Home') )
+          .catch(()=>alert(error));
+        } else {
+          alert(result.data.msg);
         }
-      );            
-      return;
-    }
-    else {
-      var result2 = await write_refresh_token(result1.refresh_token);
-      if(result2 == 'Y') {
-        navigation.replace('Home');
-      }
-      else {
-        Alert.alert(
-          '로그인 오류',
-          '시스템에 오류가 있습니다. 관리자에게 문의하세요.',
-          [{text:'ok',onPress:()=>console.log('OK pressed')}],
-          {
-            cancelable:false,
-          }
-        );           
-      }
-    }   
+    })
+    .catch( error => console.log(error));     
+  }
+
+  function btn_login_press () {     
+    console.log('btn_login_press()');    
+    create_refresh_token();   
   }  
 
   function btn_join_press() {    
@@ -127,54 +134,8 @@ export default function Login() {
       // navigation.navigate('Join1'); // Input
   }
 
-  // 토큰처리
-  async function create_refresh_token () {
-    console.log('create_refresh_token()');
-
-     try {
-      let url = '';    
-      if(cfg.mode =='http') { url = cfg.http.host; }
-      if(cfg.mode =='https') { url = cfg.https.host; }
-      url = url + '/token/createRefreshToken';    
-      const data = {
-        sid:cfg.sid,
-        phone:phone,
-        pass:pass
-      } 
-      const config = {
-        timeout: 3000
-      }      
-      let res = await axios.post(url,data,config);
-      
-      if(res.data.ret == "Y") {
-        return {"ret":"Y","refresh_token":res.data.refresh_token};
-      }
-      else {
-        return {"ret":"N","msg":res.data.msg};
-      }      
-
-    } catch (error)  {
-      return {"ret":"N","msg":error};
-    }
-  }
- 
-  async function write_refresh_token(token) {
-    console.log('token',token);
-
-    console.log('TAG: write_refresh_token()')
-    try {
-      await AsyncStorage.setItem('refresh_token',token);
-      console.log('TAG: write_refresh_token success');  
-      return 'Y';   
-    } catch (error) {
-      console.log(error);      
-      return 'N';
-    }    
-  }     
-
-
   return (
-      <ScrollView style={{width: '100%'}}>          
+      <ScrollView style={{width: '100%'}} keyboardShouldPersistTaps="handled">          
           <TitleView>
               <Image source={require('../images/logo_smartgym2.png')} style={{width:160, height:40, alignSelf:"center"}}></Image>
               <MainText>{cfg.name}</MainText>              
@@ -272,11 +233,10 @@ function CompanyText() {
     //         }
     //       );          
     //     });
-
     // }
 
 
-        //     axios.post(url,data,config)
+    //     axios.post(url,data,config)
     //     .then(function(res){
     //       if(res.data.ret=='Y') {       
     //         const refresh_token = res.data.refresh_token;
@@ -308,3 +268,50 @@ function CompanyText() {
     //       );          
     //     });
     // }
+
+
+       /*
+    var result1 = await create_refresh_token();
+    if(result1.ret!='Y')
+    {
+      Alert.alert(
+        '로그인 오류',
+        result1.msg,
+        [{text:'ok',onPress:()=>console.log('OK pressed')}],
+        {
+          cancelable:false,
+        }
+      );            
+      return;
+    }
+    else {
+      var result2 = await write_refresh_token(result1.refresh_token);
+      if(result2 == 'Y') {
+        navigation.replace('Home');
+      }
+      else {
+        Alert.alert(
+          '로그인 오류',
+          '시스템에 오류가 있습니다. 관리자에게 문의하세요.',
+          [{text:'ok',onPress:()=>console.log('OK pressed')}],
+          {
+            cancelable:false,
+          }
+        );           
+      }
+    }   
+    */
+
+    // async function write_refresh_token(token) {
+  //   console.log('token',token);
+
+  //   console.log('TAG: write_refresh_token()')
+  //   try {
+  //     await AsyncStorage.setItem('refresh_token',token);
+  //     console.log('TAG: write_refresh_token success');  
+  //     return 'Y';   
+  //   } catch (error) {
+  //     console.log(error);      
+  //     return 'N';
+  //   }    
+  // }     

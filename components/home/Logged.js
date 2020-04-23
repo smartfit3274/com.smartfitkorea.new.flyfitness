@@ -21,7 +21,8 @@ import Axios from 'axios';
 import cfg from '../data/cfg.json';
 import { PermissionsAndroid, DeviceEventEmitter } from 'react-native'
 import BleManager, { start } from 'react-native-ble-manager';
-import Beacons from 'react-native-beacons-manager'
+import Beacons from 'react-native-beacons-manager';
+import { open_door } from '../lib/Function';
 
 let access_token = '';
 let result = '';
@@ -92,7 +93,7 @@ function Logged() {
         .then(result => result.success )
         .then((success)=>{
             if(success==true) {
-                door_open();
+                open_door();
             }
             else {
                 // ignore

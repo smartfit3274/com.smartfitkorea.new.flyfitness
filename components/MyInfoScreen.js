@@ -178,7 +178,7 @@ function MyInfoScreen() {
                     <LabelBodyStyle>{MbInfo.edate}</LabelBodyStyle>
                 </ItemStyle>
             </Form>    
-    <Text style={{textAlign:"center",marginTop:30}}>{cfg.name}을(를) 이용해주셔서 감사합니다.</Text>        
+    <Text style={{textAlign:"center",marginTop:30}}>{cfg.name}을 이용해주셔서 감사합니다.</Text>        
         </Content>
 
       </>      
