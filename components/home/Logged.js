@@ -27,24 +27,19 @@ let access_token = '';
 let result = '';
 let pin = '';
 let auth_type = '';
+let confirm = '';
+const show_distance = "N"; // DEBUG
 
-function Logged(props) {
+function Logged() {
 
     const window = Dimensions.get('window'); 
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
-    const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
-
-    // 출입문 열기 : 숫자로 문열기
-    // 팝업이 닫힐때 호출됨
-    const confirm = props.confirm ? props.confirm : '';
-    if(confirm == 'Y') {
-        door_open();
-    }
-
+    const [isBeacon, setIsBeacon] = useState('Y');  // 기본값 N
+    
     // 시작
     useEffect(()=>{
-        startBeacon();
+        startBeacon();       
     },[]);
     
     function btn_mypage(){
@@ -147,45 +142,9 @@ function Logged(props) {
             if(auth_type=='number') {
                 handle_number();
             }
-            
+
         })
         .catch( error => console.log(error));        
-    }
-    
-    // 출입문 개방 : 지문 or 비번
-    function door_open() {
-       
-        AsyncStorage.getItem('access_token')
-        .then(result => {            
-            access_token = result
-
-            // 문열기
-            let url = '';    
-            if(cfg.mode =='http') { url = cfg.http.host; }
-            if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/rest/bio_dooropen';
-            const data = {          
-                sid:cfg.sid,
-                cid:cfg.cid,
-                access_token: access_token,
-            }
-            Axios.post(url,data,{timeout:3000})
-            .then((res)=>{ 
-                if( res.data.ret == 'Y') {
-                    Alert.alert(
-                        '성공',
-                        '출입문이 개방되었습니다.',
-                        [{text:'ok',onPress:()=>console.log('OK pressed')}],
-                        {
-                        cancelable:false,
-                        }
-                    );  
-                } else {
-                    alert('출입문 개방 실패 : 스마트키를 확인하세요.');
-                }
-            })
-        })
-        .catch(error=>console.log(error));
     }
 
     // ============================================== //
@@ -307,7 +266,9 @@ function Logged(props) {
         </Header>
 
         <Content scrollEnabled={false}>
+            { show_distance == 'Y' &&
             <Text>최소거리: {cfg.beacon_range} / 비콘과의 거리: {distance}</Text>
+            }
             <Image source={require('../images/bg.jpg')}
                 style={{ width: window.width, height: window.height}}            
             ></Image>
@@ -503,3 +464,9 @@ function bio_getPublicKey() {
     //     })
     //     .catch(error=>console.log(error));
     // }    
+
+        // console.log('TAG: logged confirm:', confirm);
+    // if(confirm == 'Y') {
+    //     door_open();
+    // }    
+  

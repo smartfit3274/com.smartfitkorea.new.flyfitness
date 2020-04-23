@@ -193,19 +193,13 @@ export default function HomeScreen(props) {
     
   }
 
-  // 문열기 암호검사  
-  let confirm = props.navigation.getParam('confirm');
-  if(typeof(confirm) == 'undefined') {
-    confirm = '';
-  }
-
   return (      
       <Container>
         { isLogin =='N' &&
         <Login></Login>
         }
         { isLogin == 'Y' &&
-        <Logged confirm={confirm}></Logged>
+        <Logged></Logged>
         }
       </Container>   
   );

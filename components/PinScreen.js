@@ -29,10 +29,11 @@ import { useEffect } from 'react';
 import cfg from "./data/cfg.json";
 import axios from 'axios';
 import PinView from 'react-native-pin-view'
+import {open_door} from './lib/Function';
 
 const Message = styled(View)`    
     align-items:center;
-    margin-top:15px;    
+    margin-top:15px;
 `;
 
 const LabelTitleStyle = styled(Label)` 
@@ -84,7 +85,6 @@ function PinScreen(props) {
     }
 
     function savePin() {     
-        alert(pin);   
         AsyncStorage.setItem('pin',pin)
         .then ( ()=> {        
             Alert.alert(
@@ -103,11 +103,12 @@ function PinScreen(props) {
     }
 
     function confirmPin() {
+        navigation.pop();
         if(savedPin == pin) {
-            navigation.navigate('Home',{confirm:'Y'});
+            // 핀번호 일치 (문열기)
+            open_door();
         } else {
             alert('비밀번호가 일치하지 않습니다.', savedPin);
-            navigation.navigate('Home',{confirm:'N'});
         }
     }
 
@@ -123,11 +124,7 @@ function PinScreen(props) {
             if(mode=='confirm') {
                 confirmPin();
             }
-        } 
-        
-        // console.log(pin.length);
-        // pinView.current.clearAll();
-        
+        }        
     }
   
     return (
@@ -168,3 +165,8 @@ function PinScreen(props) {
 }
 
 export default PinScreen;
+
+
+        
+        // console.log(pin.length);
+        // pinView.current.clearAll();
