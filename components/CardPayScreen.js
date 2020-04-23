@@ -26,7 +26,7 @@ import IMP from 'iamport-react-native';
 import Loading from './Loading';
 import { WebView } from 'react-native-webview';
 import { initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
-import DatePicker from 'react-native-datepicker';
+import DatePicker from 'react-native-date-picker';
 
 var access_token = '';
 var refresh_token = '';
@@ -39,67 +39,43 @@ const TextContainer = styled(View)`
     height: 60px;
 `
 
-function MyInfoScreen() {
+function CardPayScreen() {
+
 
     const navigation = useNavigation();
     const [listItem, setListItem] = useState([]);
     const [sdate,setSDate] = useState(null);
     
     useEffect(()=>{        
-        console.log('TAG: start --------');
+        console.log('TAG: * start *');
 
         AsyncStorage.getItem('access_token')
-        .then( result => { 
-            access_token = result
-            return AsyncStorage.getItem('refresh_token')            
-        }).then ( result => {
-            refresh_token = result;
-            
-            // 회원코드 가져오기
+        .then(result => {
+            access_token = result;
+
+            // 상품로딩
             let url = '';    
             if(cfg.mode =='http') { url = cfg.http.host; }
             if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/token/decode';            
+            url = url + '/rest/get_product_list';        
             const data = {
                 sid:cfg.sid,
+                cid:cfg.cid,
                 access_token: access_token
             }    
-            return Axios.post(url,data,{timeout:3000});
+            Axios.post(url,data,{timeout:3000})
+            .then(res=>{
+                setListItem(res.data);          
+            })
+            .catch(error => console.log(error));
+
         })
-        .then( result => {
-            mcd = result.data.mb_id;
-
-            // 상품로딩
-            get_product_list();
-
-        })        
         .catch( error => console.log(error));
-
     },[]);  
 
     function btn_close() {
         navigation.pop();
     }
-
-    async function get_product_list() {     
-    
-        let url = '';    
-        if(cfg.mode =='http') { url = cfg.http.host; }
-        if(cfg.mode =='https') { url = cfg.https.host; }
-        url = url + '/rest/get_product_list';         
-
-        const data = {
-            sid:cfg.sid,
-            cid:cfg.cid,
-            access_token: access_token
-        }    
-        Axios.post(url,data,{timeout:3000})
-        .then(res=>{
-            setListItem(res.data);          
-        })
-        .catch(error => console.log(error));
-    }
-  
     
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
@@ -128,7 +104,7 @@ function MyInfoScreen() {
         var params = {
             userCode : cfg.iamport,
             name : name,
-            amount: amount,
+            amount: 1000,
             mcd : mcd,
             pid : pid,
             sdate: sdate,
@@ -168,7 +144,6 @@ function MyInfoScreen() {
             date={sdate}
             placeholder="시작일"
             format="YYYY-MM-DD"
-            minDate={new Date()}      
             onDateChange={(date) => {
                 setSDate(date);
             }}            
@@ -198,4 +173,10 @@ function MyInfoScreen() {
     );  
 }
 
-export default MyInfoScreen;
+export default CardPayScreen;
+
+
+    //async function get_product_list() {     
+    
+        // 
+    //}

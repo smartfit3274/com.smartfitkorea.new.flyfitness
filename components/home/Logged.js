@@ -156,8 +156,8 @@ function Logged() {
         const scale = useRef(new Animated.Value(1)).current;    
         const pulse = () => {
             Animated.sequence([
-            Animated.timing(scale, { toValue: 1.2 , useNativeDriver: true }),
-            Animated.timing(scale, { toValue: 0.8 , useNativeDriver: true }),
+            Animated.timing(scale, { toValue: 1.2 , useNativeDriver: false }),
+            Animated.timing(scale, { toValue: 0.8 , useNativeDriver: false }),
             ]).start(() => pulse());
         };    
         useEffect(() => {
