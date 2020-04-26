@@ -14,6 +14,7 @@ import {
     Button,
     List,
     ListItem,
+    DatePicker
 } from 'native-base';
 import { Alert, Image,Dimensions, RefreshControlBase } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
@@ -26,7 +27,7 @@ import IMP from 'iamport-react-native';
 import Loading from './Loading';
 import { WebView } from 'react-native-webview';
 import { initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
-import DatePicker from 'react-native-date-picker';
+import {format} from 'date-fns';
 
 var access_token = '';
 var refresh_token = '';
@@ -140,18 +141,15 @@ function CardPayScreen() {
         </Header>  
 
         <View style={{ marginTop:10, marginBottom:5,alignItems:"center"}}>
-            <DatePicker
-            date={sdate}
-            placeholder="시작일"
-            format="YYYY-MM-DD"
-            onDateChange={(date) => {
-                setSDate(date);
-            }}            
-            >
-            </DatePicker>
             {/* <Button>
                 <Text onPress={()=>btn_result()}>Result</Text>
             </Button> */}
+            <DatePicker
+            placeHolderText="- 시작일 선택 -"
+            formatChosenDate={ date => format(date,"yyyy-MM-dd") }
+            onDateChange={ date => setSDate(date) }
+            >
+            </DatePicker>
         </View>           
 
         <Content scrollEnabled={true}> 
