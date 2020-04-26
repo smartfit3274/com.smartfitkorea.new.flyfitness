@@ -29,9 +29,11 @@ import { WebView } from 'react-native-webview';
 import { initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import {format} from 'date-fns';
 
-var access_token = '';
-var refresh_token = '';
-var mcd = '';
+let access_token = '';
+let refresh_token = '';
+let mcd = '';
+let url = '';
+let data = {}
 
 const TextContainer = styled(View)`
     justify-content:center;
@@ -54,12 +56,26 @@ function CardPayScreen() {
         .then(result => {
             access_token = result;
 
+
+            // 회원정보 로딩
+            url = '';    
+            if(cfg.mode =='http') { url = cfg.http.host; }
+            if(cfg.mode =='https') { url = cfg.https.host; }
+            url = url + '/token/decode';         
+            data = {
+                sid:cfg.sid,
+                access_token: access_token
+            }    
+            Axios.post(url,data,{timeout:3000})
+            .then(result => mcd = result.data.mb_id)
+            .catch(error => console.log(error));
+
             // 상품로딩
-            let url = '';    
+            url = '';    
             if(cfg.mode =='http') { url = cfg.http.host; }
             if(cfg.mode =='https') { url = cfg.https.host; }
             url = url + '/rest/get_product_list';        
-            const data = {
+            data = {
                 sid:cfg.sid,
                 cid:cfg.cid,
                 access_token: access_token
@@ -72,6 +88,7 @@ function CardPayScreen() {
 
         })
         .catch( error => console.log(error));
+
     },[]);  
 
     function btn_close() {
@@ -105,12 +122,12 @@ function CardPayScreen() {
         var params = {
             userCode : cfg.iamport,
             name : name,
-            amount: 1000,
+            amount: amount,
             mcd : mcd,
             pid : pid,
             sdate: sdate,
         }
-        console.log(params);
+        // console.log(params);
         navigation.navigate('CardPayStart',{params:params});
     }
 
@@ -147,7 +164,7 @@ function CardPayScreen() {
             <DatePicker
             placeHolderText="- 시작일 선택 -"
             formatChosenDate={ date => format(date,"yyyy-MM-dd") }
-            onDateChange={ date => setSDate(date) }
+            onDateChange={ date => setSDate(format(date,"yyyy-MM-dd")) }
             >
             </DatePicker>
         </View>           
@@ -172,9 +189,3 @@ function CardPayScreen() {
 }
 
 export default CardPayScreen;
-
-
-    //async function get_product_list() {     
-    
-        // 
-    //}
