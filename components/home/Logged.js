@@ -29,14 +29,14 @@ let result = '';
 let pin = '';
 let auth_type = '';
 let confirm = '';
-const show_distance = "N"; // DEBUG
+const show_distance = 'Y'; // DEBUG
 
 function Logged() {
 
     const window = Dimensions.get('window'); 
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
-    const [isBeacon, setIsBeacon] = useState('Y');  // 기본값 N
+    const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
     
     // 시작
     useEffect(()=>{
