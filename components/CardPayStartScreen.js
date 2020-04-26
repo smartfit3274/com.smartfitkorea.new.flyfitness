@@ -24,7 +24,6 @@ import cfg from "./data/cfg.json";
 import styled from "styled-components/native";
 import IMP from 'iamport-react-native';
 import Loading from './Loading';
-import { WebView } from 'react-native-webview';
 
 var access_token = '';
 
@@ -72,6 +71,8 @@ function CardPayStartScreen() {
         sid: cfg.sid,
         sdate: sdate,
     }       
+
+    // console.log(data);
 
     // 결제정보 저장
     let url = '';    
