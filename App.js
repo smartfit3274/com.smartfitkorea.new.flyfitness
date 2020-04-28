@@ -14,6 +14,7 @@ import CardPayScreen from './components/CardPayScreen';
 import CardPayStartScreen from './components/CardPayStartScreen';
 import CardPayResultScreen from './components/CardPayResultScreen';
 import PinScreen from './components/PinScreen';
+import FindPassScreen from './components/FindPassScreen';
 
 const AppNavigator = createStackNavigator({
   Home: {
@@ -82,6 +83,12 @@ const AppNavigator = createStackNavigator({
       title: 'PinScreen'
     })       
   },       
+  FindPass: {
+    screen: FindPassScreen,
+    navigatResulttions: ({
+      title: 'FindPass'
+    })       
+  },    
 }, 
 {    
   defaultNavigationOptions: {

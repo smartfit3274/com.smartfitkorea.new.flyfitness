@@ -93,8 +93,7 @@ export default function Login() {
 
  
   function create_refresh_token(){
-    console.log('create_refresh_token()');
-    
+    console.log('create_refresh_token()');    
       
     let url = '';    
     if(cfg.mode =='http') { url = cfg.http.host; }
@@ -134,6 +133,10 @@ export default function Login() {
       // navigation.navigate('Join1'); // Input
   }
 
+  function btn_find_pass() {
+    navigation.navigate('FindPass'); // Input
+  }
+
   return (
       <ScrollView style={{width: '100%'}} keyboardShouldPersistTaps="handled">          
           <TitleView>
@@ -156,7 +159,7 @@ export default function Login() {
           </ButtonContainer>
 
           <LostPassContainer>
-              <Text>비밀번호를 잊어버리셨나요?</Text>
+              <Text onPress={()=>btn_find_pass()}>비밀번호를 잊어버리셨나요?</Text>
           </LostPassContainer>
 
           <CompanyText></CompanyText>
