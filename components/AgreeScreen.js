@@ -1,19 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet } from 'react-native';
+import { View, Text,StyleSheet, SafeAreaView } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, goBack } from 'react-navigation-hooks';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationEvents } from 'react-navigation';
 import data from './data/agreement.json';
+import { Container,Content, Footer } from 'native-base';
 
-const Container = styled.View`
-  flex:1;
-`;
-
-const TextContainer = styled.View`
-  flex:1;
-  padding:2%;
-`;
 
 const TextTitle = styled.Text`
   font-size:16px;
@@ -67,18 +60,33 @@ export default function AgreeScreen (props) {
   } 
 
   return (
-    <Container>
-      <TextContainer>
-        <ScrollView>
+    
+      <Container>
+        
+        <Content contentContainerStyle={styles.container}>
+          <View style={styles.content}>
           <TextTitle className="b">{title}</TextTitle>          
-          { body.map((item, key)=><Text>{item}</Text> )}         
-        </ScrollView>
-      </TextContainer>        
-      <ButtonContainer>
-        <Button Agree onPress={()=>BtnNotAgree()}><ButtonText>동의 안함</ButtonText></Button>
-        <Button notAgree onPress={()=>BtnAgree()}><ButtonText>동의함</ButtonText></Button>          
-      </ButtonContainer>        
-    </Container>
+          { body.map((item, key)=><Text>{item}</Text> )}    
+          </View>   
+        </Content>
+
+        <Footer>
+          <Button Agree onPress={()=>BtnNotAgree()}><Text>동의 안함</Text></Button>
+          <Button notAgree onPress={()=>BtnAgree()}><Text>동의함</Text></Button>          
+        </Footer>
+ 
+      </Container>
+    
+
 
   );
 }
+
+const styles = StyleSheet.create({
+  container:{
+    alignItems:"center"
+  },
+  content : {
+    width:"90%",
+  }
+});

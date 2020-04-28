@@ -19,7 +19,7 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - IamportReactNative (1.4.1):
+  - IamportReactNative (1.4.4):
     - React
   - RCTRequired (0.62.0)
   - RCTTypeSafety (0.62.0):
@@ -186,11 +186,13 @@ PODS:
   - React-jsinspector (0.62.0)
   - react-native-biometrics (2.1.4):
     - React
+  - react-native-ble-manager (7.2.0):
+    - React
   - react-native-netinfo (5.7.0):
     - React
   - react-native-safe-area-context (0.7.3):
     - React
-  - react-native-webview (9.0.2):
+  - react-native-webview (9.3.0):
     - React
   - React-RCTActionSheet (0.62.0):
     - React-Core/RCTActionSheetHeaders (= 0.62.0)
@@ -251,8 +253,6 @@ PODS:
     - React-cxxreact (= 0.62.0)
     - React-jsi (= 0.62.0)
     - ReactCommon/callinvoker (= 0.62.0)
-  - ReactNativeBeaconsManager (1.1.0):
-    - React
   - RNCAsyncStorage (1.8.1):
     - React
   - RNCMaskedView (0.1.7):
@@ -284,6 +284,7 @@ DEPENDENCIES:
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-biometrics (from `../node_modules/react-native-biometrics`)
+  - react-native-ble-manager (from `../node_modules/react-native-ble-manager`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-webview (from `../node_modules/react-native-webview`)
@@ -298,7 +299,6 @@ DEPENDENCIES:
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/callinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - ReactNativeBeaconsManager (from `../node_modules/react-native-beacons-manager`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
@@ -343,6 +343,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-biometrics:
     :path: "../node_modules/react-native-biometrics"
+  react-native-ble-manager:
+    :path: "../node_modules/react-native-ble-manager"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-safe-area-context:
@@ -369,8 +371,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
-  ReactNativeBeaconsManager:
-    :path: "../node_modules/react-native-beacons-manager"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
   RNCMaskedView:
@@ -391,7 +391,7 @@ SPEC CHECKSUMS:
   FBReactNativeSpec: 85c7f8347f4a6e911742228e89e245187afa298e
   Folly: 30e7936e1c45c08d884aa59369ed951a8e68cf51
   glog: 1f3da668190260b06b429bb211bfbee5cd790c28
-  IamportReactNative: f53f2fa90b5ecc57d38e3f163d3a9c6d9defc47b
+  IamportReactNative: 036fc72c985548de96083adc43cbcec1b31f5a0a
   RCTRequired: 0873f5bdb1762d2b9b1ae16a01c4f91d6ee3b6dd
   RCTTypeSafety: a605e0cc0e4220f6e65896bd9e675073c2978f35
   React: 8abf6bdd2b05538e9445f7bbda800df744068bfe
@@ -402,9 +402,10 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 8bf0b2707f05865113415088c398a7f98c0cf546
   React-jsinspector: 8e5913c4c6c54f0d3f9c9fc630c465a89cded65d
   react-native-biometrics: 9d3306e5d29c3bc4e6a3c912d759a94e76a2f683
+  react-native-ble-manager: fda5f6b20092f2b2d356676bd1f3dc7065bb4329
   react-native-netinfo: 61a837131d5f0194d22f8048a456d8f31a074baa
   react-native-safe-area-context: 8260e5157617df4b72865f44006797f895b2ada7
-  react-native-webview: 838be111a7805977e5fc4fa6b66ae293f6c17384
+  react-native-webview: bdde2a3c4cbdc0122bc2bfba13603db193f0cc5c
   React-RCTActionSheet: 674afbc8b9c76e0a83520e0a51da29a70802c03f
   React-RCTAnimation: f5f24330d09ee677fb49e0782f8321868f4df431
   React-RCTBlob: b773ce6138ab0d172ebd8a455fd4efd200a92549
@@ -415,7 +416,6 @@ SPEC CHECKSUMS:
   React-RCTText: 91a0d0ae5434aa28fe0c89c03eb9d660ff53bd9b
   React-RCTVibration: 0630aeb11e22f87c180ca9c0c3a0a0aba780cc62
   ReactCommon: d22162ab8f1358c53dfcd0f9c4d82d38facdbc48
-  ReactNativeBeaconsManager: 66d56860529b3cdf9c351426f667801426901dff
   RNCAsyncStorage: 00bdf63f7f1e0f11d3323533dba4f222e58bf092
   RNCMaskedView: 90dd32f5b786bd562e876e1421ea77c700cbf71e
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38

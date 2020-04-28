@@ -41,13 +41,10 @@ function Logged() {
     const [distance, setDistance] = useState(0);
     const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
     
-    // 비콘데이트 from DB
-
-
-
     // 시작
     useEffect(()=>{
         
+        // uuid
         url = '';
         if(cfg.mode =='http') { url = cfg.http.host; }
         if(cfg.mode =='https') { url = cfg.https.host; }
@@ -245,7 +242,7 @@ function Logged() {
                         });
                 })                               
             })
-            .catch( error => alert('Error',error) );            
+            .catch( error => alert('비콘초기화 오류',error) );            
         }                
     }
       

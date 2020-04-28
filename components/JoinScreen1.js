@@ -232,23 +232,27 @@ export default function JoinScreen(props) {
   }
  
   return (  
-    <Container>
-      
-      <ScrollView>
-        <BodyContainer>
-          <MyTitle>회원가입 (약관동의)</MyTitle>
-          <AgreeSectionComp/> 
-          <TitleSectionComp title="이용약관 (필수)"/>
-          <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>
-          <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
-          <CheckPriComp data={{ check10:check10 }} />
-        </BodyContainer>
-      </ScrollView>
-      
-      <BottomContainer>
-        <ButtonNotAgree onPress={()=>BtnNotAgree(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>
-        <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료</ButtonText></ButtonAgree> 
-      </BottomContainer>
-    </Container>
+    
+
+      <Container>
+        <SafeAreaView>
+        
+        <ScrollView>
+          <BodyContainer>
+            <MyTitle>회원가입 (약관동의)</MyTitle>
+            <AgreeSectionComp/> 
+            <TitleSectionComp title="이용약관 (필수)"/>
+            <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>
+            <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
+            <CheckPriComp data={{ check10:check10 }} />
+          </BodyContainer>
+        </ScrollView>
+        
+        <BottomContainer>
+          <ButtonNotAgree onPress={()=>BtnNotAgree(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>
+          <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료</ButtonText></ButtonAgree> 
+        </BottomContainer>
+        </SafeAreaView>
+      </Container>
   );
 };

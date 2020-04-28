@@ -67,32 +67,42 @@ function MyInfoScreen() {
         // 토큰 가져오기
         AsyncStorage.getItem('access_token')
         .then( result => { 
-            access_token = result;
-            return AsyncStorage.getItem('refresh_token');
-        })
-        .then( result => {
-            refresh_token = result;
+            access_token = result 
+            
+            AsyncStorage.getItem('refresh_token')
+            .then ( result => { 
+                refresh_token = result 
 
-            if(access_token=='' || refresh_token=='') {
-                error_close();    
-            }            
+                //console.log('access_token', access_token);
+                //console.log('refresh_token', refresh_token);
 
-            // 토큰검사
-            if(cfg.mode =='http') url = cfg.http.host; 
-            if(cfg.mode =='https') url = cfg.https.host; 
-            url = url + '/token/checkAccessToken';
-            const data = {
-                sid: cfg.sid,
-                access_token: access_token
-            }
-            axios.post(url,data,{timeout:3000})
-            .then(result=>{
-                // Y 접근가능
-                if(result.data.ret!='Y') {
-                    error_close();
-                }     
-                member_one();
-            });            
+                // 토큰검사
+                if(cfg.mode =='http') url = cfg.http.host; 
+                if(cfg.mode =='https') url = cfg.https.host; 
+                url = url + '/token/checkAccessToken';
+                const data = {
+                    sid: cfg.sid,
+                    access_token: access_token
+                }
+                axios.post(url,data,{timeout:3000})
+                .then(result=>{
+                    if(result.data.ret=='Y') {
+                        member_one();
+                    }    
+                    
+                })
+                .catch( error => console.log('TAG', error));         
+
+            })
+            .catch ( error => console.log('TAG:', error));
+
+
+
+            // if(access_token=='' || refresh_token=='') {
+            //     error_close();    
+            // }            
+
+            
         }).catch(error=>console.log('TAG: ERROR',error));  
 
     },[]);    
@@ -105,13 +115,16 @@ function MyInfoScreen() {
         // 회원정보 로딩
         if(cfg.mode =='http') url = cfg.http.host; 
         if(cfg.mode =='https') url = cfg.https.host;         
-        console.log('member_one();');
+        // console.log('member_one();');
         url = url + '/rest/member_one';
         const data = {
             sid: cfg.sid,
             cid: cfg.cid,
             access_token: access_token
         }
+
+        console.log(data);
+
         axios.post(url,data,{timeout:3000})
         .then(result=>{
             console.log(result.data);

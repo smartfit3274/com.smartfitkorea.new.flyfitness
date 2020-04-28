@@ -15,7 +15,6 @@ import {
 import { useNavigation } from 'react-navigation-hooks'
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
 import { 
   Container,
   CheckBox,
@@ -66,11 +65,11 @@ const ButtonAgreeTxt = styled.Text`
   font-size:16px;
 `;
 
+
+let url = "";
+
 export default function JoinScreen1(props) {
 
-  const mode = "http";
-  const sid = "smartgym";
-  let url = "";
   const navigation = useNavigation();
   const [BtnAgreeDisabled, SetBtnAgreeDisabled] = useState(false);
   const [phone,setPhone] = useState('');
@@ -82,15 +81,15 @@ export default function JoinScreen1(props) {
     console.log('TAG - goback();');
   }
 
-  function BtnOk() {
-
-    if( mode == "https") url = "https://pass.smartg.kr/rest/join2";
-    if( mode == "http") url = "http://192.168.76.51/rest/join2"; 
-
-    const sid = cfg.sid;
-
+  function btn_ok() {
+    console.log('TAG','btn_ok()');
+    
+    if(cfg.mode =='http') { url = cfg.http.host; }
+    if(cfg.mode =='https') { url = cfg.https.host; }
+    url = url + '/rest/join2';    
     const data = {
-      sid:sid,
+      sid: cfg.sid,
+      cid: cfg.cid,
       phone:phone,
       name:name,
       pass:pass,
@@ -158,7 +157,7 @@ export default function JoinScreen1(props) {
       </Content>
 
       <Footer style={{ backgroundColor:'#ecf0f1', height:70}}>
-        <ButtonAgree onPress={()=>BtnOk()}>
+        <ButtonAgree onPress={()=>btn_ok()}>
           <ButtonAgreeTxt>확인</ButtonAgreeTxt>
         </ButtonAgree>
       </Footer>
