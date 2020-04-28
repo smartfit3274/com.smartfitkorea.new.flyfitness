@@ -17,7 +17,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Image,Dimensions, RefreshControlBase, Animated, Alert } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
-import Axios from 'axios';
+import axios from 'axios';
 import cfg from '../data/cfg.json';
 import { PermissionsAndroid, DeviceEventEmitter } from 'react-native'
 import BleManager, { start } from 'react-native-ble-manager';
@@ -29,7 +29,10 @@ let result = '';
 let pin = '';
 let auth_type = '';
 let confirm = '';
-const show_distance = 'Y'; // DEBUG
+let url = '';
+let uuid = '';
+
+const show_distance = 'N'; // DEBUG
 
 function Logged() {
 
@@ -38,9 +41,33 @@ function Logged() {
     const [distance, setDistance] = useState(0);
     const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
     
+    // 비콘데이트 from DB
+
+
+
     // 시작
     useEffect(()=>{
-        startBeacon();       
+        
+        url = '';
+        if(cfg.mode =='http') { url = cfg.http.host; }
+        if(cfg.mode =='https') { url = cfg.https.host; }
+        url = url + '/rest/get_uuid';     
+        const data = {
+            sid:cfg.sid,
+            cid:cfg.cid
+        }   
+        axios.post(url,data,{timeout:3000}) 
+        .then( result => {
+            uuid = result.data.uuid 
+            startBeacon();
+        })
+        .catch( error => console.log(error));
+       
+        
+        // 비콘끄기
+        return () => {
+            DeviceEventEmitter.removeAllListeners();      
+        }
     },[]);
     
     function btn_mypage(){
@@ -422,10 +449,6 @@ function bio_getPublicKey() {
             });
         })
     );
-
-    return () => {
-        DeviceEventEmitter.removeAllListeners();      
-    }   
     */   
 
         // 바이오 : 초기화
