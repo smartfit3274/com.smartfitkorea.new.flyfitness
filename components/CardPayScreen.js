@@ -10,16 +10,18 @@ import {
     Right,
     Body,
     Title,
-    Content,
     Button,
     List,
     ListItem,
-    DatePicker
+    Input,
+    Form,
+    Item,
+    Label,
+    Icon
 } from 'native-base';
-import { Alert, Image,Dimensions, RefreshControlBase } from 'react-native';
+import { Alert, Image,Dimensions, RefreshControlBase, StyleSheet } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Axios from 'axios';
 import cfg from "./data/cfg.json";
 import styled from "styled-components/native";
@@ -28,6 +30,9 @@ import Loading from './Loading';
 import { WebView } from 'react-native-webview';
 import { initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import {format} from 'date-fns';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import {Container,Content,Separator} from 'native-base'
+import { setDate } from 'date-fns/esm';
 
 let access_token = '';
 let refresh_token = '';
@@ -44,30 +49,33 @@ const TextContainer = styled(View)`
 
 function CardPayScreen() {
 
-
     const navigation = useNavigation();
     const [listItem, setListItem] = useState([]);
     const [sdate,setSDate] = useState(null);
+    const [show, setShow] = useState(false);
     
     useEffect(()=>{        
         console.log('TAG: * start *');
-
         AsyncStorage.getItem('access_token')
         .then(result => {
             access_token = result;
 
+            console.log(access_token);
 
             // 회원정보 로딩
             url = '';    
             if(cfg.mode =='http') { url = cfg.http.host; }
             if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/token/decode';         
+            url = url + '/token/decode';                          
             data = {
                 sid:cfg.sid,
+                cid:cfg.cid,
                 access_token: access_token
             }    
             Axios.post(url,data,{timeout:3000})
-            .then(result => mcd = result.data.mb_id)
+            .then(result => { 
+                mcd = result.data.mb_id 
+            })
             .catch(error => console.log(error));
 
             // 상품로딩
@@ -82,6 +90,7 @@ function CardPayScreen() {
             }    
             Axios.post(url,data,{timeout:3000})
             .then(res=>{
+                console.log(res.data);
                 setListItem(res.data);          
             })
             .catch(error => console.log(error));
@@ -114,13 +123,17 @@ function CardPayScreen() {
             );   
             return false;                
         }
+        
+        let userCode = cfg.iamport;
 
-        // testmode:
-        // amount = 10;
-        // userCode = "iamport";
+        // TEST MODE
+        if(false) {
+            amount = 10;
+            userCode = "iamport";
+        }
 
         var params = {
-            userCode : cfg.iamport,
+            userCode : userCode,
             name : name,
             amount: amount,
             mcd : mcd,
@@ -143,49 +156,120 @@ function CardPayScreen() {
         navigation.navigate('CardPayResult',{response:response});
     }
 
+    // 달력 팝업
+    function btn_calendar() {
+        setShow(true);
+    }
+
+    // 달력 닫힐때
+    function handle_change(result) {
+        setShow(false);
+        if( result.type=='set' ) {
+            setSDate(format(result.nativeEvent.timestamp,'yyyy-MM-dd'));
+        }
+    }
+
     return (
-      <>
+      <Container>
+        
         <Header style={{backgroundColor:'#454545'}}>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
-                    <Icon name="close" style={{fontSize:30, color:"white"}}></Icon>
+                    <Icon type="MaterialCommunityIcons" name="close" style={{fontSize:30, color:"white"}}></Icon>
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
                 <Text style={{alignSelf:"center",color:"white"}}>카드결제</Text>
             </Body>
             <Right style={{flex:1}}></Right>
-        </Header>  
+        </Header>
 
-        <View style={{ marginTop:10, marginBottom:5,alignItems:"center"}}>
-            {/* <Button>
-                <Text onPress={()=>btn_result()}>Result</Text>
-            </Button> */}
-            <DatePicker
-            placeHolderText="- 시작일 선택 -"
-            formatChosenDate={ date => format(date,"yyyy-MM-dd") }
-            onDateChange={ date => setSDate(format(date,"yyyy-MM-dd")) }
-            >
-            </DatePicker>
-        </View>           
+        <Content contentContainerStyle={styles.container} scrollEnabled={true}>
 
-        <Content scrollEnabled={true}> 
-            <List>
-            {listItem.map((item,index)=>
-                <ListItem key={index}>                    
-                    <View style={{flex:1, paddingTop:10}}>                        
-                        <Text> {item.pas1506} {item.pas1505} / {item.pas1507_format} 원</Text>                        
-                        <Button block style={{marginTop:10,marginBottom:15}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}>
-                            <Text>구매하기</Text>
-                        </Button>
-                    </View>
-                </ListItem>
+            <View style={margin.t10}>
+                <Text>시작일을 선택하세요.</Text>                
+                <Item style={styles.item}>
+                    <Input editable={false} value={sdate}>
+                    </Input>   
+                    <Button onPress={()=>btn_calendar()}>
+                        <Icon type="MaterialCommunityIcons" name="calendar" style={styles.icon} />
+                    </Button>         
+                </Item>
+            </View>                
+
+            <View style={styles.content}>                
+
+                <List>
+                { listItem.map((item,index)=>
+                    
+                    <ListItem key={index} style={styles.listitem}>                    
+                
+                            <Left>
+                                <Text style={{paddingLeft:10}}> {item.pas1506} {item.pas1505} / {item.pas1507_format} 원</Text>                        
+                            </Left>
+                    
+                            <Right>
+                                <Button info block style={{marginTop:10,marginBottom:10}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}>
+                                    <Text>구매</Text>
+                                </Button>                         
+                            </Right>
+                                            
+                    </ListItem>                        
+
+                )}
+                </List>                
+
+
+                           
+            </View>
+
+            { show && (
+                <DateTimePicker
+                timeZoneOffsetInMinutes={0}
+                value={new Date()}
+                mode={'date'}
+                is24Hour={true}
+                display="default"
+                onChange={ result => handle_change(result) }
+                />
             )}
-            </List>          
         </Content>
-
-      </>      
+      </Container>        
     );  
 }
 
 export default CardPayScreen;
+
+const margin = StyleSheet.create({
+    t5: {marginTop:5},
+    t10 : { marginTop:10}
+})
+
+const styles = StyleSheet.create({
+    container:{
+        alignItems:"center"
+    },
+    content:{
+        marginTop:15,
+        width:"90%",
+    },
+    date: {   
+        borderWidth:1,
+        borderColor:"#cccccc",
+        width:120,
+        height: 40
+    },    
+    item:{
+        width:180,
+        marginTop:10
+    },  
+    icon : {        
+        fontSize:18
+    },
+    listitem:{
+        display:"flex",
+        borderWidth:1,
+        borderColor:"#cccccc",
+        marginBottom:15
+    }
+});

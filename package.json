@@ -12,6 +12,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.8",
     "@react-native-community/async-storage": "^1.8.1",
+    "@react-native-community/datetimepicker": "^2.3.2",
     "@react-native-community/masked-view": "^0.1.7",
     "@react-native-community/netinfo": "^5.7.0",
     "axios": "^0.19.2",
