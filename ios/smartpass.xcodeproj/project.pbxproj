@@ -45,7 +45,7 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* smartpassTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = smartpassTests.m; sourceTree = "<group>"; };
 		1065C170F98CFA8F5D154570 /* Pods-smartpassTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartpassTests.release.xcconfig"; path = "Target Support Files/Pods-smartpassTests/Pods-smartpassTests.release.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* smartpass.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smartpass.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* smartgym.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smartgym.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = smartpass/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = smartpass/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -239,7 +239,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* smartpass.app */,
+				13B07F961A680F5B00A75B9A /* smartgym.app */,
 				00E356EE1AD99517003FC87E /* smartpassTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* smartpass-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* smartpass-tvOSTests.xctest */,
@@ -399,7 +399,7 @@
 			);
 			name = smartpass;
 			productName = smartpass;
-			productReference = 13B07F961A680F5B00A75B9A /* smartpass.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* smartgym.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* smartpass-tvOS */ = {
@@ -453,9 +453,6 @@
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
-					};
-					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = TPDCAWP84D;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -766,6 +763,7 @@
 			baseConfigurationReference = 6A76FF92BD738498B7EDD315 /* Pods-smartpassTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				DEVELOPMENT_TEAM = TPDCAWP84D;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -784,7 +782,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/smartpass.app/smartpass";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/smartgym.app/smartgym";
 			};
 			name = Debug;
 		};
@@ -794,6 +792,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = TPDCAWP84D;
 				INFOPLIST_FILE = smartpassTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -808,7 +807,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/smartpass.app/smartpass";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/smartgym.app/smartgym";
 			};
 			name = Release;
 		};
@@ -830,8 +829,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = smartpass;
+				PRODUCT_BUNDLE_IDENTIFIER = com.smartfitkorea.smartgym;
+				PRODUCT_NAME = smartgym;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -853,8 +852,8 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = smartpass;
+				PRODUCT_BUNDLE_IDENTIFIER = com.smartfitkorea.smartgym;
+				PRODUCT_NAME = smartgym;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
