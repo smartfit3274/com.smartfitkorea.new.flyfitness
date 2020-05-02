@@ -30,9 +30,9 @@ import Loading from './Loading';
 import { WebView } from 'react-native-webview';
 import { initialWindowSafeAreaInsets } from 'react-native-safe-area-context';
 import {format} from 'date-fns';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import {Container,Content,Separator} from 'native-base'
 import { setDate } from 'date-fns/esm';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 let access_token = '';
 let refresh_token = '';
@@ -91,7 +91,7 @@ function CardPayScreen() {
             Axios.post(url,data,{timeout:3000})
             .then(res=>{
                 console.log(res.data);
-                setListItem(res.data);          
+                // setListItem(res.data);          
             })
             .catch(error => console.log(error));
 
@@ -161,17 +161,22 @@ function CardPayScreen() {
         setShow(true);
     }
 
-    // 달력 닫힐때
-    function handle_change(result) {
+
+    // const onChange = (event, selectedDate) => {
+    //     const currentDate = selectedDate || date;
+    //     setShow(Platform.OS === 'ios');
+    //     setDate(currentDate);
+    //   };
+
+    // 날짜선택
+    function handle_picker(selectedDate) {
+        setSDate(format(selectedDate,'yyyy-MM-dd'));
         setShow(false);
-        if( result.type=='set' ) {
-            setSDate(format(result.nativeEvent.timestamp,'yyyy-MM-dd'));
-        }
     }
 
     return (
       <Container>
-        
+    
         <Header style={{backgroundColor:'#454545'}}>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
@@ -184,24 +189,31 @@ function CardPayScreen() {
             <Right style={{flex:1}}></Right>
         </Header>
 
+        <DateTimePicker
+          isVisible={show}
+          onConfirm={(date)=>handle_picker(date)}
+          onCancel={()=>setShow(false)}
+        />
+        
+        <View style={ styles.dateContainer}>
+            <View style={styles.dateSub}>
+                    <Text style={styles.dateTitle}>시작일을 선택하세요.</Text>                
+                    <Item style={styles.item}>
+                        <Input editable={false} value={sdate}>
+                        </Input>   
+                        <Button info onPress={()=>btn_calendar()}>
+                            <Icon type="MaterialCommunityIcons" name="calendar" style={styles.icon} />
+                        </Button>         
+                    </Item>
+            </View>
+        </View>
+
         <Content contentContainerStyle={styles.container} scrollEnabled={true}>
-
-            <View style={margin.t10}>
-                <Text>시작일을 선택하세요.</Text>                
-                <Item style={styles.item}>
-                    <Input editable={false} value={sdate}>
-                    </Input>   
-                    <Button onPress={()=>btn_calendar()}>
-                        <Icon type="MaterialCommunityIcons" name="calendar" style={styles.icon} />
-                    </Button>         
-                </Item>
-            </View>                
-
+            
             <View style={styles.content}>                
 
                 <List>
-                { listItem.map((item,index)=>
-                    
+                { listItem.map((item,index)=>     
                     <ListItem key={index} style={styles.listitem}>                    
                 
                             <Left>
@@ -223,16 +235,17 @@ function CardPayScreen() {
                            
             </View>
 
-            { show && (
-                <DateTimePicker
+            {/* { show && ( */}
+                {/* <DateTimePicker
                 timeZoneOffsetInMinutes={0}
                 value={new Date()}
                 mode={'date'}
                 is24Hour={true}
                 display="default"
-                onChange={ result => handle_change(result) }
-                />
-            )}
+                
+                /> */}
+            {/* )} */}
+
         </Content>
       </Container>        
     );  
@@ -246,6 +259,16 @@ const margin = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
+
+    dateContainer : {
+        alignItems:"center"
+    },
+    dateSub:{
+        width:"80%",
+    },
+    dateTitle:{
+        paddingTop:10,
+    },
     container:{
         alignItems:"center"
     },
