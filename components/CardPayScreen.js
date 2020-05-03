@@ -89,9 +89,9 @@ function CardPayScreen() {
                 access_token: access_token
             }    
             Axios.post(url,data,{timeout:3000})
-            .then(res=>{
+            .then( res => {
                 console.log(res.data);
-                // setListItem(res.data);          
+                setListItem(res.data);         
             })
             .catch(error => console.log(error));
 
@@ -160,13 +160,6 @@ function CardPayScreen() {
     function btn_calendar() {
         setShow(true);
     }
-
-
-    // const onChange = (event, selectedDate) => {
-    //     const currentDate = selectedDate || date;
-    //     setShow(Platform.OS === 'ios');
-    //     setDate(currentDate);
-    //   };
 
     // 날짜선택
     function handle_picker(selectedDate) {
