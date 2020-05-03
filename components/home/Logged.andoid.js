@@ -208,44 +208,38 @@ function Logged() {
     function startBeacon() {
 
         console.log('TAG: startBeacon()');
-
         const region = {
             identifier: "Estimotes",
             uuid: cfg.uuid
         };        
-   
-        if(Platform.OS == 'android') {  
-            
-            console.log('TAG: android');
-    
-            // 블루투스 권한요청
-            BleManager.start({ showAlert: false })
-            .then(() => BleManager.enableBluetooth() )
-            .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) )
-            .then(() => Beacons.detectIBeacons() )
-            .then(() => Beacons.startRangingBeaconsInRegion(region) )
-            .then(() => {
-                DeviceEventEmitter.addListener(
-                    'beaconsDidRange', 
-                    response=> {          
-                        response.beacons.forEach(beacon => {                                 
-                            if(beacon.distance) {     
-                                console.log('TAG: found beacon', beacon.distance);                                           
-                            }
+        
+        // 블루투스 권한요청
+        BleManager.start({ showAlert: false })
+        .then(() => BleManager.enableBluetooth() )
+        .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) )
+        .then(() => Beacons.detectIBeacons() )
+        .then(() => Beacons.startRangingBeaconsInRegion(region) )
+        .then(() => {
+            DeviceEventEmitter.addListener(
+                'beaconsDidRange', 
+                response=> {          
+                    response.beacons.forEach(beacon => {                                 
+                        if(beacon.distance) {     
+                            console.log('TAG: found beacon', beacon.distance);                                           
+                        }
 
-                            setDistance(beacon.distance);                            
-                            if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
-                                setIsBeacon('Y');
-                            } else {
-                                setIsBeacon('F'); // 근처에 없슴
-                            }
-                        });
-                })                               
-            })
-            .catch( error => alert('비콘초기화 오류',error) );            
-        }                
+                        setDistance(beacon.distance);                            
+                        if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
+                            setIsBeacon('Y');
+                        } else {
+                            setIsBeacon('F'); // 근처에 없슴
+                        }
+                    });
+            })                               
+        })
+        .catch( error => alert('비콘초기화 오류',error) );                           
     }
-      
+
 
 
     return (
