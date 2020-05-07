@@ -41,9 +41,11 @@ function Logged() {
     const [distance, setDistance] = useState(0);
     const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
     
+
+
     // 시작
     useEffect(()=>{
-        
+
         // uuid
         url = '';
         if(cfg.mode =='http') { url = cfg.http.host; }
@@ -65,6 +67,7 @@ function Logged() {
         return () => {
             DeviceEventEmitter.removeAllListeners();      
         }
+        
     },[]);
     
     function btn_mypage(){
