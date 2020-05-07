@@ -128,11 +128,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.smartpass"
+        applicationId "com.smartfitkorea.smartpass"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 10401
+        versionName "1.4.1"
     }
     splits {
         abi {
