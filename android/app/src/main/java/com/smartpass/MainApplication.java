@@ -1,4 +1,4 @@
-package com.smartpass;
+package com.smartfitkorea.smartpass;
 
 import android.app.Application;
 import android.content.Context;

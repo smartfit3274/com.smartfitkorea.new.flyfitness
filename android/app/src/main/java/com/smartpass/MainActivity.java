@@ -1,4 +1,4 @@
-package com.smartpass;
+package com.smartfitkorea.smartpass;
 
 import com.facebook.react.ReactActivity;
 
