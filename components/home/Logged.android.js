@@ -32,7 +32,7 @@ let confirm = '';
 let url = '';
 let uuid = '';
 
-const show_distance = 'N'; // DEBUG
+const show_distance = 'Y'; // DEBUG
 
 function Logged() {
 
@@ -41,7 +41,6 @@ function Logged() {
     const [distance, setDistance] = useState(0);
     const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
     
-
 
     // 시작
     useEffect(()=>{
@@ -214,7 +213,7 @@ function Logged() {
         const region = {
             identifier: "Estimotes",
             uuid: cfg.uuid
-        };        
+        };      
         
         // 블루투스 권한요청
         BleManager.start({ showAlert: false })
@@ -226,6 +225,9 @@ function Logged() {
             DeviceEventEmitter.addListener(
                 'beaconsDidRange', 
                 response=> {          
+
+                    console.log(response);
+
                     response.beacons.forEach(beacon => {                                 
                         if(beacon.distance) {     
                             console.log('TAG: found beacon', beacon.distance);                                           

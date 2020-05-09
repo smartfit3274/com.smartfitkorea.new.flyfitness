@@ -43,7 +43,7 @@ function Logged() {
     
     // 시작
     useEffect(()=>{
-        
+
         // uuid
         url = '';
         if(cfg.mode =='http') { url = cfg.http.host; }
@@ -214,27 +214,25 @@ function Logged() {
         };
         
         Beacons.requestWhenInUseAuthorization();
-        Beacons.startRangingBeaconsInRegion(region);    
-        Beacons.startUpdatingLocation();   
-        Beacons.BeaconsEventEmitter.addListener(
-            'authorizationStatusDidChange',
-            (info) => console.log('authorizationStatusDidChange: ', info)
-        );   
-        Beacons.BeaconsEventEmitter.addListener("beaconsDidRange", response => { 
-            response.beacons.forEach(beacon => {     
-                if(beacon.distance) {     
-                    setDistance(beacon.distance);                            
-                    if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
-                        setIsBeacon('Y');
-                    } else {
-                        setIsBeacon('F'); // 근처에 없슴
-                    }    
-                }                      
-            });
-        });              
+        Beacons.startRangingBeaconsInRegion(region);   
+        DeviceEventEmitter.addListener(
+            'beaconsDidRange', 
+            ( response => {   
+                
+                // console.log(response);
+                response.beacons.forEach(beacon => {     
+                    if(beacon.accuracy) {     
+                        setDistance(beacon.accuracy);                            
+                        if(beacon.accuracy > 0 && beacon.accuracy < cfg.beacon_range ) {
+                            setIsBeacon('Y');
+                        } else {
+                            setIsBeacon('F'); // 근처에 없슴
+                        }    
+                    }                      
+                });  
+            })
+        );       
     }
-      
-
 
     return (
       <>
