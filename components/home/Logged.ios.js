@@ -1,4 +1,4 @@
-import React, { useEffect,useRef,useState } from 'react';
+import React, { useEffect,useRef,useState} from 'react';
 import { useNavigation } from 'react-navigation-hooks';
 import { 
     View,
@@ -11,7 +11,7 @@ import {
     Body,
     Title,
     Content,
-    Button
+    Button,
 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Image,Dimensions, RefreshControlBase, Animated, Alert } from 'react-native';
@@ -19,7 +19,7 @@ import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import cfg from '../data/cfg.json';
-import { PermissionsAndroid, DeviceEventEmitter } from 'react-native'
+import { PermissionsAndroid, DeviceEventEmitter, StyleSheet } from 'react-native'
 import BleManager, { start } from 'react-native-ble-manager';
 import Beacons from 'react-native-beacons-manager';
 import { open_door } from '../lib/Function';
@@ -32,7 +32,7 @@ let confirm = '';
 let url = '';
 let uuid = '';
 
-const show_distance = 'Y'; // DEBUG
+const show_distance = 'N'; // DEBUG
 
 function Logged() {
 
@@ -259,14 +259,14 @@ function Logged() {
         </Content>
 
         <Footer>
-            <FooterTab>
+            <FooterTab style={styles.footerTab}>
                 <Button vertical onPress={()=>btn_mypage()}>
                     <Icon name="account-circle" style={{fontSize:30,color:'white'}}></Icon>
-                    <Text>내 정보</Text>
+                    <Text style={styles.footerText}>내 정보</Text>
                 </Button>
                 <Button vertical onPress={()=>btn_cardpay()}>
                     <Icon name="credit-card" style={{fontSize:30,color:'white'}}></Icon>
-                    <Text>카드결제</Text>
+                    <Text style={styles.footerText}>카드결제</Text>
                 </Button>
 
                 { ( isBeacon == 'Y' &&                 
@@ -284,26 +284,26 @@ function Logged() {
                     >
                     <Icon name="key" style={{fontSize:30,color:'yellow'}}></Icon>                    
                     </Animated.View>
-                    <Text>문 열기</Text>
+                    <Text style={styles.footerText}>문 열기</Text>
                 </Button>
                 
                 )}
                 { ( (isBeacon == 'N' ||  isBeacon=='null') && 
                 <Button vertical onPress={()=>no_door_message()}>
                     <Icon name="lock-question" style={{fontSize:30,color:'gray'}}></Icon>                    
-                    <Text>문 열기</Text>
+                    <Text style={styles.footerText}>문 열기</Text>
                 </Button> 
                 ) }                
                 { ( (isBeacon == 'F') && 
                 <Button vertical onPress={()=>no_door_message()}>
                     <Icon name="lock-question" style={{fontSize:30,color:'white'}}></Icon>                    
-                    <Text>문 열기</Text>
+                    <Text style={styles.footerText}>문 열기</Text>
                 </Button> 
                 ) }                                
 
                 <Button vertical onPress={()=>btn_logout()}>
                     <Icon name="power-settings" style={{fontSize:30,color:'white'}}></Icon>                    
-                    <Text>로그아웃</Text>
+                    <Text style={styles.footerText}>로그아웃</Text>
                 </Button>
             </FooterTab>
         </Footer>
@@ -313,7 +313,14 @@ function Logged() {
 
 export default Logged;
 
-
+const styles = StyleSheet.create({
+    footerTab : {
+        backgroundColor:"#3F51B5"
+    },
+    footerText : {
+        color:'white'
+    }
+});
 
 
 // function bio_isSensorAvailable(){

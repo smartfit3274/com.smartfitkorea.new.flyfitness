@@ -32,7 +32,7 @@ let confirm = '';
 let url = '';
 let uuid = '';
 
-const show_distance = 'Y'; // DEBUG
+const show_distance = 'N'; // DEBUG
 
 function Logged() {
 
