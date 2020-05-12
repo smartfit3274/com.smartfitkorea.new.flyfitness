@@ -7,3 +7,6 @@ node_modules/native-base/platform.js
 footerDefaultBg: platform === PLATFORM.IOS ? 'red' : 'red',
 tabActiveBgColor: platform === PLATFORM.IOS ? 'green' : 'green',
 ===> pod install
+
+### 릴리즈 빌드
+react-native run-android --variant=release
