@@ -10,3 +10,6 @@ tabActiveBgColor: platform === PLATFORM.IOS ? 'green' : 'green',
 
 ### 릴리즈 빌드
 react-native run-android --variant=release
+
+### 아이폰 실행
+react-native run-ios --device iPhone
