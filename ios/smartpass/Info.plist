@@ -65,5 +65,9 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>NSFaceIDUsageDescription</key>
+	<string>출입문 개방을 위해 페이스아이디 기능을 사용합니다.</string>
+	<key></key>
+	<string></string>
 </dict>
 </plist>

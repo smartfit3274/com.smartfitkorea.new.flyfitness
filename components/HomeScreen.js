@@ -194,14 +194,18 @@ export default function HomeScreen(props) {
   }
 
   return (      
+    
       <Container>
+       
         { isLogin =='N' &&
-        <Login></Login>
+          <Login></Login>
         }
         { isLogin == 'Y' &&
         <Logged></Logged>
         }
+      
       </Container>   
+    
   );
 };
 

@@ -103,12 +103,32 @@ function Logged() {
 
     // 아이폰 지문처리
     function handle_ios_finger() {
-        alert('준비중입니다.');
+        ReactNativeBiometrics.simplePrompt({promptMessage: 'Confirm fingerprint'})
+        .then(result => result.success )
+        .then((success)=>{
+            if(success==true) {
+                open_door();
+            }
+            else {
+                // ignore
+            }
+        })
+        .catch(error => console.log(error));
     }
 
     // 아이폰 얼굴처리
     function handle_ios_face() {
-        alert('준비중입니다.');
+        ReactNativeBiometrics.simplePrompt({promptMessage: 'Confirm FaceID'})
+        .then(result => result.success )
+        .then((success)=>{
+            if(success==true) {
+                open_door();
+            }
+            else {
+                // ignore
+            }
+        })
+        .catch(error => console.log(error));
     }
 
     // 안드로이드 지문처리
