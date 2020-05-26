@@ -13,6 +13,8 @@ import axios from 'axios';
 import {useNavigation} from 'react-navigation-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import DeviceInfo from 'react-native-device-info';
 
 const TitleView = styled.View`
   margin-top: 30px;
@@ -87,27 +89,26 @@ export default function Login() {
   const [phone,setPhone] = useState('');
   const [pass,setPass] = useState('');
   const navigation = useNavigation();          
+  const store = useSelector(state => state.data);
 
   useEffect(()=>{
   },[]);
 
  
-  function create_refresh_token(){
-    console.log('create_refresh_token()');    
-      
-    let url = '';    
-    if(cfg.mode =='http') { url = cfg.http.host; }
-    if(cfg.mode =='https') { url = cfg.https.host; }
-    url = url + '/token/createRefreshToken';    
+  function create_refresh_token(){  
+    
+    let device = DeviceInfo.getBrand() + ' ' + DeviceInfo.getModel();
+    
+    // 로그인
+    const url = store.url + '/token/createRefreshToken';
     const data = {
-      sid:cfg.sid,
+      sid:store.sid,
+      cid:store.cid,
       phone:phone,
-      pass:pass
-    } 
-    const config = {
-      timeout: 3000
+      pass:pass,
+      device:device
     }    
-    axios.post(url,data,config)
+    axios.post(url,data,{timeout:3000})
     .then( result => {
         if( result.data.ret == 'Y' )
         {
@@ -120,7 +121,7 @@ export default function Login() {
           alert(result.data.msg);
         }
     })
-    .catch( error => console.log(error));     
+    .catch( error => console.log(error));
   }
 
   function btn_login_press () {     
@@ -141,7 +142,7 @@ export default function Login() {
       <ScrollView style={{width: '100%'}} keyboardShouldPersistTaps="handled">          
           <TitleView>
               <Image source={require('../images/logo_smartgym2.png')} style={{width:160, height:40, alignSelf:"center"}}></Image>
-              <MainText>{cfg.name}</MainText>              
+              <MainText>{store.name}</MainText>              
           </TitleView>
 
           <InputContainer>        

@@ -28,6 +28,7 @@
     "react-native-beacons-manager": "^1.0.7",
     "react-native-biometrics": "^2.1.4",
     "react-native-ble-manager": "^7.2.0",
+    "react-native-device-info": "^5.6.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-modal-datetime-picker": "^8.6.0",
     "react-native-pin-view": "^3.0.0",

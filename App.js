@@ -9,12 +9,11 @@ function ReduxComponent () {
   const dispatch = useDispatch();
   dispatch({type:'GET',name:'URL'});
   const data = useSelector(state => state.data);
-  const showData = "N";
 
-  if(showData=="Y") {
+  if(data.mode=="local") {
     return (
       <>
-        <Text>{data.url}</Text>
+        <Text> * Local Mode *</Text>
       </>
     )
   }
