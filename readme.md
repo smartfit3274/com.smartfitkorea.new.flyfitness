@@ -16,3 +16,6 @@ react-native run-android --variant=release
 
 ### 아이폰 실행
 react-native run-ios --device iPhone
+
+### 안드로이드 실행
+react-native run-android
