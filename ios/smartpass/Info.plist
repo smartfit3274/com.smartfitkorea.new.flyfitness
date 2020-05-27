@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key></key>
+	<string></string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -41,6 +43,8 @@
 	<string>아이비콘 서비스 이용을위해 권한이 필요합니다.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>아이비콘 서비스 이용을위해 권한이 필요합니다.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>출입문 개방을 위해 페이스아이디 기능을 사용합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>아이비콘 서비스 이용을위해 권한이 필요합니다.</string>
 	<key>NSMainNibFile</key>
@@ -65,9 +69,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>NSFaceIDUsageDescription</key>
-	<string>출입문 개방을 위해 페이스아이디 기능을 사용합니다.</string>
-	<key></key>
-	<string></string>
 </dict>
 </plist>

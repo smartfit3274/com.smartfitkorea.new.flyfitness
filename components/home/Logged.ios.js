@@ -23,6 +23,7 @@ import { PermissionsAndroid, DeviceEventEmitter, StyleSheet } from 'react-native
 import BleManager, { start } from 'react-native-ble-manager';
 import Beacons from 'react-native-beacons-manager';
 import { open_door } from '../lib/Function';
+import { useSelector, useDispatch } from 'react-redux';
 
 let access_token = '';
 let result = '';
@@ -40,31 +41,30 @@ function Logged() {
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
     const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
+    const store = useSelector(state => state.data);
     
     // 시작
     useEffect(()=>{
 
-        // uuid
-        url = '';
-        if(cfg.mode =='http') { url = cfg.http.host; }
-        if(cfg.mode =='https') { url = cfg.https.host; }
-        url = url + '/rest/get_uuid';     
+        url = store.url + '/rest/get_uuid';     
         const data = {
-            sid:cfg.sid,
-            cid:cfg.cid
+            sid:store.sid,
+            cid:store.cid
         }   
+        
         axios.post(url,data,{timeout:3000}) 
         .then( result => {
-            uuid = result.data.uuid 
+            uuid = result.data.uuid;
             startBeacon();
         })
-        .catch( error => console.log(error));
+
+        .catch( error => console.log(error) );
        
-        
         // 비콘끄기
         return () => {
             DeviceEventEmitter.removeAllListeners();      
         }
+
     },[]);
     
     function btn_mypage(){

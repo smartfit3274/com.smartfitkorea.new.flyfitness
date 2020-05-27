@@ -42,12 +42,12 @@ target 'smartpass' do
   use_native_modules!
 end
 
-target 'smartpass-tvOS' do
-  # Pods for smartpass-tvOS
+# target 'smartpass-tvOS' do
+#   # Pods for smartpass-tvOS
 
-  target 'smartpass-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
+#   target 'smartpass-tvOSTests' do
+#     inherit! :search_paths
+#     # Pods for testing
+#   end
 
-end
+# end
