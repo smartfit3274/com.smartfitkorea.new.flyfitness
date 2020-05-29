@@ -228,9 +228,14 @@ function Logged() {
 
                     console.log(response);
 
+                    let count = 0;
                     response.beacons.forEach(beacon => {                                 
+                        count++;
                         if(beacon.distance) {     
                             console.log('TAG: found beacon', beacon.distance);                                           
+                        }
+                        else {
+                            console.log('TAG: no beacon!');
                         }
 
                         setDistance(beacon.distance);                            
@@ -240,6 +245,12 @@ function Logged() {
                             setIsBeacon('F'); // 근처에 없슴
                         }
                     });
+
+                    // off
+                    console.log('TAG / count / ' + count);
+                    if(count == 0 ) {
+                        setIsBeacon('F'); // 근처에 없슴
+                    }
             })                               
         })
         .catch( error => alert('비콘초기화 오류',error) );                           
