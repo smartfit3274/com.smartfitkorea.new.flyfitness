@@ -19,13 +19,12 @@ import {
   CheckBox,
   Body,
   Button,
-  Text
+  Text,
+  Header,
+  Container,
+  Content,
+  Footer
 } from 'native-base';
-
-const Container = styled.View`
-  flex:1;
-  align-items:center;
-`;
 
 const BodyContainer = styled.View`
    width:90%;
@@ -33,9 +32,8 @@ const BodyContainer = styled.View`
    padding-bottom: 40px;
 `;
 
-const BottomContainer = styled.View`
-  height: 60px;
-  flex-direction:row;  
+const FooterStyle = styled(Footer)`
+  background:#cccccc;
 `;
 
 const MyTitle = styled.Text`
@@ -128,7 +126,7 @@ function CheckSectionComp(props) {
 
   function agreeBtnPressed(no){    
     navigation.navigate('Agree',{no:no});
-  }  
+  }
 
   return (
   <SectionCheck>     
@@ -175,9 +173,12 @@ function CheckPriComp(props) {
   )
 }
 
+
+
+
 export default function JoinScreen(props) {
 
-  const [check1, setCheck1] = useState(false);
+  const [check1, setCheck1] = useState(true);
   const [check2, setCheck2] = useState(false);
   const [check3, setCheck3] = useState(false);
   const [check4, setCheck4] = useState(false);
@@ -187,8 +188,10 @@ export default function JoinScreen(props) {
   const { navigate,goBack } = useNavigation();
   const [BtnDisabled,setBtnDisabled] = useState(true);
   const navigation = useNavigation();
+  
 
-  useEffect( ()=>{    
+  useEffect( ()=>{     
+        
 
     console.log('TAG: useEffect()');    
     let no = 0;
@@ -234,25 +237,33 @@ export default function JoinScreen(props) {
   return (  
     
 
-      <Container>
-        <SafeAreaView>
-        
-        <ScrollView>
-          <BodyContainer>
-            <MyTitle>회원가입 (약관동의)</MyTitle>
-            <AgreeSectionComp/> 
-            <TitleSectionComp title="이용약관 (필수)"/>
-            <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>
-            <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
-            <CheckPriComp data={{ check10:check10 }} />
-          </BodyContainer>
-        </ScrollView>
-        
-        <BottomContainer>
-          <ButtonNotAgree onPress={()=>BtnNotAgree(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>
-          <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료</ButtonText></ButtonAgree> 
-        </BottomContainer>
-        </SafeAreaView>
-      </Container>
+        <Container>
+
+          <Body>
+            <SafeAreaView>
+            <BodyContainer>
+              <ScrollView showsVerticalScrollIndicator={false}>
+                <MyTitle>회원가입 (약관동의)</MyTitle>
+                <AgreeSectionComp/> 
+                <TitleSectionComp title="이용약관 (필수)"/>
+                <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>
+                <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
+                <CheckPriComp data={{ check10:check10 }} />
+              </ScrollView>
+            </BodyContainer>            
+            </SafeAreaView>
+          </Body>    
+          
+          <FooterStyle>            
+            <ButtonNotAgree onPress={()=>BtnNotAgree(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>      
+            <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료</ButtonText></ButtonAgree> 
+          </FooterStyle>
+    
+        </Container>
+      
   );
 };
+
+// 가입페이지 수정
+// 1. 네이티브 베이스 기본 컴터넌트로 레이아웃 잡기
+// 2. SafeAreaView 아이폰 x11에서 상단 잘림현상 처리

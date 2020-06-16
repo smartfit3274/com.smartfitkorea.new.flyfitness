@@ -10,19 +10,8 @@ function ReduxComponent () {
   dispatch({type:'GET',name:'URL'});
   const data = useSelector(state => state.data);
 
-  if(data.mode=="local") {
-    return (
-      <>
-        <Text> * Local Mode *</Text>
-      </>
-    )
-  }
-  else {
-    return (
-      <>
-      </>
-    )
-  }
+  // 로컬개발중
+  return (data.mode=="local") ? <Text>Local Mode</Text>:null;  
   
 }
 

@@ -39,8 +39,7 @@ function Logged() {
     const window = Dimensions.get('window'); 
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
-    const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N
-    
+    const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N    
 
     // 시작
     useEffect(()=>{
@@ -62,7 +61,7 @@ function Logged() {
         .catch( error => console.log(error));
        
         
-        // 비콘끄기
+        // 프로그램 종료시 비콘끄기
         return () => {
             DeviceEventEmitter.removeAllListeners();      
         }
