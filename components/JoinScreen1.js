@@ -188,7 +188,8 @@ export default function JoinScreen(props) {
   const [BtnDisabled,setBtnDisabled] = useState(true);
   const navigation = useNavigation();
   const [count,setCount] = useState(0);
-
+  let i = 0;
+  
   // navigate 호출시마다 실행됨
   useEffect( ()=>{           
 
@@ -220,17 +221,19 @@ export default function JoinScreen(props) {
     console.log('TAG check6:', check6);
     console.log('TAG check10:', check10);  
     
-    if( check1==true &&
-        check2==true && 
-        check3==true && 
-        check5==true && 
-        check6==true && 
-        check10==true
-      )
-    {
+    i = 0;
+    if( check1==true ) i++;
+    if( check2==true ) i++;
+    if( check3==true ) i++;
+    if( check4==true ) i++;
+    if( check5==true ) i++;
+    if( check6==true ) i++;
+    if( check10==true ) i++;
+    setCount(i);    
+
+    if(i==6) 
       setBtnDisabled(false);
-    }        
-    
+        
   }); 
 
   function BtnNotAgree() {
