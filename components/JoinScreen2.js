@@ -9,8 +9,7 @@ import {
   ScrollView,
   Keyboard,
   TouchableOpacity,
-  Alert,
-  Text,
+  Alert
 } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks'
 import axios from 'axios';
@@ -21,7 +20,13 @@ import {
   Input,
   Item,
   Content,
+  Header,
   Footer,
+  Button,
+  Left,
+  Right,
+  Body,
+  Text
 } from 'native-base';
 import styled from 'styled-components/native';
 import cfg from './data/cfg.json';
@@ -51,19 +56,28 @@ const ButtonNotAgree = styled.TouchableOpacity`
   background-color: #95a5a6;
 `;
 
-const ButtonAgree = styled.TouchableOpacity`
-  flex:1;
-  align-items:center;
-  justify-content:center;
-  background-color: #2980b9;
-  margin:10px;
-  border-radius:5px;  
+const ButtonAgree = styled(Button)`
+  margin-top:30px;
 `;
 
 const ButtonAgreeTxt = styled.Text`
   color:#fff;
-  font-size:16px;
+  font-size:16px;  
 `;
+
+// header
+const $Header = styled(Header)`
+  background-color:#454545;
+`;
+
+const BodyComp = styled(Body)`
+`;
+
+const BodyText = styled(Text)`
+  color:white;
+  align-self:center;
+`
+
 
 
 let url = "";
@@ -121,47 +135,61 @@ export default function JoinScreen1(props) {
     }).catch(function (e){
       console.log("TAG - ", e);
     });    
-
   }  
+
+
+  // <Body style={{flex:1,justifyContent:"center"}}></Body>
 
   return (  
     <Container>
+                
+        <$Header>
+            <Left style={{flex:1}}>
+                <Button transparent onPress={()=>btn_close()}>
+                    <Icon type="MaterialCommunityIcons" name="close" style={{fontSize:30, color:"white"}}></Icon>
+                </Button>
+            </Left>
+            <Body style={{flex:1,justifyContent:"center"}}>
+                <Text style={{alignSelf:"center",color:"white"}}>카드결제</Text>
+            </Body>
+            <Right style={{flex:1}}></Right>
+        </$Header>
+
         <Content style={{ paddingLeft:'5%', paddingRight:'5%' }}> 
 
           <Title>회원정보를 입력하세요.</Title>
 
           <Item>
-            <Icon name="phone" style={{ fontSize:18,paddingRight:5,color:'#cccccc'}}/>
+            <Icon name="phone" style={{ fontSize:18,paddingRight:5,color:'#666666'}}/>
             <Input placeholder="휴대폰 (- 없이 입력)" 
             keyboardType="numeric" 
             onChange={(e)=>setPhone(e.nativeEvent.text)} 
-            placeholderTextColor='#cccccc'            
+            placeholderTextColor='#666666'            
             />
           </Item>
 
           <Item>
-            <Icon name="account-box" style={{ fontSize:18,paddingRight:5,color:'#cccccc' }}/>
-            <Input placeholder="이름 (실명)" onChange={(e)=>setName(e.nativeEvent.text)} placeholderTextColor='#cccccc'/>
+            <Icon name="account-box" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
+            <Input placeholder="이름 (실명)" onChange={(e)=>setName(e.nativeEvent.text)} placeholderTextColor='#666666'/>
           </Item>
 
           <Item>
-            <Icon name="lock" style={{ fontSize:18,paddingRight:5,color:'#cccccc' }}/>
-            <Input placeholder="비밀번호 (4-12 자리 영문/숫자 조합)" secureTextEntry={true} onChange={(e)=>setPass(e.nativeEvent.text)} placeholderTextColor='#cccccc'/>
+            <Icon name="lock" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
+            <Input placeholder="비밀번호 (4-12 자리 영문/숫자 조합)" secureTextEntry={true} onChange={(e)=>setPass(e.nativeEvent.text)} placeholderTextColor='#666666'/>
           </Item>          
 
           <Item>
-            <Icon name="lock" style={{ fontSize:18,paddingRight:5,color:'#cccccc' }}/>
-            <Input placeholder="비밀번호 확인"  secureTextEntry={true} onChange={(e)=>setPassConfirm(e.nativeEvent.text)} placeholderTextColor='#cccccc'/>
+            <Icon name="lock" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
+            <Input placeholder="비밀번호 확인"  secureTextEntry={true} onChange={(e)=>setPassConfirm(e.nativeEvent.text)} placeholderTextColor='#666666'/>
           </Item>
+
+          <View>
+            <ButtonAgree full onPress={()=>btn_ok()}>
+              <ButtonAgreeTxt>확인</ButtonAgreeTxt>              
+            </ButtonAgree>
+          </View>
       
       </Content>
-
-      <Footer style={{ backgroundColor:'#ecf0f1', height:70}}>
-        <ButtonAgree onPress={()=>btn_ok()}>
-          <ButtonAgreeTxt>확인</ButtonAgreeTxt>
-        </ButtonAgree>
-      </Footer>
-  
       
     </Container>
   );
