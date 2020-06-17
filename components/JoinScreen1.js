@@ -16,7 +16,6 @@ import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
 import {
   ListItem,
-  CheckBox,
   Body,
   Button,
   Text,
@@ -25,15 +24,15 @@ import {
   Content,
   Footer
 } from 'native-base';
+import Checkbox from '@react-native-community/checkbox';
 
 const BodyContainer = styled.View`
    width:90%;
    margin:0 auto;
-   padding-bottom: 40px;
 `;
 
 const FooterStyle = styled(Footer)`
-  background:#cccccc;
+  
 `;
 
 const MyTitle = styled.Text`
@@ -53,11 +52,11 @@ const SectionAText = styled.Text`
 `;
 
 const SectionCheck = styled.View`
-  background: #fff;
+  background:#fff;
   border: 1px solid #cccccc;
   justify-content:flex-start;
   margin-top: 10px;
-  padding:10px;
+  padding:5px;
 `;
 
 const SectionCheckText = styled.Text`
@@ -131,23 +130,23 @@ function CheckSectionComp(props) {
   return (
   <SectionCheck>     
     <ListItem>
-      <CheckBox color="gray" checked={check1} onPress={()=>agreeBtnPressed(1)}></CheckBox>      
+      <Checkbox disabled = {true} value = {check1} />
       <TextStyle onPress={()=>agreeBtnPressed(1)}>1조 센터 가입원칙 관련 사항에 대하여 동의합니다. [ 약관보기 ] </TextStyle>              
     </ListItem>
     <ListItem>
-      <CheckBox color="gray" checked={check2} onPress={()=>agreeBtnPressed(2)}></CheckBox>      
+      <Checkbox disabled = {true} value = {check2} />
       <TextStyle onPress={()=>agreeBtnPressed(2)}>2조 센터 사용관련 회원 준수사항에 대하여 동의합니다. [ 약관보기 ]</TextStyle>              
     </ListItem>
     <ListItem>
-      <CheckBox color="gray" checked={check3} onPress={()=>agreeBtnPressed(3)}></CheckBox>      
+      <Checkbox disabled = {true} value = {check3} />
       <TextStyle onPress={()=>agreeBtnPressed(3)}>3,4조 명의 변경 및 휴회(정지)적용에 대하여 이해하였습니다. [ 약관보기 ]</TextStyle>              
     </ListItem>
     <ListItem>
-      <CheckBox color="gray" checked={check5} onPress={()=>agreeBtnPressed(5)}></CheckBox>      
+      <Checkbox disabled = {true} value = {check5} />
       <TextStyle onPress={()=>agreeBtnPressed(5)}>5조 환불약정금(위약금10%) 및 환불금 지급방식에 대하여 동의합니다. [ 약관보기 ]</TextStyle>              
     </ListItem>
     <ListItem>
-      <CheckBox color="gray" checked={check6} onPress={()=>agreeBtnPressed(6)}></CheckBox>      
+      <Checkbox disabled = {true} value = {check6} />
       <TextStyle onPress={()=>agreeBtnPressed(6)}>6조 영업시간 및 서비스 시간과 각종사고 책임범위에 대하여 동의합니다. [ 약관보기 ]</TextStyle>              
     </ListItem>    
   </SectionCheck>
@@ -166,7 +165,7 @@ function CheckPriComp(props) {
   return (
     <SectionCheck>
       <ListItem>
-        <CheckBox color="gray" checked={check10} onPress={()=>agreeBtnPressed(10)}></CheckBox>      
+        <Checkbox disabled = {true} value = {check10} />
         <TextStyle onPress={()=>agreeBtnPressed(10)}>개인정보 수집 및 이용에 대하여 동의합니다. [ 약관보기 ]</TextStyle>
       </ListItem> 
     </SectionCheck>
@@ -178,7 +177,7 @@ function CheckPriComp(props) {
 
 export default function JoinScreen(props) {
 
-  const [check1, setCheck1] = useState(true);
+  const [check1, setCheck1] = useState(false);
   const [check2, setCheck2] = useState(false);
   const [check3, setCheck3] = useState(false);
   const [check4, setCheck4] = useState(false);
@@ -188,10 +187,10 @@ export default function JoinScreen(props) {
   const { navigate,goBack } = useNavigation();
   const [BtnDisabled,setBtnDisabled] = useState(true);
   const navigation = useNavigation();
-  
+  const [count,setCount] = useState(0);
 
-  useEffect( ()=>{     
-        
+  // navigate 호출시마다 실행됨
+  useEffect( ()=>{           
 
     console.log('TAG: useEffect()');    
     let no = 0;
@@ -206,13 +205,21 @@ export default function JoinScreen(props) {
     if(no=='1') setCheck1(true);
     if(no=='2') setCheck2(true);
     if(no=='3') setCheck3(true);
-    if(no=='4') setCheck4(true);
+    //if(no=='4') setCheck4(true);
     if(no=='5') setCheck5(true);
     if(no=='6') setCheck6(true);
     if(no=='10') setCheck10(true);
 
     setBtnDisabled(true);
-    console.log('TAG check2:', check2)
+    
+    console.log('TAG check1:', check1);
+    console.log('TAG check2:', check2);
+    console.log('TAG check3:', check3);
+    console.log('TAG check4:', check4);
+    console.log('TAG check5:', check5);
+    console.log('TAG check6:', check6);
+    console.log('TAG check10:', check10);  
+    
     if( check1==true &&
         check2==true && 
         check3==true && 
@@ -249,6 +256,7 @@ export default function JoinScreen(props) {
                 <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>
                 <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
                 <CheckPriComp data={{ check10:check10 }} />
+                <View style={styles.scrollview}></View>
               </ScrollView>
             </BodyContainer>            
             </SafeAreaView>
@@ -256,7 +264,7 @@ export default function JoinScreen(props) {
           
           <FooterStyle>            
             <ButtonNotAgree onPress={()=>BtnNotAgree(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>      
-            <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료</ButtonText></ButtonAgree> 
+  <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료({count}/6)</ButtonText></ButtonAgree> 
           </FooterStyle>
     
         </Container>
@@ -264,6 +272,8 @@ export default function JoinScreen(props) {
   );
 };
 
-// 가입페이지 수정
-// 1. 네이티브 베이스 기본 컴터넌트로 레이아웃 잡기
-// 2. SafeAreaView 아이폰 x11에서 상단 잘림현상 처리
+const styles = StyleSheet.create({
+  scrollview: {
+    paddingBottom:30
+  }
+});
