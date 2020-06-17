@@ -17,6 +17,12 @@ import PinScreen from '../components/PinScreen';
 import FindPassScreen from '../components/FindPassScreen';
 
 const AppNavigator = createStackNavigator({   
+  Join2: {
+    screen: JoinScreen2,
+    navigationOptions: ({
+      title: '회원가입'
+    })       
+  }, 
   Home: {
     screen: HomeScreen,
     navigationOptions: ({

@@ -66,7 +66,7 @@ export default function AgreeScreen (props) {
         <Content contentContainerStyle={styles.container}>
           <View style={styles.content}>
           <TextTitle className="b">{title}</TextTitle>          
-          { body.map((item, key)=><Text>{item}</Text> )}    
+          { body.map((item, key)=><Text key={key}>{item}</Text> )}    
           </View>   
         </Content>
 
