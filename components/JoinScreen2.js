@@ -126,7 +126,7 @@ export default function JoinScreen2(props) {
     .then( result => {
       
       const { ret, msg } = result.data;
-            
+
       if( ret == 'Y') {
         Alert.alert(
           '안내',
@@ -172,7 +172,7 @@ export default function JoinScreen2(props) {
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
-                <Text style={{alignSelf:"center",color:"white"}}>카드결제</Text>
+                <Text style={{alignSelf:"center",color:"white"}}>회원가입</Text>
             </Body>
             <Right style={{flex:1}}></Right>
         </$Header>

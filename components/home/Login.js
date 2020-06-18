@@ -84,7 +84,7 @@ const CompanyTextContainer = styled.View`
 
 let result = '';
 
-export default function Login() {
+function Login () {
 
   const [phone,setPhone] = useState('');
   const [pass,setPass] = useState('');
@@ -92,15 +92,31 @@ export default function Login() {
   const store = useSelector(state => state.data);
 
   useEffect(()=>{
-  },[]);
+  },[]);  
 
- 
-  function create_refresh_token(){  
-    
-    let device = DeviceInfo.getBrand() + ' ' + DeviceInfo.getModel();
-    
-    // 로그인
-    const url = store.url + '/token/createRefreshToken';
+  const btn_join_press = () => {    
+    navigation.navigate('Join1');   // 약관동의 
+    // navigation.navigate('Join2');
+  }
+
+  const btn_find_pass = () => {
+    navigation.navigate('FindPass'); // Input
+  }
+
+  const btn_login_press = () => {
+    console.log('btn_login_press()');    
+    create_refresh_token();
+  }    
+
+  const get_deivce = () => {
+    return DeviceInfo.getBrand() + ' ' + DeviceInfo.getModel();    
+  }
+
+  const create_refresh_token = () => {
+    console.log('create_refresh_token()');    
+
+    const device = get_deivce();
+    const url = store.url + '/slim/token/createRefreshToken';
     const data = {
       sid:store.sid,
       cid:store.cid,
@@ -108,33 +124,32 @@ export default function Login() {
       pass:pass,
       device:device
     }    
+    
     axios.post(url,data,{timeout:3000})
-    .then( result => {
-        if( result.data.ret == 'Y' )
-        {
-          // 로그인성공
-          // 리프레시 토큰저장
-          AsyncStorage.setItem('refresh_token',result.data.refresh_token)
-          .then(()=> navigation.replace('Home') )
-          .catch(()=>alert(error));
-        } else {
-          alert(result.data.msg);
-        }
+    .then ( result => {
+      const { ret , msg, refresh_token } = result.data;
+
+      if( ret == 'Y') {
+        console.log('TAG: 로그인 성공!!!');
+        
+        AsyncStorage.setItem('refresh_token', refresh_token )
+        .then( navigation.replace('Home') )
+        .catch( error => alert(error)) ;
+
+      }
+      else {
+        Alert.alert(
+          '오류',
+            msg,
+          [{text:'ok',onPress:()=>console.log('OK pressed')}],
+          {
+            cancelable:false,
+          }
+        );      
+      }
+
     })
-    .catch( error => console.log(error));
-  }
-
-  function btn_login_press () {     
-    console.log('btn_login_press()');    
-    create_refresh_token();   
-  }  
-
-  const btn_join_press = () => {    
-    navigation.navigate('Join1');   // 약관동의 
-  }
-
-  function btn_find_pass() {
-    navigation.navigate('FindPass'); // Input
+    .catch(error => alert(error));
   }
 
   return (
@@ -154,7 +169,7 @@ export default function Login() {
           </InputContainer>
 
           <ButtonContainer>            
-              <LoginButton full onPress={()=>btn_login_press()}><Text>로그인</Text></LoginButton>
+              <LoginButton full onPress={btn_login_press}><Text>로그인</Text></LoginButton>
               <JoinButton full onPress={()=>btn_join_press()}><Text>회원가입</Text></JoinButton>                     
           </ButtonContainer>
 
@@ -180,6 +195,8 @@ function CompanyText() {
     )
 }
 
+
+export default Login ;
 
 // function getRefreshtoken() {
     //     console.log('-----------------------------');
