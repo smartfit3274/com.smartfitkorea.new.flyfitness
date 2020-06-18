@@ -130,8 +130,7 @@ export default function Login() {
   }  
 
   const btn_join_press = () => {    
-    // navigation.navigate('Join1');   // Agree 
-    navigation.navigate('Join2'); // Input
+    navigation.navigate('Join1');   // 약관동의 
   }
 
   function btn_find_pass() {

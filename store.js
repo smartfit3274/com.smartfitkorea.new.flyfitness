@@ -1,12 +1,14 @@
 import { createStore } from 'redux'
 
 // mode : local , server
+// pass.smartg.kr > admin.smartg.kr 로 소스이전
+
 const INITIAL_STATE = {
   data: {
     url     : "",      
     mode    : "local",
     local   : "http://192.168.76.51:80",   
-    server  : "https://pass.smartg.kr",
+    server  : "https://admin.smartg.kr",
     sid     : "smartgym",    
     cid     : "CT14Z01170314.HXZb9",
     name    : "스마트짐 옥포점"

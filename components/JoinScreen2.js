@@ -30,6 +30,7 @@ import {
 } from 'native-base';
 import styled from 'styled-components/native';
 import cfg from './data/cfg.json';
+import {useSelector, useDispatch} from 'react-redux';
 
 const SubContainer = styled.View`
   flex:1;  
@@ -65,9 +66,19 @@ const ButtonAgreeTxt = styled.Text`
   font-size:16px;  
 `;
 
-// header
 const $Header = styled(Header)`
   background-color:#454545;
+`;
+
+const $Content = styled(Content)`
+  display:flex;
+  width:90%;
+  margin:0 auto;
+  max-width: 350px;
+`
+
+const $Input = styled(Input)`
+  font-size:16px;  
 `;
 
 const BodyComp = styled(Body)`
@@ -77,6 +88,11 @@ const BodyText = styled(Text)`
   color:white;
   align-self:center;
 `
+
+const ButtonContainer = styled.View`
+  padding-bottom:60px;
+`
+
 let url = "";
 
 export default function JoinScreen2(props) {
@@ -87,17 +103,16 @@ export default function JoinScreen2(props) {
   const [name,setName] = useState('');
   const [pass,setPass] = useState('');
   const [passConfirm,setPassConfirm] = useState('');
+  const store = useSelector(state => state.data);
 
   function BtnClose() {
     console.log('TAG - goback();');
   }
 
-  function btn_ok() {
-    console.log('TAG','btn_ok()');
+  const btn_ok = () => {
     
-    if(cfg.mode =='http') { url = cfg.http.host; }
-    if(cfg.mode =='https') { url = cfg.https.host; }
-    url = url + '/rest/join2';    
+    url = store.url + '/slim/join2';
+
     const data = {
       sid: cfg.sid,
       cid: cfg.cid,
@@ -105,39 +120,48 @@ export default function JoinScreen2(props) {
       name:name,
       pass:pass,
       passConfirm:passConfirm,
-    } 
-    
-    axios.post(url, data)
-    .then(function(res){  
-      if(res.data.ret=='Y') {   
+    }
+
+    axios.post(url,data)
+    .then( result => {
+      
+      const { ret, msg } = result.data;
+            
+      if( ret == 'Y') {
         Alert.alert(
-        '안내',
-        '회원가입이 완료되었습니다.',
-        [{text:'ok',onPress:()=>console.log('OK pressed')}],
-        {
-          cancelable:false,
-        }
-        ); 
-        navigation.navigate('Home');
-      } else {
-        Alert.alert(
-          '입력오류',
-          res.data.msg,
+          '안내',
+          '회원가입이 완료되었습니다.',
           [{text:'ok',onPress:()=>console.log('OK pressed')}],
           {
             cancelable:false,
           }
-          );        
+          ); 
+          navigation.navigate('Home');
       }
-    }).catch(function (e){
-      console.log("TAG - ", e);
-    });    
+      else {
+        Alert.alert(
+          '입력오류',
+            msg,
+          [{text:'ok',onPress:()=>console.log('OK pressed')}],
+          {
+            cancelable:false,
+          }
+        );      
+      }
+
+    })
+    .catch ( error => alert(error));
+
   }
 
   const btn_close = () => {
     navigation.pop();
   }
-  
+
+  const onChangePhone = ( text ) => {
+    console.log(text);
+  }
+
   return (  
     <Container>
                 
@@ -153,41 +177,43 @@ export default function JoinScreen2(props) {
             <Right style={{flex:1}}></Right>
         </$Header>
 
-        <Content style={{ paddingLeft:'5%', paddingRight:'5%' }}> 
+        <$Content> 
 
           <Title>회원정보를 입력하세요.</Title>
 
           <Item>
             <Icon name="phone" style={{ fontSize:18,paddingRight:5,color:'#666666'}}/>
-            <Input placeholder="휴대폰 (- 없이 입력)" 
+            <$Input placeholder="휴대폰 (- 없이 입력)" 
             keyboardType="numeric" 
-            onChange={(e)=>setPhone(e.nativeEvent.text)} 
-            placeholderTextColor='#666666'            
+            onChange={ e => setPhone(e.nativeEvent.text) } 
+            placeholderTextColor='#666666'         
             />
           </Item>
 
           <Item>
             <Icon name="account-box" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
-            <Input placeholder="이름 (실명)" onChange={(e)=>setName(e.nativeEvent.text)} placeholderTextColor='#666666'/>
+            <$Input placeholder="이름 (실명)" 
+            onChange={(e)=>setName(e.nativeEvent.text)} 
+            placeholderTextColor='#666666'/>
           </Item>
 
           <Item>
             <Icon name="lock" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
-            <Input placeholder="비밀번호 (4-12 자리 영문/숫자 조합)" secureTextEntry={true} onChange={(e)=>setPass(e.nativeEvent.text)} placeholderTextColor='#666666'/>
+            <$Input placeholder="비밀번호 (4-12 자리 영문/숫자 조합)" secureTextEntry={true} onChange={(e)=>setPass(e.nativeEvent.text)} placeholderTextColor='#666666'/>
           </Item>          
 
           <Item>
             <Icon name="lock" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
-            <Input placeholder="비밀번호 확인"  secureTextEntry={true} onChange={(e)=>setPassConfirm(e.nativeEvent.text)} placeholderTextColor='#666666'/>
+            <$Input placeholder="비밀번호 확인"  secureTextEntry={true} onChange={(e)=>setPassConfirm(e.nativeEvent.text)} placeholderTextColor='#666666'/>
           </Item>
 
-          <View>
+          <ButtonContainer>
             <ButtonAgree full onPress={()=>btn_ok()}>
               <ButtonAgreeTxt>확인</ButtonAgreeTxt>              
             </ButtonAgree>
-          </View>
+          </ButtonContainer>
       
-      </Content>
+      </$Content>
       
     </Container>
   );
