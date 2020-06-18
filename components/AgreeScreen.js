@@ -9,13 +9,14 @@ import { Container,Content, Footer } from 'native-base';
 
 
 const TextTitle = styled.Text`
-  font-size:16px;
+  font-size:17px;
   font-weight: bold;
   margin-bottom: 10px;
+  margin-top:20px;
 `;
 
 const TextItem = styled.Text`
-  font-size:15px;
+  font-size:16px;
   margin-bottom: 8px;
 `;
 
@@ -64,15 +65,17 @@ export default function AgreeScreen (props) {
       <Container>        
 
         <Content contentContainerStyle={styles.container}>
-          <View style={styles.content}>
-          <TextTitle className="b">{title}</TextTitle>          
-          { body.map((item, key)=><Text key={key}>{item}</Text> )}    
-          </View>   
+          <SafeAreaView>
+            <View style={styles.content}>
+            <TextTitle>{title}</TextTitle>   
+            { body.map((item, key)=><TextItem key={key}>{item}</TextItem> )}    
+            </View>   
+          </SafeAreaView>
         </Content>
 
         <Footer>
-          <Button Agree onPress={()=>BtnNotAgree()}><Text>동의 안함</Text></Button>
-          <Button notAgree onPress={()=>BtnAgree()}><Text>동의함</Text></Button>          
+          <Button Agree onPress={()=>BtnNotAgree()}><ButtonText>동의 안함</ButtonText></Button>
+          <Button notAgree onPress={()=>BtnAgree()}><ButtonText>동의함</ButtonText></Button>          
         </Footer>
  
       </Container>

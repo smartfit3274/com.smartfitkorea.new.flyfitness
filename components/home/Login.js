@@ -129,9 +129,9 @@ export default function Login() {
     create_refresh_token();   
   }  
 
-  function btn_join_press() {    
-    navigation.navigate('Join1');   // Agree 
-      // navigation.navigate('Join1'); // Input
+  const btn_join_press = () => {    
+    // navigation.navigate('Join1');   // Agree 
+    navigation.navigate('Join2'); // Input
   }
 
   function btn_find_pass() {

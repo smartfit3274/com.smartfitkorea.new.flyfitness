@@ -77,12 +77,9 @@ const BodyText = styled(Text)`
   color:white;
   align-self:center;
 `
-
-
-
 let url = "";
 
-export default function JoinScreen1(props) {
+export default function JoinScreen2(props) {
 
   const navigation = useNavigation();
   const [BtnAgreeDisabled, SetBtnAgreeDisabled] = useState(false);
@@ -135,18 +132,19 @@ export default function JoinScreen1(props) {
     }).catch(function (e){
       console.log("TAG - ", e);
     });    
-  }  
+  }
 
-
-  // <Body style={{flex:1,justifyContent:"center"}}></Body>
-
+  const btn_close = () => {
+    navigation.pop();
+  }
+  
   return (  
     <Container>
                 
         <$Header>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
-                    <Icon type="MaterialCommunityIcons" name="close" style={{fontSize:30, color:"white"}}></Icon>
+                  <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"white"}}></Icon>
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
