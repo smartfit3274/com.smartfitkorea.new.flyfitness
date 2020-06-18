@@ -16,14 +16,7 @@ import CardPayResultScreen from '../components/CardPayResultScreen';
 import PinScreen from '../components/PinScreen';
 import FindPassScreen from '../components/FindPassScreen';
 
-const AppNavigator = createStackNavigator({   
-  Join1: {
-    screen: JoinScreen1,
-    navigationOptions: ({
-      title: '회원가입'
-    })       
-  },    
-  
+const AppNavigator = createStackNavigator({    
   Home: {
     screen: HomeScreen,
     navigationOptions: ({

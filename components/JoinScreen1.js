@@ -251,6 +251,10 @@ export default function JoinScreen(props) {
   function BtnAgree() {
     navigation.replace('Join2');
   }
+
+  const btn_close = () => {
+    navigation.pop();
+  }
  
   return (      
 
@@ -258,7 +262,7 @@ export default function JoinScreen(props) {
           <$Header>
               <Left style={{flex:1}}>
                   <Button transparent onPress={()=>btn_close()}>
-                      <Icon type="MaterialCommunityIcons" name="arrow-left" style={{fontSize:30, color:"white"}}></Icon>
+                      <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"white"}}></Icon>
                   </Button>
               </Left>
               <Body style={{flex:1,justifyContent:"center"}}>

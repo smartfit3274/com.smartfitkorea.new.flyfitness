@@ -61,8 +61,8 @@ export default function AgreeScreen (props) {
 
   return (
     
-      <Container>
-        
+      <Container>        
+
         <Content contentContainerStyle={styles.container}>
           <View style={styles.content}>
           <TextTitle className="b">{title}</TextTitle>          
