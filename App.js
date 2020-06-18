@@ -11,7 +11,7 @@ function ReduxComponent () {
   const data = useSelector(state => state.data);
 
   // 로컬개발중
-  return (data.mode=="local") ? <Text>Local Mode</Text>:null;  
+  return null;
   
 }
 
