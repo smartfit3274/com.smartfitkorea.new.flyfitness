@@ -21,7 +21,15 @@ import Logged from './home/Logged';
 import cfg from "./data/cfg.json";
 import { Button,Text,Drawer,Container } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import NetInfo from "@react-native-community/netinfo";
+import { checkState } from 'react-native-ble-manager';
+import { useSelector, useDispatch } from 'react-redux';
+import { 
+  get_access_token, 
+  get_refresh_token, 
+  net_state,
+  access_token_check,
+  create_access_token
+} from './lib/Function';
 
 let refresh_token = '';
 let access_token = '';
@@ -29,169 +37,95 @@ let result = '';
 let is_access_token = '';
 let is_refresh_token = '';
 
-export default function HomeScreen(props) {
+function HomeScreen(props) {
 
   const navigation = useNavigation();
   const [isLogin,setIsLogin] = useState('');
+  const store = useSelector(state => state.data);
+
+  const write_access_token = access_token => {
+    
+    return new Promise(function( resolve, reject ){
+      if(access_token == null || access_token == '') resolve('N');      
+      AsyncStorage.setItem('access_token',access_token)
+      .then( ()=> resolve('Y') )
+      .catch( () => resolve('N') );
+    });
   
-  // 인터넷 연결확인
-  async function check_internet() {
-    try {
-      result = await NetInfo.fetch();
-      if (result.isConnected) {
-        return 'Y';
-      }
-      else 
-        return 'N';
-    } catch (error) {
-      throw error;
+  }    
+
+  const handle_login = () => {
+    // console.log('handle_login()');
+    // console.log('[access_token]',access_token);
+    // console.log('[refresh_token]',refresh_token);    
+
+    // 로그인 상태
+    if(access_token !== '' && refresh_token !=='' && is_access_token == 'Y') {
+      setIsLogin('Y');
     }
-  }
 
-  async function get_access_token() {
-    try {
-      result = await AsyncStorage.getItem('access_token');
-      if(result == null ) {
-        return ''
-      }
-      else {
-        return result;
-      }
-    } catch (error) {
-      throw error;
-    }  
-  }
-
-  async function get_refresh_token() {
-    try {
-      result = await AsyncStorage.getItem('refresh_token');
-      if(result == null ) {
-        return ''
-      }
-      else {
-        return result;
-      }
-    } catch (error) {
-      throw error;
-    }  
-  } 
-
-  async function check_access_token() {
-
-    if(access_token == null || access_token == '') return 'N';
-
-    try {
-      let url = '';    
-      if(cfg.mode =='http') { url = cfg.http.host; }
-      if(cfg.mode =='https') { url = cfg.https.host; }
-      url = url + '/token/checkAccessToken';         
-      const data = {
-        sid:cfg.sid,
-        access_token: access_token
-      }
-      result = await axios.post(url,data,{timeout:3000})
-      return result.data.ret;
-      
-    } catch (error) {
-      throw error;
-    }  
-  }  
-
-  async function create_access_token() {
-
-    if(refresh_token == null || refresh_token == '') return 'N';
-
-    try { 
-      let url = '';    
-      if(cfg.mode =='http') { url = cfg.http.host; }
-      if(cfg.mode =='https') { url = cfg.https.host; }
-      url = url + '/token/createAccessToken';    
-      const data = {
-        sid:cfg.sid,
-        refresh_token: refresh_token
-      }      
-      result = await axios.post(url,data,{timeout:3000});
-      return result.data.access_token;
- 
-    } catch (error) {
-      throw error;
-    }  
-  } 
-
-
-  async function write_access_token(access_token) {
-
-    if(access_token == null || access_token == '') return 'N';
-
-    try { 
-      result = await AsyncStorage.setItem('access_token',access_token);
-      return 'Y'
-    } catch (error) {
-      throw error;
-    }  
-  } 
-
-  useEffect(()=>{    
-    start();
-  },[]);
-
-  async function start() {
-    
-    console.log('====== START ======');
-
-    try {
-
-      // Network
-      result = await check_internet(); 
-      if(result != 'Y') {
-        navigation.navigate('Network');
-      }
-
-      // Access_token
-      access_token = await get_access_token();
-      // console.log('access_token:', access_token);
-      
-      // Refresh_token
-      refresh_token = await get_refresh_token();
-      // console.log('refresh_token:', refresh_token);
-      if(refresh_token == '') {
-        setIsLogin('N');
-        return;
-      }
-
-      // Check access_token
-      is_access_token = await check_access_token();
-      if(is_access_token == 'Y') {
-        console.log('TAG: 로그인 성공')
-        setIsLogin('Y');
-        return;
-      }
-
-      // Get new access token
-      if(is_access_token=='N') {
-        console.log('is_access_token:', is_access_token);
-        access_token = await create_access_token();
-        //console.log('access_token:',access_token);
-
-        if(access_token != '')
+    // 토큰만료시 자동로그인
+    if(access_token !== '' && refresh_token !=='' && is_access_token == 'N') {
+      create_access_token( {refresh_token:refresh_token, url:store.url , sid:store.sid} )
+      .then ( result => {
+        access_token = result;
+        if(access_token != null && access_token != '' )
         {
-          console.log('TAG: 자동로그인')
-          await write_access_token(access_token);
-          setIsLogin('Y');
-          return;
+          write_access_token( access_token )
+          .then( result => {
+            if( result == 'Y' )
+              setIsLogin('Y');      
+            else 
+              setIsLogin('N');      
+          })
+          .catch(error=>{
+            setIsLogin('N');      
+          });          
         }
-        else 
-        {
+        else {
           setIsLogin('N');
-          return;
         }
-      }
-
-    } catch ( error ) {
-      console.log(error);
+      })
+      .catch(error=>alert(error));
     }
-    
+
+    // 로그아웃상태
+    if( access_token == '' || refresh_token =='' ) {
+      setIsLogin('N');
+    }
+
   }
+
+  useEffect(()=>{        
+    console.log('====== PROGRAM START ======'); 
+    
+    net_state()
+    .then( result => {       
+        console.log(result);
+        const isConnected = result;      
+        if( isConnected == false ) {
+          navigation.navigate('Network');
+        }
+    })
+    .then( get_access_token )
+    .then ( result => {
+      access_token = result;
+    })
+    .then( () => get_refresh_token() )
+    .then ( result => {
+      refresh_token = result;
+    })
+    .then (
+      () => access_token_check ( {access_token:access_token,url:store.url, sid:store.sid} )
+     )
+    .then ( result => { 
+      is_access_token = result;
+
+      handle_login();
+    })
+    .catch( error => console.log(error));
+
+  },[]);
 
   return (      
     
@@ -209,5 +143,4 @@ export default function HomeScreen(props) {
   );
 };
 
-
-// distance = beacon.distance ? beacon.distance : '';
+export default HomeScreen;

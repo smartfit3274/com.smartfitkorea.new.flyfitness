@@ -48,7 +48,7 @@ function Logged() {
 
         const region = {
             identifier: "Estimotes",
-            uuid: store.uuid
+            uuid: uuid
         };
 
         Beacons.requestWhenInUseAuthorization();
@@ -79,7 +79,7 @@ function Logged() {
 
         const region = {
             identifier: "Estimotes",
-            uuid: store.uuid
+            uuid: uuid
         };
        
         // 블루투스 권한요청
