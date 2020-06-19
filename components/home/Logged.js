@@ -82,9 +82,6 @@ function Logged() {
             identifier: "Estimotes",
             uuid: uuid
         };
-        alert(uuid);
-        
-        return;
        
         // 블루투스 권한요청
         BleManager.start({ showAlert: false })
