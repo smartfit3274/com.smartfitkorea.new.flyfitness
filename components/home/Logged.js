@@ -30,8 +30,9 @@ let pin = '';
 let auth_type = '';
 let confirm = '';
 let uuid = '';
+let disconnectCount = 0;
 
-const show_distance = 'N'; // DEBUG
+const show_distance = 'Y'; // DEBUG
 
 function Logged() {
 
@@ -47,7 +48,7 @@ function Logged() {
 
         const region = {
             identifier: "Estimotes",
-            uuid: uuid
+            uuid: store.uuid
         };
 
         Beacons.requestWhenInUseAuthorization();
@@ -69,7 +70,7 @@ function Logged() {
                 });  
             })
         );    
-       
+
     }
 
     const start_beacon_android = () => {
@@ -78,8 +79,8 @@ function Logged() {
 
         const region = {
             identifier: "Estimotes",
-            uuid: uuid
-        };     
+            uuid: store.uuid
+        };
        
         // 블루투스 권한요청
         BleManager.start({ showAlert: false })
@@ -112,11 +113,20 @@ function Logged() {
                         }
                     });
 
-                    // off
-                    console.log('TAG / count / ' + count);
-                    if(count == 0 ) {
-                        setIsBeacon('F'); // 근처에 없슴
+                    // 비콘신호가 자주 끊어짐
+                    // 10초동안 신호가 없으면 비콘끊김 처리
+                    if ( count == 0 ) {
+                        disconnectCount++;
                     }
+                    if(count > 0 ) {
+                        disconnectCount = 0;
+                    }
+                    if(disconnectCount > 9) {
+                        setIsBeacon('N');
+                        disconnectCount = 0;
+                    }
+                    console.log('disconnectCount',disconnectCount);
+                    
             })                               
         })
         .catch( error => alert('비콘초기화 오류',error) );                           
