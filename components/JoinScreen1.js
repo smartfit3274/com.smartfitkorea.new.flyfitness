@@ -19,12 +19,16 @@ import {
   Body,
   Button,
   Text,
-  Header,
   Container,
-  Content,
+  Content,  
+  Header,
+  Left,
+  Right,  
   Footer
 } from 'native-base';
 import Checkbox from '@react-native-community/checkbox';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { $Header } from './$Header';
 
 const BodyContainer = styled.View`
    width:90%;
@@ -92,6 +96,10 @@ const ButtonText = styled.Text`
 const TextStyle = styled.Text`
   margin-left:10px;
   font-size:16px;  
+`;
+
+const $ScrollView = styled.ScrollView`
+
 `;
 
 function AgreeSectionComp () {
@@ -188,7 +196,8 @@ export default function JoinScreen(props) {
   const [BtnDisabled,setBtnDisabled] = useState(true);
   const navigation = useNavigation();
   const [count,setCount] = useState(0);
-
+  let i = 0;
+  
   // navigate 호출시마다 실행됨
   useEffect( ()=>{           
 
@@ -220,17 +229,19 @@ export default function JoinScreen(props) {
     console.log('TAG check6:', check6);
     console.log('TAG check10:', check10);  
     
-    if( check1==true &&
-        check2==true && 
-        check3==true && 
-        check5==true && 
-        check6==true && 
-        check10==true
-      )
-    {
+    i = 0;
+    if( check1==true ) i++;
+    if( check2==true ) i++;
+    if( check3==true ) i++;
+    if( check4==true ) i++;
+    if( check5==true ) i++;
+    if( check6==true ) i++;
+    if( check10==true ) i++;
+    setCount(i);    
+
+    if(i==6) 
       setBtnDisabled(false);
-    }        
-    
+        
   }); 
 
   function BtnNotAgree() {
@@ -240,40 +251,49 @@ export default function JoinScreen(props) {
   function BtnAgree() {
     navigation.replace('Join2');
   }
+
+  const btn_close = () => {
+    navigation.pop();
+  }
  
-  return (  
-    
+  return (      
 
         <Container>
+          <$Header>
+              <Left style={{flex:1}}>
+                  <Button transparent onPress={()=>btn_close()}>
+                      <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"white"}}></Icon>
+                  </Button>
+              </Left>
+              <Body style={{flex:1,justifyContent:"center"}}>
+                  <Text style={{alignSelf:"center",color:"white"}}>회원가입</Text>
+              </Body>
+              <Right style={{flex:1}}></Right>
+          </$Header>          
 
-          <Body>
-            <SafeAreaView>
-            <BodyContainer>
-              <ScrollView showsVerticalScrollIndicator={false}>
-                <MyTitle>회원가입 (약관동의)</MyTitle>
-                <AgreeSectionComp/> 
-                <TitleSectionComp title="이용약관 (필수)"/>
-                <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>
-                <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
-                <CheckPriComp data={{ check10:check10 }} />
-                <View style={styles.scrollview}></View>
-              </ScrollView>
-            </BodyContainer>            
-            </SafeAreaView>
-          </Body>    
-          
-          <FooterStyle>            
-            <ButtonNotAgree onPress={()=>BtnNotAgree(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>      
-  <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료({count}/6)</ButtonText></ButtonAgree> 
-          </FooterStyle>
+            <Body>
+              <SafeAreaView>
+              <BodyContainer>
+                <$ScrollView showsVerticalScrollIndicator={false}>
+                  <MyTitle>회원가입 (약관동의)</MyTitle>
+                  <AgreeSectionComp/> 
+                  <TitleSectionComp title="이용약관 (필수)"/>
+                  <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>
+                  <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
+                  <CheckPriComp data={{ check10:check10 }} />
+                  <View style={{ paddingTop:30}}>                    
+                  </View>
+                </$ScrollView>
+              </BodyContainer>            
+              </SafeAreaView>
+            </Body>    
+            
+            <FooterStyle>            
+              <ButtonNotAgree onPress={()=>BtnNotAgree(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>      
+              <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료({count}/6)</ButtonText></ButtonAgree> 
+            </FooterStyle>
     
         </Container>
       
   );
 };
-
-const styles = StyleSheet.create({
-  scrollview: {
-    paddingBottom:30
-  }
-});

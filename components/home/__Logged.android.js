@@ -1,5 +1,6 @@
 import React, { useEffect,useRef,useState } from 'react';
 import { useNavigation } from 'react-navigation-hooks';
+import { useSelector, useDispatch } from 'react-redux';
 import { 
     View,
     Text,
@@ -25,11 +26,9 @@ import Beacons from 'react-native-beacons-manager';
 import { open_door } from '../lib/Function';
 
 let access_token = '';
-let result = '';
 let pin = '';
 let auth_type = '';
 let confirm = '';
-let url = '';
 let uuid = '';
 
 const show_distance = 'N'; // DEBUG
@@ -39,28 +38,82 @@ function Logged() {
     const window = Dimensions.get('window'); 
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
-    const [isBeacon, setIsBeacon] = useState('N');  // 기본값 N    
+    const [isBeacon, setIsBeacon] = useState('N');  // 비콘이 근처에 있는지
+    const store = useSelector(state => state.data);
+
+    // 비콘 시작
+    const start_beacon = () => {
+
+        console.log('TAG: start_beacon()');
+        const region = {
+            identifier: "Estimotes",
+            uuid: uuid
+        };     
+       
+        // 블루투스 권한요청
+        BleManager.start({ showAlert: false })
+        .then(() => BleManager.enableBluetooth() )
+        .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) )
+        .then(() => Beacons.detectIBeacons() )
+        .then(() => Beacons.startRangingBeaconsInRegion(region) )
+        .then(() => {
+            DeviceEventEmitter.addListener(
+                'beaconsDidRange', 
+                response=> {          
+
+                    console.log(response);
+
+                    let count = 0;
+                    response.beacons.forEach(beacon => {                                 
+                        count++;
+                        if(beacon.distance) {     
+                            console.log('TAG: found beacon', beacon.distance);                                           
+                        }
+                        else {
+                            console.log('TAG: no beacon!');
+                        }
+
+                        setDistance(beacon.distance);                            
+                        if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
+                            setIsBeacon('Y');
+                        } else {
+                            setIsBeacon('F'); // 근처에 없슴
+                        }
+                    });
+
+                    // off
+                    console.log('TAG / count / ' + count);
+                    if(count == 0 ) {
+                        setIsBeacon('F'); // 근처에 없슴
+                    }
+            })                               
+        })
+        .catch( error => alert('비콘초기화 오류',error) );                           
+    }
 
     // 시작
     useEffect(()=>{
-
-        // uuid
-        url = '';
-        if(cfg.mode =='http') { url = cfg.http.host; }
-        if(cfg.mode =='https') { url = cfg.https.host; }
-        url = url + '/rest/get_uuid';     
+        
+        // 비콘 uuid 받기
+        const url = store.url + '/slim/get_uuid';
         const data = {
             sid:cfg.sid,
             cid:cfg.cid
         }   
         axios.post(url,data,{timeout:3000}) 
         .then( result => {
-            uuid = result.data.uuid 
-            startBeacon();
+            uuid = result.data.uuid;            
+            
+            if( uuid === null || uuid==='') {
+                alert('비콘정보를 내려받지 못했습니다.')
+            }            
+            else {
+                start_beacon(); // 비콘시작                
+            }
+            
         })
         .catch( error => console.log(error));
-       
-        
+               
         // 프로그램 종료시 비콘끄기
         return () => {
             DeviceEventEmitter.removeAllListeners();      
@@ -204,58 +257,6 @@ function Logged() {
     }
 
     const scale = usePulse();
-
-
-    function startBeacon() {
-
-        console.log('TAG: startBeacon()');
-        const region = {
-            identifier: "Estimotes",
-            uuid: cfg.uuid
-        };      
-        
-        // 블루투스 권한요청
-        BleManager.start({ showAlert: false })
-        .then(() => BleManager.enableBluetooth() )
-        .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) )
-        .then(() => Beacons.detectIBeacons() )
-        .then(() => Beacons.startRangingBeaconsInRegion(region) )
-        .then(() => {
-            DeviceEventEmitter.addListener(
-                'beaconsDidRange', 
-                response=> {          
-
-                    console.log(response);
-
-                    let count = 0;
-                    response.beacons.forEach(beacon => {                                 
-                        count++;
-                        if(beacon.distance) {     
-                            console.log('TAG: found beacon', beacon.distance);                                           
-                        }
-                        else {
-                            console.log('TAG: no beacon!');
-                        }
-
-                        setDistance(beacon.distance);                            
-                        if(beacon.distance > 0 && beacon.distance < cfg.beacon_range ) {
-                            setIsBeacon('Y');
-                        } else {
-                            setIsBeacon('F'); // 근처에 없슴
-                        }
-                    });
-
-                    // off
-                    console.log('TAG / count / ' + count);
-                    if(count == 0 ) {
-                        setIsBeacon('F'); // 근처에 없슴
-                    }
-            })                               
-        })
-        .catch( error => alert('비콘초기화 오류',error) );                           
-    }
-
-
 
     return (
       <>

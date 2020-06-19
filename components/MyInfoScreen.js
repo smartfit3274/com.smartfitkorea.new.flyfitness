@@ -27,6 +27,7 @@ import styled from 'styled-components';
 import { useEffect } from 'react';
 import cfg from "./data/cfg.json";
 import axios from 'axios';
+import {useSelector, useDispatch} from 'react-redux';
 
 const ItemStyle = styled(Item)`    
     height:60px;
@@ -61,6 +62,7 @@ function MyInfoScreen() {
         sdate:'',
         edate:'',
     });
+    const store = useSelector(state => state.data);
     
     useEffect(()=>{
 
@@ -77,66 +79,55 @@ function MyInfoScreen() {
                 //console.log('refresh_token', refresh_token);
 
                 // 토큰검사
-                if(cfg.mode =='http') url = cfg.http.host; 
-                if(cfg.mode =='https') url = cfg.https.host; 
-                url = url + '/token/checkAccessToken';
+                const url = store.url + '/slim/checkAccessToken';
                 const data = {
-                    sid: cfg.sid,
+                    sid: store.sid,
                     access_token: access_token
                 }
+                
                 axios.post(url,data,{timeout:3000})
-                .then(result=>{
-                    if(result.data.ret=='Y') {
+                .then(result => {
+                    const {ret} = result.data;
+                    if(ret == 'Y')                    
+                    {
                         member_one();
-                    }    
-                    
+                    }                      
                 })
-                .catch( error => console.log('TAG', error));         
-
+                .catch( error => console.log('TAG',error));
+                    
             })
-            .catch ( error => console.log('TAG:', error));
+            .catch( error => console.log('TAG', error));         
 
-
-
-            // if(access_token=='' || refresh_token=='') {
-            //     error_close();    
-            // }            
-
-            
-        }).catch(error=>console.log('TAG: ERROR',error));  
+        })
+        .catch ( error => console.log('TAG',error) )
+        .then ( () => {
+            if(access_token=='' || refresh_token=='') {
+                error_close();    
+            }            
+        });
 
     },[]);    
 
 
-    function member_one(){
+    const member_one = () => {
 
-        console.log('TAG: member_one();');
-
+        console.log('TAG: member_one()');       
+         
         // 회원정보 로딩
-        if(cfg.mode =='http') url = cfg.http.host; 
-        if(cfg.mode =='https') url = cfg.https.host;         
-        // console.log('member_one();');
-        url = url + '/rest/member_one';
+        const url = store.url + '/slim/member_one';       
         const data = {
             sid: cfg.sid,
             cid: cfg.cid,
             access_token: access_token
-        }
-
-        console.log(data);
-
+        } 
         axios.post(url,data,{timeout:3000})
-        .then(result=>{
-            console.log(result.data);
-            setMbInfo(
-                {
-                    mb_name: result.data.mb_name,
-                    p_name: result.data.p_name,
-                    sdate: result.data.sdate,
-                    edate: result.data.edate
-                }
-            );
-
+        .then( result => {       
+            setMbInfo({
+                mb_name: result.data.mb_name,
+                p_name: result.data.p_name,
+                sdate: result.data.sdate,
+                edate: result.data.edate
+             });
         })
         .catch(error=>console.log(error));
 

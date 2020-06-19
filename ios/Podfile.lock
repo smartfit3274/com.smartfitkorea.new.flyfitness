@@ -257,6 +257,8 @@ PODS:
     - ReactCommon/callinvoker (= 0.62.0)
   - RNCAsyncStorage (1.8.1):
     - React
+  - RNCCheckbox (0.4.2):
+    - React
   - RNCMaskedView (0.1.7):
     - React
   - RNDateTimePicker (2.3.2):
@@ -307,6 +309,7 @@ DEPENDENCIES:
   - ReactCommon/callinvoker (from `../node_modules/react-native/ReactCommon`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-community/async-storage`)"
+  - "RNCCheckbox (from `../node_modules/@react-native-community/checkbox`)"
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
@@ -384,6 +387,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-community/async-storage"
+  RNCCheckbox:
+    :path: "../node_modules/@react-native-community/checkbox"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
   RNDateTimePicker:
@@ -433,6 +438,7 @@ SPEC CHECKSUMS:
   React-RCTVibration: 0630aeb11e22f87c180ca9c0c3a0a0aba780cc62
   ReactCommon: d22162ab8f1358c53dfcd0f9c4d82d38facdbc48
   RNCAsyncStorage: 00bdf63f7f1e0f11d3323533dba4f222e58bf092
+  RNCCheckbox: 2e90172b1ba7a5c7d88f50f6243fe16566bf03aa
   RNCMaskedView: 90dd32f5b786bd562e876e1421ea77c700cbf71e
   RNDateTimePicker: 0f657a34a0f6465ab7d0255c24954693bc7a8cf6
   RNDeviceInfo: 23eef94a8911a03ecf5d6c79df71db34091c8f40
