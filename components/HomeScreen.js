@@ -28,7 +28,8 @@ import {
   get_refresh_token, 
   net_state,
   access_token_check,
-  create_access_token
+  create_access_token,
+  write_access_token
 } from './lib/Function';
 
 let refresh_token = '';
@@ -43,16 +44,7 @@ function HomeScreen(props) {
   const [isLogin,setIsLogin] = useState('');
   const store = useSelector(state => state.data);
 
-  const write_access_token = access_token => {
-    
-    return new Promise(function( resolve, reject ){
-      if(access_token == null || access_token == '') resolve('N');      
-      AsyncStorage.setItem('access_token',access_token)
-      .then( ()=> resolve('Y') )
-      .catch( () => resolve('N') );
-    });
   
-  }    
 
   const handle_login = () => {
     // console.log('handle_login()');

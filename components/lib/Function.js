@@ -129,3 +129,15 @@ export const create_access_token = params => {
     });
 
 }
+
+// 엑세스 토큰 저장하기
+export const write_access_token = access_token => {
+    
+    return new Promise(function( resolve, reject ){
+      if(access_token == null || access_token == '') resolve('N');      
+      AsyncStorage.setItem('access_token',access_token)
+      .then( ()=> resolve('Y') )
+      .catch( () => resolve('N') );
+    });
+  
+  }    

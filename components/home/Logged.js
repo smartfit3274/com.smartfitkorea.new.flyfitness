@@ -75,12 +75,16 @@ function Logged() {
 
     const start_beacon_android = () => {
 
+      
         console.log('TAG: start_beacon_android()');
 
         const region = {
             identifier: "Estimotes",
             uuid: uuid
         };
+        alert(uuid);
+        
+        return;
        
         // 블루투스 권한요청
         BleManager.start({ showAlert: false })
