@@ -23,7 +23,7 @@ import cfg from '../data/cfg.json';
 import { PermissionsAndroid, DeviceEventEmitter, Platform } from 'react-native'
 import BleManager, { start } from 'react-native-ble-manager';
 import Beacons from 'react-native-beacons-manager';
-import { open_door } from '../lib/Function';
+import { open_door, get_access_token, access_token_check, get_uuid } from '../lib/Function';
 
 let access_token = '';
 let pin = '';
@@ -31,16 +31,54 @@ let auth_type = '';
 let confirm = '';
 let uuid = '';
 let disconnectCount = 0;
+let is_key = ''; // 출입키 보유 유무
 
 const show_distance = 'Y'; // DEBUG
 
-function Logged() {
+function Logged( props ) {
 
     const window = Dimensions.get('window'); 
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
     const [isBeacon, setIsBeacon] = useState('N');  // 비콘이 근처에 있는지
     const store = useSelector(state => state.data);
+    is_key = props.is_key;    
+    
+
+    // 시작
+    useEffect(()=>{
+        
+        console.log('Logged() --- start');
+        
+        get_uuid( { cid:store.cid, sid:store.sid, url:store.url} )
+        .then( result => uuid = result )
+        .then( () => {
+            if(uuid == '' ) {
+                alert('비콘정보 수신오류');
+                return;
+            }
+            
+            if( Platform.OS=='ios' ) {
+                start_beacon_ios()
+            }
+
+            if( Platform.OS=='android' ) {
+                start_beacon_android();
+            }
+
+        })
+        .catch( error => console.log(error) );        
+        
+            
+               
+        // // 프로그램 종료시 비콘끄기
+        // return () => {
+        //     DeviceEventEmitter.removeAllListeners();      
+        // }
+        // */
+        
+    },[]);
+
 
     // 비콘 시작
     const start_beacon_ios = () => {
@@ -132,45 +170,7 @@ function Logged() {
         })
         .catch( error => alert('비콘초기화 오류',error) );                           
     }
-
-    // 시작
-    useEffect(()=>{
-        
-        // 비콘 uuid 받기
-        const url = store.url + '/slim/get_uuid';
-        const data = {
-            sid:cfg.sid,
-            cid:cfg.cid
-        }   
-        axios.post(url,data,{timeout:3000}) 
-        .then( result => {
-            uuid = result.data.uuid;            
-            
-            if( uuid === null || uuid==='') {
-                alert('비콘정보를 내려받지 못했습니다.')
-            }            
-            else {
-                // 비콘시작  
-                if( Platform.OS=='ios' )
-                {
-                    start_beacon_ios();
-                }
-                else 
-                {
-                    start_beacon_android();   
-                }            
-            }
-            
-        })
-        .catch( error => console.log(error));
-               
-        // 프로그램 종료시 비콘끄기
-        return () => {
-            DeviceEventEmitter.removeAllListeners();      
-        }
-        
-    },[]);
-    
+   
     function btn_mypage(){
         console.log('TAG: btn_mypage()');
         navigation.push('MyInfo')
@@ -344,9 +344,17 @@ function Logged() {
         </Header>
 
         <Content scrollEnabled={false}>
+            
             { show_distance == 'Y' &&
-            <Text>최소거리: {cfg.beacon_range} / 비콘과의 거리: {distance}</Text>
+                <>
+                    <Text> * 디버그 모드 * </Text>
+                    <Text>최소거리: {cfg.beacon_range} </Text>
+                    <Text>비콘과의 거리: {distance} </Text>
+                    <Text>출입키 보유: {is_key} </Text>
+                    <Text>비콘상태: {isBeacon} </Text>
+                </>
             }
+
             <Image source={require('../images/bg.jpg')}
                 style={{ width: window.width, height: window.height}}            
             ></Image>

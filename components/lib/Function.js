@@ -130,14 +130,50 @@ export const create_access_token = params => {
 
 }
 
+
 // 엑세스 토큰 저장하기
-export const write_access_token = access_token => {
-    
+export const write_access_token = access_token => {    
     return new Promise(function( resolve, reject ){
       if(access_token == null || access_token == '') resolve('N');      
       AsyncStorage.setItem('access_token',access_token)
       .then( ()=> resolve('Y') )
       .catch( () => resolve('N') );
+    });  
+}
+
+
+// 출입키가 있는지 확인
+export const check_key = params => {   
+    console.log('check_key();');
+    const { access_token , url, sid } = params;
+
+    const data = {
+        sid: sid,      
+        access_token : access_token
+    }    
+
+    return new Promise(function( resolve, reject ){
+        axios.post(url+'/slim/check_key',data,{timeout:3000})
+        .then( result => {
+        resolve(result.data.ret)
+        })
+        .catch( error => console.log(error) );      
     });
-  
-  }    
+}
+
+// 비콘 uuid 가져오기
+export const get_uuid = params => {
+    console.log('get_uuid();');
+
+    const { sid,cid,url } = params;
+    const data = {
+        sid: sid,      
+        cid : cid,
+    }    
+
+    return new Promise(function(resolve,reject) {
+        axios.post(url+'/slim/get_uuid',data)
+        .then(result => resolve( result.data.uuid ))
+        .catch(error=>resolve(''));
+    })      
+}
