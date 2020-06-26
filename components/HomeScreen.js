@@ -23,20 +23,24 @@ import { Button,Text,Drawer,Container } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { checkState } from 'react-native-ble-manager';
 import { useSelector, useDispatch } from 'react-redux';
-import { 
+import {
   get_access_token, 
   get_refresh_token, 
   net_state,
   access_token_check,
   create_access_token,
-  write_access_token
+  write_access_token,
+  check_key
 } from './lib/Function';
+import Loading from '../components/Loading';
+
 
 let refresh_token = '';
 let access_token = '';
 let result = '';
 let is_access_token = '';
 let is_refresh_token = '';
+let is_key = ''; // 출입키가 있는지
 
 function HomeScreen(props) {
 
@@ -91,48 +95,42 @@ function HomeScreen(props) {
   useEffect(()=>{        
     console.log('====== PROGRAM START ======'); 
     
+    var isConnected;
     net_state()
-    .then( result => {       
-        console.log(result);
-        const isConnected = result;      
-        if( isConnected == false ) {
-          navigation.navigate('Network');
-        }
-    })
+    .then( result => isConnected = result )
+    .then( () => {
+      if( isConnected == false ) {
+        navigation.navigate('Network');
+      }      
+    })    
     .then( get_access_token )
-    .then ( result => {
-      access_token = result;
-    })
-    .then( () => get_refresh_token() )
-    .then ( result => {
-      refresh_token = result;
-    })
-    .then (
-      () => access_token_check ( {access_token:access_token,url:store.url, sid:store.sid} )
-     )
-    .then ( result => { 
-      is_access_token = result;
-
+    .then( result => access_token = result )    
+    .then( get_refresh_token )
+    .then( result => refresh_token = result )
+    .then( () => access_token_check ( {access_token:access_token,url:store.url, sid:store.sid} ) )
+    .then( result => is_access_token = result )
+    .then( () => check_key({refresh_token:refresh_token, url:store.url , sid:store.sid}) )
+    .then( result => is_key = result )
+    .then ( ()=> {
+      // console.log('done!');
+      // console.log('access_token',access_token);
+      // console.log('refresh_token',refresh_token);
+      // console.log('is_access_token',is_access_token);
+      // console.log('is_key',is_key);
       handle_login();
-    })
-    .catch( error => console.log(error));
+    })    
+    .catch( error => console.log(error) );
 
   },[]);
 
-  return (      
-    
-      <Container>
-       
-        { isLogin =='N' &&
-          <Login></Login>
-        }
-        { isLogin == 'Y' &&
-        <Logged></Logged>
-        }
-      
-      </Container>   
-    
+  return (              
+      <Container> 
+        { isLogin == '' ? <Loading/> : null }      
+        { isLogin == 'Y' ? <Logged is_key={is_key} /> : null }      
+        { isLogin == 'N' ? <Login/> : null }              
+      </Container>       
   );
+
 };
 
 export default HomeScreen;
