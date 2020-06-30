@@ -33,7 +33,7 @@ let uuid = '';
 let disconnectCount = 0;
 let is_key = ''; // 출입키 보유 유무
 
-const show_distance = 'Y'; // DEBUG
+const show_distance = ''; // DEBUG
 
 function Logged( props ) {
 
@@ -51,9 +51,8 @@ function Logged( props ) {
         console.log('Logged() --- start');
 
         // console.log('sid',store.sid);
-        // console.log('cid',store.cid);        
+        // console.log('cid',store.cid);
         // console.log('url',store.url);
-        
 
         // 비콘ID 서버에서 내려받기
         get_uuid( { cid:store.cid, sid:store.sid, url:store.url} )
@@ -90,7 +89,7 @@ function Logged( props ) {
         console.log('TAG: start_beacon_ios()');
 
         const region = {
-            identifier: "Estimotes",
+            identifier: "iBeacon",
             uuid: uuid
         };
 
@@ -120,7 +119,7 @@ function Logged( props ) {
         console.log('TAG: start_beacon_android()');
 
         const region = {
-            identifier: "Estimotes",
+            identifier: "iBeacon",
             uuid: uuid
         };
        

@@ -11,7 +11,7 @@ const INITIAL_STATE = {
     server  : "https://admin.smartg.kr",
     sid     : "smartgym",    
     cid     : "CT14Z01170314.HXZb9",
-    name    : "스마트짐 옥포점"
+    name    : "스마트짐 옥포점",
   }
 }
 

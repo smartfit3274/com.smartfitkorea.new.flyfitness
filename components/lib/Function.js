@@ -16,7 +16,7 @@ export const open_door = () => {
         let url = '';    
         if(cfg.mode =='http') { url = cfg.http.host; }
         if(cfg.mode =='https') { url = cfg.https.host; }
-        url = url + '/rest/bio_dooropen';
+        url = url + '/slim/bio_dooropen';
         const data = {          
             sid:cfg.sid,
             cid:cfg.cid,
