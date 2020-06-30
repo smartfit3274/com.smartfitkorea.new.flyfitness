@@ -33,13 +33,14 @@ let uuid = '';
 let disconnectCount = 0;
 let is_key = ''; // 출입키 보유 유무
 
-const show_distance = ''; // DEBUG
+const show_distance = 'Y'; // DEBUG
 
 function Logged( props ) {
 
     const window = Dimensions.get('window'); 
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
+    const [proximity, setProximity] = useState('');
     const [isBeacon, setIsBeacon] = useState('N');  // 비콘이 근처에 있는지
     const store = useSelector(state => state.data);
     is_key = props.is_key;
@@ -99,17 +100,31 @@ function Logged( props ) {
             'beaconsDidRange', 
             ( response => {   
                 
-                // console.log(response);
-                response.beacons.forEach(beacon => {     
-                    if(beacon.accuracy) {     
-                        setDistance(beacon.accuracy);                            
-                        if(beacon.accuracy > 0 && beacon.accuracy < cfg.beacon_range ) {
+                let count = 0;
+                response.beacons.forEach(beacon => {    
+                    if(beacon.proximity) {     
+                        setProximity(beacon.proximity);                        
+                        if(beacon.proximity === 'immediate' || beacon.proximity === 'near') {
                             setIsBeacon('Y');
-                        } else {
-                            setIsBeacon('F'); // 근처에 없슴
-                        }    
+                            count++;
+                        }
+                        console.log('proximity:',beacon.proximity);
                     }                      
                 });  
+
+                if(count === 0 ) {
+                    disconnectCount++;
+                }
+
+                if(count > 0 ) {
+                    disconnectCount = 0;
+                }
+
+                if(disconnectCount > 9) {
+                    disconnectCount = 0;
+                    if( isBeacon == 'N') setIsBeacon('N');
+                }
+                console.log('disconnectCount:',disconnectCount);
             })
         );  
     }
@@ -351,7 +366,8 @@ function Logged( props ) {
                 <>
                     <Text> * 디버그 모드 * </Text>
                     <Text>최소거리: {cfg.beacon_range} </Text>
-                    <Text>비콘과의 거리: {distance} </Text>
+                    <Text>비콘과의 거리 (안드로이드): {distance} </Text>
+                    <Text>비콘과의 근접 (아이폰): {proximity} </Text>
                     <Text>출입키 보유: {is_key} </Text>
                     <Text>비콘상태: {isBeacon} </Text>
                 </>

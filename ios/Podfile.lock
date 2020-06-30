@@ -184,7 +184,7 @@ PODS:
     - React-cxxreact (= 0.62.0)
     - React-jsi (= 0.62.0)
   - React-jsinspector (0.62.0)
-  - react-native-beacons-manager (1.0.7):
+  - react-native-beacons-manager (1.2.0):
     - React
   - react-native-biometrics (2.1.4):
     - React
@@ -421,7 +421,7 @@ SPEC CHECKSUMS:
   React-jsi: bc8166d6833cdcb0848c80710b26ce63fad2c099
   React-jsiexecutor: 8bf0b2707f05865113415088c398a7f98c0cf546
   React-jsinspector: 8e5913c4c6c54f0d3f9c9fc630c465a89cded65d
-  react-native-beacons-manager: 30dd69009f8cd8f6a8c79edab1e653fe08adc499
+  react-native-beacons-manager: 842dac2f2f1b392f53d01cb4dbea2e3f3b6d0f36
   react-native-biometrics: 9d3306e5d29c3bc4e6a3c912d759a94e76a2f683
   react-native-ble-manager: fda5f6b20092f2b2d356676bd1f3dc7065bb4329
   react-native-netinfo: 61a837131d5f0194d22f8048a456d8f31a074baa
