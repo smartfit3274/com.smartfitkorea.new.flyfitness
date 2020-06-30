@@ -6,12 +6,12 @@ import { createStore } from 'redux'
 const INITIAL_STATE = {
   data: {
     url     : "",      
-    mode    : "local",
+    mode    : "server",
     local   : "http://192.168.76.51:80",   
     server  : "https://admin.smartg.kr",
     sid     : "smartgym",    
     cid     : "CT14Z01170314.HXZb9",
-    name    : "스마트짐 옥포점"
+    name    : "스마트짐 옥포점",
   }
 }
 
