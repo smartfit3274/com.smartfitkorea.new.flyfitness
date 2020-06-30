@@ -155,9 +155,9 @@ export const check_key = params => {
     return new Promise(function( resolve, reject ){
         axios.post(url+'/slim/check_key',data,{timeout:3000})
         .then( result => {
-            resolve(result.data.ret)
+            resolve(result.data.ret);
         })
-        .catch( resolve('') );      
+        .catch( resolve('N') );      
     });
 }
 
@@ -174,8 +174,7 @@ export const get_uuid = params => {
     return new Promise(function(resolve,reject) {
         axios.post(url+'/slim/get_uuid',data)
         .then(result => { 
-            // resolve( result.data.uuid )
-            resolve('')
+            resolve( result.data.uuid )            
         })
         .catch(error=>resolve(''));
     })      

@@ -42,17 +42,25 @@ function Logged( props ) {
     const [distance, setDistance] = useState(0);
     const [isBeacon, setIsBeacon] = useState('N');  // 비콘이 근처에 있는지
     const store = useSelector(state => state.data);
-    is_key = props.is_key;    
-    
+    is_key = props.is_key;
+   
 
     // 시작
     useEffect(()=>{
         
         console.log('Logged() --- start');
+
+        // console.log('sid',store.sid);
+        // console.log('cid',store.cid);        
+        // console.log('url',store.url);
         
+
+        // 비콘ID 서버에서 내려받기
         get_uuid( { cid:store.cid, sid:store.sid, url:store.url} )
-        .then( result => uuid = result )
-        .then( () => {
+        .then( result => { 
+
+            uuid = result;
+
             if(uuid == '' ) {
                 alert('비콘정보 수신오류');
                 return;
@@ -65,17 +73,14 @@ function Logged( props ) {
             if( Platform.OS=='android' ) {
                 start_beacon_android();
             }
-
         })
         .catch( error => console.log(error) );        
-        
-            
+                    
                
-        // // 프로그램 종료시 비콘끄기
-        // return () => {
-        //     DeviceEventEmitter.removeAllListeners();      
-        // }
-        // */
+        // 프로그램 종료시 비콘 리스너 종료
+        return () => {
+            DeviceEventEmitter.removeAllListeners();      
+        }        
         
     },[]);
 
@@ -107,12 +112,10 @@ function Logged( props ) {
                     }                      
                 });  
             })
-        );    
-
+        );  
     }
 
     const start_beacon_android = () => {
-
       
         console.log('TAG: start_beacon_android()');
 
