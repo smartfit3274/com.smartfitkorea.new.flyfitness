@@ -48,8 +48,6 @@ function HomeScreen(props) {
   const [isLogin,setIsLogin] = useState('');
   const store = useSelector(state => state.data);
 
-  
-
   const handle_login = () => {
     // console.log('handle_login()');
     // console.log('[access_token]',access_token);
@@ -112,7 +110,7 @@ function HomeScreen(props) {
     .then( () => check_key({refresh_token:refresh_token, url:store.url , sid:store.sid}) )
     .then( result => is_key = result )
     .then ( ()=> {
-      // console.log('done!');
+      console.log('done!');
       // console.log('access_token',access_token);
       // console.log('refresh_token',refresh_token);
       // console.log('is_access_token',is_access_token);

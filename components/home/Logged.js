@@ -195,6 +195,7 @@ function Logged( props ) {
     const window = Dimensions.get('window'); 
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
+    const [proximity, setProximity] = useState('');
     const [isBeacon, setIsBeacon] = useState('N');  // 비콘이 근처에 있는지
     const [MbInfo, setMbInfo]   = useState({
         mb_name:'',
@@ -204,17 +205,24 @@ function Logged( props ) {
         count : ''
     });
     const store = useSelector(state => state.data);
-    is_key = props.is_key;    
-    
+    is_key = props.is_key;
+   
 
     // 시작
     useEffect(()=>{
         
         console.log('Logged() --- start');
-        
+
+        // console.log('sid',store.sid);
+        // console.log('cid',store.cid);
+        // console.log('url',store.url);
+
+        // 비콘ID 서버에서 내려받기
         get_uuid( { cid:store.cid, sid:store.sid, url:store.url} )
-        .then( result => uuid = result )
-        .then( () => {
+        .then( result => { 
+
+            uuid = result;
+
             if(uuid == '' ) {
                 alert('비콘정보 수신오류');
                 return;
@@ -227,7 +235,6 @@ function Logged( props ) {
             if( Platform.OS=='android' ) {
                 start_beacon_android();
             }
-
         })
         .catch( error => console.log(error) );        
         
@@ -268,11 +275,10 @@ function Logged( props ) {
     
         }
                
-        // // 프로그램 종료시 비콘끄기
-        // return () => {
-        //     DeviceEventEmitter.removeAllListeners();      
-        // }
-        // */
+        // 프로그램 종료시 비콘 리스너 종료
+        return () => {
+            DeviceEventEmitter.removeAllListeners();      
+        }        
         
     },[]);
 
@@ -282,7 +288,7 @@ function Logged( props ) {
         console.log('TAG: start_beacon_ios()');
 
         const region = {
-            identifier: "Estimotes",
+            identifier: "iBeacon",
             uuid: uuid
         };
 
@@ -292,29 +298,41 @@ function Logged( props ) {
             'beaconsDidRange', 
             ( response => {   
                 
-                // console.log(response);
-                response.beacons.forEach(beacon => {     
-                    if(beacon.accuracy) {     
-                        setDistance(beacon.accuracy);                            
-                        if(beacon.accuracy > 0 && beacon.accuracy < cfg.beacon_range ) {
+                let count = 0;
+                response.beacons.forEach(beacon => {    
+                    if(beacon.proximity) {     
+                        setProximity(beacon.proximity);                        
+                        if(beacon.proximity === 'immediate' || beacon.proximity === 'near') {
                             setIsBeacon('Y');
-                        } else {
-                            setIsBeacon('F'); // 근처에 없슴
-                        }    
+                            count++;
+                        }
+                        console.log('proximity:',beacon.proximity);
                     }                      
                 });  
-            })
-        );    
 
+                if(count === 0 ) {
+                    disconnectCount++;
+                }
+
+                if(count > 0 ) {
+                    disconnectCount = 0;
+                }
+
+                if(disconnectCount > 9) {
+                    disconnectCount = 0;
+                    if( isBeacon == 'N') setIsBeacon('N');
+                }
+                console.log('disconnectCount:',disconnectCount);
+            })
+        );  
     }
 
     const start_beacon_android = () => {
-
       
         console.log('TAG: start_beacon_android()');
 
         const region = {
-            identifier: "Estimotes",
+            identifier: "iBeacon",
             uuid: uuid
         };
        
@@ -555,7 +573,8 @@ function Logged( props ) {
                 <>
                     <Text> * 디버그 모드 * </Text>
                     <Text>최소거리: {cfg.beacon_range} </Text>
-                    <Text>비콘과의 거리: {distance} </Text>
+                    <Text>비콘과의 거리 (안드로이드): {distance} </Text>
+                    <Text>비콘과의 근접 (아이폰): {proximity} </Text>
                     <Text>출입키 보유: {is_key} </Text>
                     <Text>비콘상태: {isBeacon} </Text>
                 </>
