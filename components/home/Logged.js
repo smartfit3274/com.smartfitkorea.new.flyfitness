@@ -15,7 +15,7 @@ import {
     Button
 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Image,Dimensions, RefreshControlBase, Animated, Alert, Linking, TouchableHighlight } from 'react-native';
+import { Image,Dimensions, RefreshControlBase, Animated, Alert, Linking, TouchableHighlight, TouchableOpacity } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
@@ -26,7 +26,7 @@ import Beacons from 'react-native-beacons-manager';
 import { open_door, get_access_token, access_token_check, get_uuid } from '../lib/Function';
 import styled from 'styled-components';
 import Slick from 'react-native-slick';
-import { WebView } from 'react-native-webview';
+import moment from "moment";
 
 let access_token = '';
 let pin = '';
@@ -50,20 +50,20 @@ const $SatusView = styled(View)`
 const $StatusNameText = styled(Text)`
     color : #fff;
     line-height : 40px;
-    font-size : 14px;
+    font-size : 12px;
     text-align : center;
 `
 
 const $StatusPriodText = styled(Text)`
     color : #fff;
     font-weight : 700;
-    font-size : 14px;
+    font-size : 12px;
     text-align : center;
 `
 
 const $StatusHighLightText = styled(Text)`
     color : #15ff94;
-    font-size : 14px;
+    font-size : 12px;
     text-align : center;
 `
 
@@ -90,7 +90,7 @@ const $PaginationView = styled(View)`
     flex-direction : row;
     display : flex;
 `
-const ButtonView = styled(View)`
+const ButtonView = styled(TouchableOpacity)`
     /* height : 350px; */
     justify-content: center;
     align-items: center;
@@ -135,27 +135,30 @@ const $ButtonTextHighLight = styled(Text)`
 
 const $ButtonTextSmall = styled(Text)`
     color : #15ff94;
-    font-size: 12px;
+    font-size: 10px;
 `
 
 const $Footer = styled(Footer)`
     background-color : #111111;
     color : white;
-    height : 80px;
+    height : 65px;
+    border-top-color : #555;
+    border-style : solid;
+    border-width : 1px;
 `
 const $FooterTab = styled(FooterTab)`
     background-color : #111111;
 `
 
 const $FooterImage = styled.Image`
-    width : 30px;
+    width : 20px;
     resize-mode : contain;
 `
 const $FooterText = styled.Text`
     color : white;
     text-align : center;
-    padding-top : 3px;
 `
+
 const renderPagination = (index, total, context) => {
     return (
       <$PaginationView>
@@ -164,7 +167,7 @@ const renderPagination = (index, total, context) => {
       </$PaginationView>
     )
   }
-  const supportedURL = "https://google.com";
+
   const slideURL01 = "https://www.smartmall.kr/product/detail.html?product_no=121&cate_no=57&display_group=1";
   const slideURL02 = "https://www.smartmall.kr/product/detail.html?product_no=27&cate_no=93&display_group=1";
   const slideURL03 = "https://www.smartmall.kr/product/detail.html?product_no=17&cate_no=57&display_group=1";
@@ -193,6 +196,13 @@ function Logged( props ) {
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
     const [isBeacon, setIsBeacon] = useState('N');  // 비콘이 근처에 있는지
+    const [MbInfo, setMbInfo]   = useState({
+        mb_name:'',
+        p_name:'',
+        sdate:'',
+        edate:'',
+        count : ''
+    });
     const store = useSelector(state => state.data);
     is_key = props.is_key;    
     
@@ -222,6 +232,41 @@ function Logged( props ) {
         .catch( error => console.log(error) );        
         
             
+        AsyncStorage.getItem('access_token')
+        .then( result => {
+            access_token = result 
+            member_one();
+        })
+        .catch( error => console.log('TAG', error)); 
+
+        const member_one = () => {
+
+            console.log('TAG: member_one()');       
+             
+            // 회원정보 로딩
+            const url = store.url + '/slim/member_one';       
+            const data = {
+                sid: cfg.sid,
+                cid: cfg.cid,
+                access_token: access_token
+            } 
+            axios.post(url,data,{timeout:3000})
+            .then( result => {   
+                const a = moment();
+                const b = moment(result.data.edate);
+                const dateDiff = b.diff(a, 'days');
+                const formatEdate = moment(result.data.edate).format( "YYYY-MM-DD")
+                setMbInfo({
+                    mb_name: result.data.mb_name,
+                    p_name: result.data.p_name,
+                    sdate: result.data.sdate,
+                    edate: formatEdate,
+                    count : dateDiff
+                 });
+            })
+            .catch(error=>console.log(error));
+    
+        }
                
         // // 프로그램 종료시 비콘끄기
         // return () => {
@@ -326,6 +371,15 @@ function Logged( props ) {
     function btn_mypage(){
         console.log('TAG: btn_mypage()');
         navigation.push('MyInfo')
+    }
+
+    function btn_home(){
+        console.log('TAG: btn_home()');
+    }
+
+    function btn_cart(){
+        console.log('TAG: btn_cart()');
+        navigation.push('Purchase')
     }
 
     function btn_cardpay(){
@@ -508,14 +562,15 @@ function Logged( props ) {
             }
 
             <$SatusView>
-                <$StatusNameText>홍길동님, 반갑습니다.{'\u00A0'}{'\u00A0'}
-                    <$StatusPriodText>이용가능기간 ~2020.08.20
-                        <$StatusHighLightText>(30일 남음)</$StatusHighLightText>
-                    </$StatusPriodText>
+                <$StatusNameText>{MbInfo.mb_name}님, 반갑습니다.{'\u00A0'}{'\u00A0'}
+                { is_key == 'Y' ? <$StatusPriodText>이용가능기간 ~{MbInfo.edate}{'\u00A0'}
+                                    <$StatusHighLightText>({MbInfo.count}일 남음)</$StatusHighLightText>
+                                </$StatusPriodText> : null }
+                { is_key == 'N' ? <$StatusPriodText>이용 가능한 스마트키가 없습니다.</$StatusPriodText> : null }
                 </$StatusNameText>
             </$SatusView>
-            <View style={{flex : 1, flexDirection : 'column'}}>
-                <Slick style={{height : height, paddingBottom:50 }} showsPagination={true} renderPagination={renderPagination} autoplay={true} speed={700}>
+            <View style={{flex : 1, flexDirection : 'column', backgroundColor : '#111111'}}>
+                <Slick style={{height : height, paddingBottom:50 }} showsPagination={true} renderPagination={renderPagination} autoplay={true} autoplayTimeout={6}>
                     <$SlideView>
                         <SlideUrl url={slideURL01} img={require('../images/banner1.png')} />
                     </$SlideView>
@@ -529,10 +584,9 @@ function Logged( props ) {
                         <SlideUrl url={slideURL04} img={require('../images/banner4.png')} />
                     </$SlideView>
                 </Slick>
-                {/* <OpenURLButton url={supportedURL}>Open Supported URL</OpenURLButton> */}
                 
-                <View style={{flex : 1, flexDirection : 'row'}}>
-                    { ( isBeacon == 'Y' &&                 
+                <View style={{flex : 1, flexDirection : 'row', backgroundColor : '#111111'}}>
+                    { ( ( is_key == 'Y' && isBeacon == 'Y' ) &&                 
                     <$DoorButtonView style={{backgroundColor : '#1ad57c'}} onPress={()=>btn_door_open()}>
                         <$DoorButtonImg source={require('../images/icon_key.png')} />
                         <$ButtonText>
@@ -540,16 +594,26 @@ function Logged( props ) {
                         </$ButtonText>
                     </$DoorButtonView>
                     )}
-                    { ( (isBeacon == 'N' ||  isBeacon=='null') && 
+                    { ( ( is_key == 'Y' && (isBeacon == 'N' ||  isBeacon=='null') ) && 
                     <$DoorButtonView style={{backgroundColor : '#111111'}} onPress={()=>no_door_message()}>
                         <$DoorButtonImg source={require('../images/icon_key.png')} />
                         <$ButtonText>
                             <$ButtonTextHighLight>출입구 가까이</$ButtonTextHighLight> 가시면 {"\n"}
-                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight> 됩니다.{"\n"}
-                            <$ButtonTextSmall>* 이용기간 종료시 버튼 비활성화</$ButtonTextSmall>
+                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight> 됩니다.
                         </$ButtonText>
+                        <$ButtonTextSmall>* 이용기간 종료시 버튼 비활성화</$ButtonTextSmall>
                     </$DoorButtonView>
-                    ) }                
+                    ) }    
+                    { ( ( is_key == 'N' ) && 
+                    <$DoorButtonView style={{backgroundColor : '#111111'}} onPress={()=>btn_cardpay()}>
+                        <$DoorButtonImg source={require('../images/icon_key.png')} />
+                        <$ButtonText>
+                            <$ButtonTextHighLight>출입구 가까이</$ButtonTextHighLight> 가시면 {"\n"}
+                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight> 됩니다.
+                        </$ButtonText>
+                        <$ButtonTextSmall>* 이용기간 종료시 버튼 비활성화</$ButtonTextSmall>
+                    </$DoorButtonView>
+                    ) }             
                     { ( (isBeacon == 'F') && 
                     <$DoorButtonView style={{backgroundColor : '#363636'}} onPress={()=>no_door_message()}>
                         <$DoorButtonImg source={require('../images/icon_key.png')} />
@@ -576,7 +640,7 @@ function Logged( props ) {
                 </Button>
                 <Button vertical onPress={()=>btn_cart()}>
                     <$FooterImage source={require('../images/icon_cart.png')} ></$FooterImage>
-                    <$FooterText>등록정보</$FooterText>
+                    <$FooterText>구매내역</$FooterText>
                 </Button>
                 <Button vertical onPress={()=>btn_mypage()}>
                     <$FooterImage source={require('../images/icon_mypage.png')} ></$FooterImage>

@@ -9,6 +9,7 @@ import AgreeScreen from '../components/AgreeScreen';
 import JoinScreen1 from '../components/JoinScreen1';
 import JoinScreen2 from '../components/JoinScreen2';
 import MyInfoScreen from '../components/MyInfoScreen';
+import PurchaseScreen from '../components/PurchaseScreen';
 import NetworkScreen from '../components/NetworkScreen';
 import CardPayScreen from '../components/CardPayScreen';
 import CardPayStartScreen from '../components/CardPayStartScreen';
@@ -47,6 +48,12 @@ const AppNavigator = createStackNavigator({
       title: 'TEST'
     })       
   }, 
+  Purchase: {
+    screen: PurchaseScreen,
+    navigationOptions: ({
+      title: 'Purchase'
+    })       
+  },  
   MyInfo: {
     screen: MyInfoScreen,
     navigationOptions: ({
