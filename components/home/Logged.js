@@ -223,6 +223,12 @@ function Logged( props ) {
 
             uuid = result;
 
+            // 개발용 비콘
+            if(store.debug_beacon == 'Y')
+            {
+                uuid=store.dubug_beacon_uuid;
+            }
+
             if(uuid == '' ) {
                 alert('비콘정보 수신오류');
                 return;
@@ -569,7 +575,7 @@ function Logged( props ) {
 
         <Content scrollEnabled={false}>
             
-            { show_distance == 'Y' &&
+            { store.debug_beacon_distance == 'Y' &&
                 <>
                     <Text> * 디버그 모드 * </Text>
                     <Text>최소거리: {cfg.beacon_range} </Text>
