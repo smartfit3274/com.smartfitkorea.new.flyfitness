@@ -257,7 +257,7 @@ function Logged( props ) {
             console.log('TAG: member_one()');       
              
             // 회원정보 로딩
-            const url = store.url + '/slim/member_one';       
+            const url = store.url + '/slim/member_one';
             const data = {
                 sid: cfg.sid,
                 cid: cfg.cid,
@@ -350,16 +350,20 @@ function Logged( props ) {
         .then(() => Beacons.startRangingBeaconsInRegion(region) )
         .then(() => {
             DeviceEventEmitter.addListener(
-                'beaconsDidRange', 
-                response=> {          
+                
+                'beaconsDidRange', response=> {         
 
-                    console.log(response);
+                    if(store.debug_beacon_console==='Y') {
+                        console.log(response);
+                    }
 
                     let count = 0;
                     response.beacons.forEach(beacon => {                                 
                         count++;
                         if(beacon.distance) {     
-                            console.log('TAG: found beacon', beacon.distance);                                           
+                            if(store.debug_beacon_console==='Y') {
+                                console.log('TAG: found beacon', beacon.distance);                                           
+                            }
                         }
                         else {
                             console.log('TAG: no beacon!');
@@ -384,10 +388,11 @@ function Logged( props ) {
                     if(disconnectCount > 9) {
                         setIsBeacon('N');
                         disconnectCount = 0;
-                    }
-                    console.log('disconnectCount',disconnectCount);
-                    
-            })                               
+                    }                    
+                    if(store.debug_beacon_console==='Y') {
+                        console.log('disconnectCount',disconnectCount);
+                    } 
+                })
         })
         .catch( error => alert('비콘초기화 오류',error) );                           
     }

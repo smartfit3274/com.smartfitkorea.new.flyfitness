@@ -105,16 +105,16 @@ function HomeScreen(props) {
     .then( result => access_token = result )    
     .then( get_refresh_token )
     .then( result => refresh_token = result )
-    .then( () => access_token_check ( {access_token:access_token,url:store.url, sid:store.sid} ) )
+    .then( ( access_token ) => access_token_check ( access_token,store.url, store.sid ) )
     .then( result => is_access_token = result )
-    .then( () => check_key({refresh_token:refresh_token, url:store.url , sid:store.sid}) )
+    .then( ( access_token ) => check_key( access_token, store.url , store.sid, store.cid) )
     .then( result => is_key = result )
     .then ( ()=> {
       console.log('done!');
-      // console.log('access_token',access_token);
-      // console.log('refresh_token',refresh_token);
-      // console.log('is_access_token',is_access_token);
-      // console.log('is_key',is_key);
+      console.log('access_token',access_token);
+      console.log('refresh_token',refresh_token);
+      console.log('is_access_token',is_access_token);      
+      console.log('is_key',is_key);
       handle_login();
     })    
     .catch( error => console.log(error) );

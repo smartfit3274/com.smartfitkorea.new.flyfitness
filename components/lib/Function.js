@@ -89,10 +89,12 @@ export const net_state = () => {
 }
 
 // 엑세스 토큰이 유효한지 검사
-export const access_token_check = params => {  
-    console.log('access_token_check();');
-    const { access_token , url, sid } = params;
+export const access_token_check = (access_token, url, sid) => {  
     
+    console.log(access_token);
+    console.log(url);
+    console.log(sid);
+
     return new Promise (function ( resolve, reject ) {
         if(access_token == null || access_token =='') {
             resolve('N');
@@ -143,12 +145,11 @@ export const write_access_token = access_token => {
 
 
 // 출입키가 있는지 확인
-export const check_key = params => {   
-    console.log('check_key();');
-    const { access_token , url, sid } = params;
-
+export const check_key = (access_token, url , sid, cid ) => {   
+    console.log('check_key();');    
     const data = {
-        sid: sid,      
+        sid: sid, 
+        cid: cid,     
         access_token : access_token
     }    
 
