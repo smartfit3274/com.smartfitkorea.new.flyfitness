@@ -45,7 +45,7 @@ export const open_door = () => {
 
 // 엑세스 토큰 읽기
 export const get_access_token = () => {    
-    console.log('get_access_token();');
+    console.log('get_access_token()');
     return new Promise (function (resolve , reject ) {
         AsyncStorage.getItem('access_token')
         .then( result => { 
@@ -59,7 +59,7 @@ export const get_access_token = () => {
 
 // 리프레시 토큰 읽기
 export const get_refresh_token = () => {
-    console.log('get_refresh_token();');
+    console.log('get_refresh_token()');
     return new Promise (function (resolve , reject ) {
         AsyncStorage.getItem('refresh_token')
         .then( result => {         
@@ -73,7 +73,7 @@ export const get_refresh_token = () => {
 
 // 인터넷 연결확인
 export const net_state = () => {   
-    console.log('net_state();');        
+    console.log('net_state()');        
     return new Promise(function ( resolve, reject ) {
         NetInfo.fetch()
         .then( result => { 
@@ -90,13 +90,11 @@ export const net_state = () => {
 
 // 엑세스 토큰이 유효한지 검사
 export const access_token_check = (access_token, url, sid) => {  
-    
-    console.log(access_token);
-    console.log(url);
-    console.log(sid);
+ 
+    console.log('access_token_check()');
 
     return new Promise (function ( resolve, reject ) {
-        if(access_token == null || access_token =='') {
+        if(access_token == null || access_token =='') {            
             resolve('N');
         }
 
@@ -114,7 +112,7 @@ export const access_token_check = (access_token, url, sid) => {
 
 // 자동로그인
 export const create_access_token = params => {
-    console.log('create_access_token();');
+    console.log('create_access_token()');
     const { refresh_token , url, sid } = params;
 
     const data = {
@@ -146,25 +144,30 @@ export const write_access_token = access_token => {
 
 // 출입키가 있는지 확인
 export const check_key = (access_token, url , sid, cid ) => {   
-    console.log('check_key();');    
+    console.log('check_key()');    
     const data = {
         sid: sid, 
         cid: cid,     
         access_token : access_token
-    }    
+    }   
+
+    console.log(access_token);
 
     return new Promise(function( resolve, reject ){
         axios.post(url+'/slim/check_key',data,{timeout:3000})
         .then( result => {
             resolve(result.data.ret);
         })
-        .catch( resolve('N') );      
+        .catch( (err)=>{
+            console.log(err);
+            resolve('N');
+        } );      
     });
 }
 
 // 비콘 uuid 가져오기
 export const get_uuid = params => {
-    console.log('get_uuid();');
+    console.log('get_uuid()');
 
     const { sid,cid,url } = params;
     const data = {

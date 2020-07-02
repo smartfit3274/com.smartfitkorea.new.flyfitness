@@ -95,36 +95,43 @@ function HomeScreen(props) {
     
     var isConnected;
     net_state()
-    .then( result => isConnected = result )
-    .then( () => {
+    .then( result => {
+      isConnected = result;
       if( isConnected == false ) {
         navigation.navigate('Network');
-      }      
+      }
+      return get_access_token();
+    })
+    .then( result => {
+      access_token = result;
+      return get_refresh_token();
+    })
+    .then( result => {
+      refresh_token = result;          
+      return access_token_check ( access_token,store.url, store.sid );      
     })    
-    .then( get_access_token )
-    .then( result => access_token = result )    
-    .then( get_refresh_token )
-    .then( result => refresh_token = result )
-    .then( ( access_token ) => access_token_check ( access_token,store.url, store.sid ) )
-    .then( result => is_access_token = result )
-    .then( ( access_token ) => check_key( access_token, store.url , store.sid, store.cid) )
-    .then( result => is_key = result )
-    .then ( ()=> {
-      console.log('done!');
-      console.log('access_token',access_token);
-      console.log('refresh_token',refresh_token);
+    .then( result => {
+      is_access_token = result;
+      return check_key( access_token , store.url, store.sid , store.cid );
+    })
+    .then ( result => {
+      is_key = result;
+
+      // console.log('access_token',access_token);
+      // console.log('refresh_token',refresh_token);
       console.log('is_access_token',is_access_token);      
       console.log('is_key',is_key);
       handle_login();
-    })    
+    })
     .catch( error => console.log(error) );
+   
 
   },[]);
 
   return (              
       <Container> 
         { isLogin == '' ? <Loading/> : null }      
-        { isLogin == 'Y' ? <Logged is_key={is_key} /> : null }      
+        { isLogin == 'Y' ? <Logged params={{is_key:is_key, access_token: access_token }} /> : null }      
         { isLogin == 'N' ? <Login/> : null }              
       </Container>       
   );

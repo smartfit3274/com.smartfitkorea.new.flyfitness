@@ -206,88 +206,89 @@ function Logged( props ) {
     });
     const store = useSelector(state => state.data);
     is_key = props.is_key;
-   
+    access_token = props.access_token;   
 
     // 시작
     useEffect(()=>{
         
         console.log('Logged() --- start');
 
-        // console.log('sid',store.sid);
-        // console.log('cid',store.cid);
-        // console.log('url',store.url);
+        console.log('access_token',access_token);
 
         // 비콘ID 서버에서 내려받기
-        get_uuid( { cid:store.cid, sid:store.sid, url:store.url} )
-        .then( result => { 
+        // 구매한 키가 있는경우 비콘 처리 시작
+        if(is_key === 'Y')
+        {
 
-            uuid = result;
+            get_uuid( { cid:store.cid, sid:store.sid, url:store.url} )
+            .then( result => { 
 
-            // 개발용 비콘
-            if(store.debug_beacon == 'Y')
-            {
-                uuid=store.dubug_beacon_uuid;
-            }
+                uuid = result;
 
-            if(uuid == '' ) {
-                alert('비콘정보 수신오류');
-                return;
-            }
-            
-            if( Platform.OS=='ios' ) {
-                start_beacon_ios()
-            }
+                // 개발용 비콘
+                if(store.debug_beacon == 'Y')
+                {
+                    uuid=store.dubug_beacon_uuid;
+                }
 
-            if( Platform.OS=='android' ) {
-                start_beacon_android();
-            }
-        })
-        .catch( error => console.log(error) );        
-        
-            
-        AsyncStorage.getItem('access_token')
-        .then( result => {
-            access_token = result 
-            member_one();
-        })
-        .catch( error => console.log('TAG', error)); 
+                if(uuid == '' ) {
+                    alert('비콘정보 수신오류');
+                    return;
+                }
+                
+                if( Platform.OS=='ios' ) {
+                    start_beacon_ios()
+                }
 
-        const member_one = () => {
-
-            console.log('TAG: member_one()');       
-             
-            // 회원정보 로딩
-            const url = store.url + '/slim/member_one';
-            const data = {
-                sid: cfg.sid,
-                cid: cfg.cid,
-                access_token: access_token
-            } 
-            axios.post(url,data,{timeout:3000})
-            .then( result => {   
-                const a = moment();
-                const b = moment(result.data.edate);
-                const dateDiff = b.diff(a, 'days');
-                const formatEdate = moment(result.data.edate).format( "YYYY-MM-DD")
-                setMbInfo({
-                    mb_name: result.data.mb_name,
-                    p_name: result.data.p_name,
-                    sdate: result.data.sdate,
-                    edate: formatEdate,
-                    count : dateDiff
-                 });
+                if( Platform.OS=='android' ) {
+                    start_beacon_android();
+                }
             })
-            .catch(error=>console.log(error));
-    
-        }
-               
-        // 프로그램 종료시 비콘 리스너 종료
-        return () => {
-            DeviceEventEmitter.removeAllListeners();      
-        }        
-        
-    },[]);
+            .catch( error => console.log(error) );        
+            
+                
+            AsyncStorage.getItem('access_token')
+            .then( result => {
+                access_token = result 
+                member_one();
+            })
+            .catch( error => console.log('TAG', error)); 
 
+            const member_one = () => {
+
+                console.log('TAG: member_one()');       
+                
+                // 회원정보 로딩
+                const url = store.url + '/slim/member_one';
+                const data = {
+                    sid: cfg.sid,
+                    cid: cfg.cid,
+                    access_token: access_token
+                } 
+                axios.post(url,data,{timeout:3000})
+                .then( result => {   
+                    const a = moment();
+                    const b = moment(result.data.edate);
+                    const dateDiff = b.diff(a, 'days');
+                    const formatEdate = moment(result.data.edate).format( "YYYY-MM-DD")
+                    setMbInfo({
+                        mb_name: result.data.mb_name,
+                        p_name: result.data.p_name,
+                        sdate: result.data.sdate,
+                        edate: formatEdate,
+                        count : dateDiff
+                    });
+                })
+                .catch(error=>console.log(error));
+        
+            }
+                
+            // 프로그램 종료시 비콘 리스너 종료
+            return () => {
+                DeviceEventEmitter.removeAllListeners();      
+            }   
+        }        
+    },[]);
 
     // 비콘 시작
     const start_beacon_ios = () => {
