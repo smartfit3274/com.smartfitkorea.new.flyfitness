@@ -117,7 +117,7 @@ function HomeScreen(props) {
     .then ( result => {
       is_key = result;
 
-      // console.log('access_token',access_token);
+      //console.log('access_token',access_token);
       // console.log('refresh_token',refresh_token);
       console.log('is_access_token',is_access_token);      
       console.log('is_key',is_key);

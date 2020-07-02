@@ -149,9 +149,7 @@ export const check_key = (access_token, url , sid, cid ) => {
         sid: sid, 
         cid: cid,     
         access_token : access_token
-    }   
-
-    console.log(access_token);
+    }
 
     return new Promise(function( resolve, reject ){
         axios.post(url+'/slim/check_key',data,{timeout:3000})
