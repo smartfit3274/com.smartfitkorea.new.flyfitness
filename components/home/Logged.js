@@ -134,6 +134,7 @@ const $ButtonTextHighLight = styled(Text)`
 `
 
 const $ButtonTextSmall = styled(Text)`
+    padding-top: 3px;
     color : #15ff94;
     font-size: 10px;
 `
@@ -210,7 +211,7 @@ function Logged( props ) {
     // 회원정보 로딩
     const member_one = () => {
 
-        console.log('TAG: member_one()');       
+        console.log('member_one()');
                 
         const url = store.url + '/slim/member_one';
         const data = {
@@ -218,8 +219,6 @@ function Logged( props ) {
             cid: cfg.cid,
             access_token: access_token
         } 
-
-        console.log(data);
         axios.post(url,data,{timeout:3000})
         .then( result => {   
             const a = moment();
@@ -273,13 +272,7 @@ function Logged( props ) {
                     start_beacon_android();
                 }
             })
-            .catch( error => console.log(error) );        
-            
-                
-            
-                
-            
-            
+            .catch( error => console.log(error) );
                 
             // 프로그램 종료시 비콘 리스너 종료
             return () => {
@@ -628,7 +621,7 @@ function Logged( props ) {
                         <$DoorButtonImg source={require('../images/icon_key.png')} />
                         <$ButtonText>
                             <$ButtonTextHighLight>출입구 가까이</$ButtonTextHighLight> 가시면 {"\n"}
-                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight> 됩니다.
+                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight>됩니다.
                         </$ButtonText>
                         <$ButtonTextSmall>* 이용기간 종료시 버튼 비활성화</$ButtonTextSmall>
                     </$DoorButtonView>
@@ -638,7 +631,7 @@ function Logged( props ) {
                         <$DoorButtonImg source={require('../images/icon_key.png')} />
                         <$ButtonText>
                             <$ButtonTextHighLight>출입구 가까이</$ButtonTextHighLight> 가시면 {"\n"}
-                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight> 됩니다.
+                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight>됩니다.
                         </$ButtonText>
                         <$ButtonTextSmall>* 이용기간 종료시 버튼 비활성화</$ButtonTextSmall>
                     </$DoorButtonView>

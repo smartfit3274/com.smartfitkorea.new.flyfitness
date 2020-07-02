@@ -7,6 +7,9 @@ import NetInfo from "@react-native-community/netinfo";
 // 문열기 요청
 export const open_door = () => {
 
+    alert('준비중!!!');
+    
+    /*
     let access_token = '';
     AsyncStorage.getItem('access_token')
     .then(result => {            
@@ -41,6 +44,7 @@ export const open_door = () => {
 
     })
     .catch( error => alert(error));
+    */
 }
 
 // 엑세스 토큰 읽기
