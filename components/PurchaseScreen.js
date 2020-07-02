@@ -23,7 +23,6 @@ import {
     Alert,
     StyleSheet
 } from 'react-native';
-import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';

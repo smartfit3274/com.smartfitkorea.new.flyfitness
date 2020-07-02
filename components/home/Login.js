@@ -177,7 +177,7 @@ function Login () {
               <Text onPress={()=>btn_find_pass()}>비밀번호를 잊어버리셨나요?</Text>
           </LostPassContainer>
 
-          <CompanyText></CompanyText>
+          {/* <CompanyText></CompanyText> */}
       </ScrollView>
   );  
 }
