@@ -6,12 +6,17 @@ import { createStore } from 'redux'
 const INITIAL_STATE = {
   data: {
     url     : "",      
-    mode    : "server",
+    mode    : "local",
     local   : "http://192.168.76.51:80",   
     server  : "https://admin.smartg.kr",
     sid     : "smartgym",    
     cid     : "CT14Z01170314.HXZb9",
     name    : "스마트짐 옥포점",
+    debug_beacon_local   : "N",
+    dubug_beacon_uuid: "0b2b0848-205f-11e9-ab14-820316983006",
+    debug_beacon_distance : "N",
+    debug_beacon_console : "N",
+    debug_door : "33",
   }
 }
 
