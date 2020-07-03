@@ -32,6 +32,15 @@ import cfg from "./data/cfg.json";
 import axios from 'axios';
 import {useSelector, useDispatch} from 'react-redux';
 import moment from "moment";
+import {
+    get_access_token, 
+    get_refresh_token, 
+    net_state,
+    access_token_check,
+    create_access_token,
+    write_access_token,
+    check_key
+  } from './lib/Function';
 
 const ItemStyle = styled(Item)`    
     height:60px;
@@ -55,58 +64,12 @@ const LabelBodyStyle = styled(Label)`
 
 var access_token = '';
 var refresh_token = '';
-var url = '';
 
 function PurchaseScreen() {
 
     const navigation = useNavigation();
     const [PurchaseInfo, setPurchaseInfo] = useState([]);
     const store = useSelector(state => state.data);
-
-    useEffect(()=>{
-
-        // 토큰 가져오기
-        AsyncStorage.getItem('access_token')
-        .then( result => { 
-            access_token = result 
-
-            AsyncStorage.getItem('refresh_token')
-            .then ( result => { 
-                refresh_token = result 
-
-                //console.log('access_token', access_token);
-                //console.log('refresh_token', refresh_token);
-
-                // 토큰검사
-                const url = store.url + '/slim/checkAccessToken';
-                const data = {
-                    sid: store.sid,
-                    access_token: access_token
-                }
-
-                axios.post(url,data,{timeout:3000})
-                .then(result => {
-                    const {ret} = result.data;
-                    if(ret == 'Y')                    
-                    {
-                        member_purchase();
-                    }                      
-                })
-                .catch( error => console.log('TAG',error));
-
-            })
-            .catch( error => console.log('TAG', error));         
-
-        })
-        .catch ( error => console.log('TAG',error) )
-        .then ( () => {
-            if(access_token=='' || refresh_token=='') {
-                error_close();    
-            }            
-        });
-
-    },[]);    
-
 
     const member_purchase = () => {
 
@@ -127,7 +90,13 @@ function PurchaseScreen() {
 
     }
 
-    function error_close() {
+
+    const btn_close = () => {
+        navigation.pop();
+    }
+
+
+    const error_close = () => {
         Alert.alert(
             '오류',
             '권한이 없거나 로그인 상태가 아닙니다.',
@@ -139,10 +108,27 @@ function PurchaseScreen() {
         navigation.pop();
     }
 
-    function btn_close() {
-        navigation.pop();
-    }
+    
+    useEffect(()=>{
+        
+        get_access_token()
+        .then( result=> {
+            access_token = result;
+            return get_refresh_token();
+        })
+        .then( result=> {
+            refresh_token = result;
+            return access_token_check ( access_token,store.url, store.sid ); 
+        })
+        .then( result => {
+            is_access_token = result;
+            member_purchase();
+        })        
+        .catch(error => alert(error));
 
+    },[]);
+
+    
     return (
       <>
         <Header style={{backgroundColor:'#454545'}}>

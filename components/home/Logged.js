@@ -398,8 +398,8 @@ function Logged( props ) {
         console.log('TAG: btn_home()');
     }
 
-    function btn_cart(){
-        console.log('TAG: btn_cart()');
+    function btn_purchase(){
+        console.log('TAG: btn_purchase()');
         navigation.push('Purchase')
     }
 
@@ -639,7 +639,7 @@ function Logged( props ) {
                     <$FooterImage source={require('../images/icon_home.png')} ></$FooterImage>
                     <$FooterText>홈</$FooterText>
                 </Button>
-                <Button vertical onPress={()=>btn_cart()}>
+                <Button vertical onPress={()=>btn_purchase()}>
                     <$FooterImage source={require('../images/icon_cart.png')} ></$FooterImage>
                     <$FooterText>구매내역</$FooterText>
                 </Button>
