@@ -24,8 +24,7 @@ import cfg from "./data/cfg.json";
 import styled from "styled-components/native";
 import IMP from 'iamport-react-native';
 import Loading from './Loading';
-
-var access_token = '';
+import {useSelector, useDispatch} from 'react-redux';  
 
 const TextContainer = styled(View)`
     justify-content:center;
@@ -47,6 +46,8 @@ function CardPayStartScreen() {
         pid,
         sdate,
     } = params;     
+    const store = useSelector(state => state.data);
+
 
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
@@ -68,28 +69,18 @@ function CardPayStartScreen() {
         app_scheme: 'myawesomeapp',
         mcd: mcd,
         pid: pid,
-        sid: cfg.sid,
+        sid: store.sid,
         sdate: sdate,
     }       
 
-    // console.log(data);
+
 
     // 결제정보 저장
-    let url = '';    
-    if(cfg.mode =='http') { url = cfg.http.host; }
-    if(cfg.mode =='https') { url = cfg.https.host; }
-    url = url + '/rest/cardPayStart'; 
-    const config = {
-        timeout: 3000
-    }
-    Axios.post(url,data,config)
-    .then(function(res){
-        console.log('success');        
-    })
+    const url = store.url + '/slim/card_pay_start'; 
+    Axios.post(url,data,{timeout:3000})
+    .then(result => console.log(result))
     .catch(function(error){
-        console.log(error);
-        // 결제창 종료
-
+        alert(error);
     });   
  
     // return (<View><Text>DEBUG</Text></View>)

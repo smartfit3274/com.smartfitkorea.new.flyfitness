@@ -17,8 +17,11 @@ const INITIAL_STATE = {
     debug_beacon_distance : "N",
     debug_beacon_console : "N",
     debug_door : "33",
+    iamport:"iamport"
   }
 }
+
+// iamport:"imp76426114"
 
 function fetch(state = INITIAL_STATE, action) {
   if(action.type==='GET' && action.name==="URL") {

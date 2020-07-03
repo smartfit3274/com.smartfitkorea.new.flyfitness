@@ -40,7 +40,7 @@ import {
     create_access_token,
     write_access_token,
     check_key
-  } from './lib/Function';
+ } from './lib/Function';
 
 const ItemStyle = styled(Item)`    
     height:60px;
@@ -64,6 +64,7 @@ const LabelBodyStyle = styled(Label)`
 
 var access_token = '';
 var refresh_token = '';
+var is_access_token = 'N';
 
 function PurchaseScreen() {
 
@@ -74,6 +75,12 @@ function PurchaseScreen() {
     const member_purchase = () => {
 
         console.log('TAG: member_purchase()');       
+
+        // 권한검사
+        if( is_access_token === 'N') {
+            error_close();
+            return;
+        }
 
         // 회원정보 로딩
         const url = store.url + '/slim/member_purchase';       

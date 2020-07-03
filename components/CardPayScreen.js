@@ -33,12 +33,22 @@ import {format} from 'date-fns';
 import {Container,Content,Separator} from 'native-base'
 import { setDate } from 'date-fns/esm';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import {
+    get_access_token, 
+    get_refresh_token, 
+    net_state,
+    access_token_check,
+    create_access_token,
+    write_access_token,
+    check_key
+} from './lib/Function';
+import {useSelector, useDispatch} from 'react-redux';  
 
 let access_token = '';
 let refresh_token = '';
+let is_access_token = 'N';
 let mcd = '';
-let url = '';
-let data = {}
+let rows = {}
 
 const TextContainer = styled(View)`
     justify-content:center;
@@ -53,69 +63,34 @@ function CardPayScreen() {
     const [listItem, setListItem] = useState([]);
     const [sdate,setSDate] = useState(null);
     const [show, setShow] = useState(false);
-    
-    useEffect(()=>{        
-        console.log('TAG: * start *');
-        AsyncStorage.getItem('access_token')
-        .then(result => {
-            access_token = result;
+    const store = useSelector(state => state.data);
 
-            console.log(access_token);
-
-            // 회원정보 로딩
-            url = '';    
-            if(cfg.mode =='http') { url = cfg.http.host; }
-            if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/token/decode';                          
-            data = {
-                sid:cfg.sid,
-                cid:cfg.cid,
-                access_token: access_token
-            }    
-            Axios.post(url,data,{timeout:3000})
-            .then(result => { 
-                mcd = result.data.mb_id 
-            })
-            .catch(error => console.log(error));
-
-            // 상품로딩
-            url = '';    
-            if(cfg.mode =='http') { url = cfg.http.host; }
-            if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/rest/get_product_list';        
-            data = {
-                sid:cfg.sid,
-                cid:cfg.cid,
-                access_token: access_token
-            }    
-            Axios.post(url,data,{timeout:3000})
-            .then( res => {
-                console.log(res.data);
-                setListItem(res.data);         
-            })
-            .catch(error => console.log(error));
-
-        })
-        .catch( error => console.log(error));
-
-    },[]);  
-
-    function btn_close() {
+    const btn_close = () => {
         navigation.pop();
-    }
+    }    
     
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
         navigation.replace('PaymentResult', response);
     }
 
-    // cfg > usercode
-    function btn_cardpay(name,amount,pid){
-        
+    // 달력 팝업
+    const btn_calendar = () => {
+        setShow(true);
+    }
+
+    // 날짜선택
+    const handle_picker = (selectedDate) => {
+        setShow(false);
+        setSDate(format(selectedDate,'yyyy-MM-dd'));
+    }
+
+    const btn_cardpay = (name,amount,pid) => {
+            
         if(sdate==null) {
             Alert.alert(
-                '안내',
-                '먼저 시작일을 선택하세요.',
+                '결제오류',
+                '시작일을 선택하세요.',
                 [{text:'ok',onPress:()=>console.log('OK pressed')}],
                 {
                     cancelable:false,
@@ -124,14 +99,7 @@ function CardPayScreen() {
             return false;                
         }
         
-        let userCode = cfg.iamport;
-
-        // TEST MODE
-        if(false) {
-            amount = 10;
-            userCode = "iamport";
-        }
-
+        const userCode = store.iamport;       
         var params = {
             userCode : userCode,
             name : name,
@@ -139,13 +107,13 @@ function CardPayScreen() {
             mcd : mcd,
             pid : pid,
             sdate: sdate,
-        }
-        // console.log(params);
+        }        
         navigation.navigate('CardPayStart',{params:params});
     }
 
-    // 결제완료페이지 TEST
-    function btn_result() {
+
+    // 결제완료페이지 직접호출 (디자인 및 결과TEST)
+    const btn_result = () => {
         console.log('result();');        
         const response = {
             "imp_success": "true", 
@@ -154,18 +122,64 @@ function CardPayScreen() {
             "error_msg":"오류메시지"
         }
         navigation.navigate('CardPayResult',{response:response});
-    }
+    }    
 
-    // 달력 팝업
-    function btn_calendar() {
-        setShow(true);
-    }
+    const product_list = () => {
+        console.log('product_list()')
+        const data = {
+            sid:store.sid,
+            cid:store.cid,
+            access_token : access_token
+        }
+        
+        Axios.post(store.url+'/slim/get_product_list',data,{timeout:3000})
+        .then( result => {
+            // console.log(result.data);
+            setListItem(result.data);         
+        }) 
+        .catch( error=> console.log(error));
+    }    
 
-    // 날짜선택
-    function handle_picker(selectedDate) {
-        setSDate(format(selectedDate,'yyyy-MM-dd'));
-        setShow(false);
-    }
+    useEffect(()=>{        
+        console.log('START >>>');
+
+        get_access_token()
+        .then( result=> {
+            access_token = result;
+            return get_refresh_token();
+        })
+        .then( result=> {
+            refresh_token = result;
+            return access_token_check ( access_token,store.url, store.sid ); 
+        })
+        .then( result => {
+            is_access_token = result;            
+            // console.log('access_token',access_token);
+            // console.log('refresh_token',refresh_token);
+            // console.log('is_access_token',is_access_token);
+
+            // 회원ID
+            const data = {
+                sid:store.sid,
+                cid:store.cid,
+                access_token: access_token            
+            }
+            const url = store.url + '/slim/token/decode'
+            Axios.post(url,data,{timeout:3000})
+            .then(result => { 
+                // console.log(result.data);
+                mcd = result.data.mb_id;
+
+                // 상품리스트 출력
+                product_list();
+            })
+            .catch(error=> alert(error));
+
+        })        
+        .catch(error => alert(error));
+
+    },[]);  
+
 
     return (
       <Container>
@@ -184,7 +198,7 @@ function CardPayScreen() {
 
         <DateTimePicker
           isVisible={show}
-          onConfirm={(date)=>handle_picker(date)}
+          onConfirm={date=>handle_picker(date)}
           onCancel={()=>setShow(false)}
         />
         
