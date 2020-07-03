@@ -228,7 +228,8 @@ function CardPayScreen() {
                             </Left>
                     
                             <Right>
-                                <Button info block style={{marginTop:10,marginBottom:10}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}>
+                                {/* <Button info block style={{marginTop:10,marginBottom:10}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}> */}
+                                <Button info block style={{marginTop:10,marginBottom:10}} onPress={()=>alert('준비중인 기능입니다.')}>
                                     <Text>구매</Text>
                                 </Button>                         
                             </Right>

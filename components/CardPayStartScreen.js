@@ -70,23 +70,16 @@ function CardPayStartScreen() {
         app_scheme: 'myawesomeapp',
         mcd: mcd,
         pid: pid,
-        sid: cfg.sid,
+        sid: store.sid,
         sdate: sdate,
-    }       
+    }    
 
     // console.log(data);
 
-    // 결제정보 저장
-    let url = '';    
-    if(cfg.mode =='http') { url = cfg.http.host; }
-    if(cfg.mode =='https') { url = cfg.https.host; }
-    url = url + '/rest/cardPayStart'; 
-    const config = {
-        timeout: 3000
-    }
-    Axios.post(url,data,config)
+    // 결제정보 저장    
+    Axios.post(store.url+'/slim/card_pay_start',data,{timeout:3000})
     .then(function(res){
-        console.log('success');        
+        console.log('card_pay_start()');        
     })
     .catch(function(error){
         console.log(error);
