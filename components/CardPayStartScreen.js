@@ -26,6 +26,8 @@ import IMP from 'iamport-react-native';
 import Loading from './Loading';
 import {useSelector, useDispatch} from 'react-redux';  
 
+var access_token = '';
+
 const TextContainer = styled(View)`
     justify-content:center;
     align-items:center;    
@@ -45,9 +47,8 @@ function CardPayStartScreen() {
         mcd,
         pid,
         sdate,
-    } = params;     
-    const store = useSelector(state => state.data);
-
+    } = params;   
+    const store = useSelector(state => state.data);  
 
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
@@ -69,24 +70,33 @@ function CardPayStartScreen() {
         app_scheme: 'myawesomeapp',
         mcd: mcd,
         pid: pid,
-        sid: store.sid,
+        sid: cfg.sid,
         sdate: sdate,
     }       
 
-
+    // console.log(data);
 
     // 결제정보 저장
-    const url = store.url + '/slim/card_pay_start'; 
-    Axios.post(url,data,{timeout:3000})
-    .then(result => console.log(result))
+    let url = '';    
+    if(cfg.mode =='http') { url = cfg.http.host; }
+    if(cfg.mode =='https') { url = cfg.https.host; }
+    url = url + '/rest/cardPayStart'; 
+    const config = {
+        timeout: 3000
+    }
+    Axios.post(url,data,config)
+    .then(function(res){
+        console.log('success');        
+    })
     .catch(function(error){
-        alert(error);
-    });   
+        console.log(error);
+        // 결제창 종료
+    }); 
  
     // return (<View><Text>DEBUG</Text></View>)
     return (  
         <IMP.Payment
-        userCode={userCode}     // 가맹점 식별코드
+        userCode={store.iamport}     // 가맹점 식별코드
         loading={<Loading />}   // 웹뷰 로딩 컴포넌트
         data={data}             // 결제 데이터
         callback={callback}     // 결제 종료 후 콜백

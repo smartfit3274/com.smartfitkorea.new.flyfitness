@@ -1,6 +1,6 @@
 {
-  "name": "smartpass",
-  "version": "0.0.1",
+  "name": "smartgym_okpo",
+  "version": "1.4.6",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -10,7 +10,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@material-ui/core": "^4.9.8",
     "@react-native-community/async-storage": "^1.8.1",
     "@react-native-community/checkbox": "^0.4.2",
     "@react-native-community/datetimepicker": "^2.3.2",
@@ -23,14 +22,16 @@
     "moment": "^2.24.0",
     "native-base": "^2.13.12",
     "npm": "^6.14.4",
-    "react": "16.9.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
     "react-native": "^0.62.0",
     "react-native-async-storage": "0.0.1",
     "react-native-beacons-manager": "git://github.com/smartfit3274/react-native-beacons-manager.git",
     "react-native-biometrics": "^2.1.4",
-    "react-native-ble-manager": "^7.2.0",
+    "react-native-ble-manager": "^7.3.1",
     "react-native-device-info": "^5.6.0",
     "react-native-gesture-handler": "^1.6.1",
+    "react-native-iamport": "^0.4.0",
     "react-native-modal-datetime-picker": "^8.6.0",
     "react-native-pin-view": "^3.0.0",
     "react-native-safe-area-context": "^0.7.3",
@@ -39,7 +40,6 @@
     "react-native-table-component": "^1.2.1",
     "react-native-vector-icons": "^6.6.0",
     "react-native-websocket": "^1.0.2",
-    "react-native-webview": "^10.3.2",
     "react-navigation": "^4.3.5",
     "react-navigation-hooks": "^1.1.0",
     "react-navigation-stack": "^2.3.9",

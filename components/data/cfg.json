@@ -16,5 +16,6 @@
         "host":"https://pass.smartg.kr"
     },
     "beacon_range":5,
-    "iamport":"imp76426114"
+    "iamport":"iamport",
+    "iamport-okpo":"imp76426114"
 }
