@@ -164,7 +164,7 @@ const renderPagination = (index, total, context) => {
     return (
       <$PaginationView>
       <View><Text style={{ color: 'white'}}>{index + 1}/{total}</Text></View>
-      <View><Image style={{ height : 20, resizeMode : 'contain'}}source={require('../images/icon_plus.png')}></Image></View>
+      {/* <View><Image style={{ height : 20, resizeMode : 'contain'}}source={require('../images/icon_plus.png')}></Image></View> */}
       </$PaginationView>
     )
   }
@@ -426,7 +426,7 @@ function Logged( props ) {
                 navigation.navigate('Pin',{mode:'create'}); // 신규등록
             }
             else {
-                navigation.navigate('Pin',{mode:'confirm'}); // 번호확인
+                navigation.navigate('Pin',{mode:'confirm', sid: store.sid, cid: store.cid, access_token:access_token, url:store.url}); // 번호확인
             }           
         })
         .catch( error => console.log(error));
@@ -438,7 +438,7 @@ function Logged( props ) {
         .then(result => result.success )
         .then((success)=>{
             if(success==true) {
-                open_door();
+                open_door( {sid:store.sid, cid: store.cid, access_token:access_token, url:store.url } );
             }
             else {
                 // ignore
@@ -453,7 +453,7 @@ function Logged( props ) {
         .then(result => result.success )
         .then((success)=>{
             if(success==true) {
-                open_door();
+                open_door( {sid:store.sid, cid: store.cid, access_token:access_token, url:store.url } );
             }
             else {
                 // ignore
@@ -469,7 +469,7 @@ function Logged( props ) {
         .then(result => result.success )
         .then((success)=>{
             if(success==true) {
-                open_door();
+                open_door( access_token );
             }
             else {
                 // ignore
@@ -479,7 +479,7 @@ function Logged( props ) {
     }      
 
     // 출입문개방 클릭
-    function btn_door_open() {
+    function btn_door_open() {    
         find_auth_type();        
     }
 
@@ -519,29 +519,10 @@ function Logged( props ) {
             if(auth_type=='number') {
                 handle_number();
             }
-
         })
         .catch( error => console.log(error));        
     }
 
-    // ============================================== //
-    // 토큰처리
-    // ============================================== //    
-    const usePulse = (startDelay = 500) => {     
-        const scale = useRef(new Animated.Value(1)).current;    
-        const pulse = () => {
-            Animated.sequence([
-            Animated.timing(scale, { toValue: 1.2 , useNativeDriver: false }),
-            Animated.timing(scale, { toValue: 0.8 , useNativeDriver: false }),
-            ]).start(() => pulse());
-        };    
-        useEffect(() => {
-            const timeout = setTimeout(() => pulse(), startDelay);
-            return () => clearTimeout(timeout);
-        }, []);
-        return scale;
-    };     
-    
     function no_door_message() {
         Alert.alert(
             '* 출입문 열기 안내 *',
@@ -552,8 +533,6 @@ function Logged( props ) {
             }
         ); 
     }
-
-    const scale = usePulse();
 
     return (
       <>
