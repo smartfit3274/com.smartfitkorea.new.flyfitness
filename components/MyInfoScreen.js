@@ -28,6 +28,15 @@ import { useEffect } from 'react';
 import cfg from "./data/cfg.json";
 import axios from 'axios';
 import {useSelector, useDispatch} from 'react-redux';
+import {
+    get_access_token, 
+    get_refresh_token, 
+    net_state,
+    access_token_check,
+    create_access_token,
+    write_access_token,
+    check_key
+ } from './lib/Function';
 
 const ItemStyle = styled(Item)`    
     height:60px;
@@ -51,7 +60,7 @@ const LabelBodyStyle = styled(Label)`
 
 var access_token = '';
 var refresh_token = '';
-var url = '';
+var is_access_token = 'N';
 
 function MyInfoScreen() {
 
@@ -66,46 +75,21 @@ function MyInfoScreen() {
     
     useEffect(()=>{
 
-        // 토큰 가져오기
-        AsyncStorage.getItem('access_token')
-        .then( result => { 
-            access_token = result 
-            
-            AsyncStorage.getItem('refresh_token')
-            .then ( result => { 
-                refresh_token = result 
-
-                //console.log('access_token', access_token);
-                //console.log('refresh_token', refresh_token);
-
-                // 토큰검사
-                const url = store.url + '/slim/checkAccessToken';
-                const data = {
-                    sid: store.sid,
-                    access_token: access_token
-                }
-                
-                axios.post(url,data,{timeout:3000})
-                .then(result => {
-                    const {ret} = result.data;
-                    if(ret == 'Y')                    
-                    {
-                        member_one();
-                    }                      
-                })
-                .catch( error => console.log('TAG',error));
-                    
-            })
-            .catch( error => console.log('TAG', error));         
-
+        get_access_token()
+        .then( result=> {
+            access_token = result;
+            return get_refresh_token();
         })
-        .catch ( error => console.log('TAG',error) )
-        .then ( () => {
-            if(access_token=='' || refresh_token=='') {
-                error_close();    
-            }            
-        });
-
+        .then( result=> {
+            refresh_token = result;
+            return access_token_check ( access_token,store.url, store.sid ); 
+        })
+        .then( result => {
+            is_access_token = result;
+            
+            member_one();
+        })        
+        .catch(error => alert(error)); 
     },[]);    
 
 

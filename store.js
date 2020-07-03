@@ -6,7 +6,7 @@ import { createStore } from 'redux'
 const INITIAL_STATE = {
   data: {
     url     : "",      
-    mode    : "local",
+    mode    : "server",
     local   : "http://192.168.76.51:80",   
     server  : "https://admin.smartg.kr",
     sid     : "smartgym",    
