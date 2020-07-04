@@ -53,41 +53,60 @@ function HomeScreen(props) {
     // console.log('[access_token]',access_token);
     // console.log('[refresh_token]',refresh_token);    
 
-    // 로그인 상태
-    if(access_token !== '' && refresh_token !=='' && is_access_token == 'Y') {
-      setIsLogin('Y');
-    }
 
     // 토큰만료시 자동로그인
-    if(access_token !== '' && refresh_token !=='' && is_access_token == 'N') {
-      create_access_token( {refresh_token:refresh_token, url:store.url , sid:store.sid} )
-      .then ( result => {
-        access_token = result;
-        if(access_token != null && access_token != '' )
-        {
-          write_access_token( access_token )
-          .then( result => {
-            if( result == 'Y' )
-              setIsLogin('Y');      
-            else 
-              setIsLogin('N');      
-          })
-          .catch(error=>{
-            setIsLogin('N');      
-          });          
-        }
-        else {
-          setIsLogin('N');
-        }
-      })
-      .catch(error=>alert(error));
-    }
+    if(access_token == null) access_token = '';
+    if(refresh_token == null ) refresh_token = '';
 
-    // 로그아웃상태
-    if( access_token == '' || refresh_token =='' ) {
-      setIsLogin('N');
-    }
+    // console.log('access_token',access_token);
+    // console.log('refresh_token',refresh_token);
+    // console.log('is_access_token',is_access_token);
 
+    // 로그인
+    let auto_login = 0;
+    if( refresh_token !== ''  && access_token !=='' && is_access_token === 'Y' )
+    {
+      setIsLogin('Y');
+    }
+    else // 자동로그인
+    {
+      
+      if( refresh_token !== '' && access_token=='' ) {
+        auto_loogin = 1;
+      }
+      
+      if( refresh_token !=='' && is_access_token ==='N') {
+        auto_login = 1;
+      }
+
+      if(auto_login===1) {
+        create_access_token( {refresh_token:refresh_token, url:store.url , sid:store.sid} )
+        .then( result => {
+          access_token = result;
+
+          if(access_token === null || access_token === '') {
+            setIsLogin('N');
+          }
+          else
+          {
+            AsyncStorage.setItem('access_token',access_token)
+            .then( 
+              () => {
+                // 자동로그인일 경우는 잠시후 새로고침을 해야함
+                // setTimeout(()=>{navigation.replace('Home')},1000);
+                setTimeout(function(){ navigation.replace('Home') },2000);
+              }
+             )
+            .catch( error => alert(error));
+          }
+        })
+        .catch(error=>alert(error))
+      }
+
+      else {
+        setIsLogin('N');
+      }
+    }
   }
 
   useEffect(()=>{        

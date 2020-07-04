@@ -137,6 +137,16 @@ export const write_access_token = access_token => {
 }
 
 
+// 리프레시 토큰 저장하기
+export const wrtie_refresh_token = refresh_token => {    
+    return new Promise(function( resolve, reject ){
+      if(refresh_token == null || refresh_token == '') resolve('N');      
+      AsyncStorage.setItem('refresh_token',refresh_token)
+      .then( ()=> resolve('Y') )
+      .catch( () => resolve('N') );
+    });  
+}
+
 // 출입키가 있는지 확인
 export const check_key = (access_token, url , sid, cid ) => {   
     console.log('check_key()');    
