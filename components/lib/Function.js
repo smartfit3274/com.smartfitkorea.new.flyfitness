@@ -118,7 +118,13 @@ export const create_access_token = params => {
     return new Promise ( function (resolve, reject ){
       axios.post(url+'/slim/token/createAccessToken',data,{timeout:3000})
       .then( result => {
-        resolve(result.data.access_token)
+          if( result.data.ret === 'Y') {
+            resolve(result.data.access_token);
+          } else
+          { 
+              resolve('');
+              console.log(result.data);
+          }
       })
       .catch( error => console.log(error) );
     });
@@ -136,6 +142,16 @@ export const write_access_token = access_token => {
     });  
 }
 
+
+// 리프레시 토큰 저장하기
+export const wrtie_refresh_token = refresh_token => {    
+    return new Promise(function( resolve, reject ){
+      if(refresh_token == null || refresh_token == '') resolve('N');      
+      AsyncStorage.setItem('refresh_token',refresh_token)
+      .then( ()=> resolve('Y') )
+      .catch( () => resolve('N') );
+    });  
+}
 
 // 출입키가 있는지 확인
 export const check_key = (access_token, url , sid, cid ) => {   
