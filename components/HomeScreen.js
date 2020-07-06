@@ -49,64 +49,43 @@ function HomeScreen(props) {
   const store = useSelector(state => state.data);
 
   const handle_login = () => {
-    // console.log('handle_login()');
-    // console.log('[access_token]',access_token);
-    // console.log('[refresh_token]',refresh_token);    
-
-
-    // 토큰만료시 자동로그인
-    if(access_token == null) access_token = '';
-    if(refresh_token == null ) refresh_token = '';
-
+    
+    console.log('handle_login()');
     // console.log('access_token',access_token);
     // console.log('refresh_token',refresh_token);
-    // console.log('is_access_token',is_access_token);
+    // console.log('is_access_token',is_access_token); 
 
-    // 로그인
-    let auto_login = 0;
-    if( refresh_token !== ''  && access_token !=='' && is_access_token === 'Y' )
-    {
-      setIsLogin('Y');
-    }
-    else // 자동로그인
-    {
-      
-      if( refresh_token !== '' && access_token=='' ) {
-        auto_loogin = 1;
-      }
-      
-      if( refresh_token !=='' && is_access_token ==='N') {
-        auto_login = 1;
-      }
+    // 자동로그인
+    if(is_access_token == 'Y') {
+      check_key (access_token, store.url , store.sid, store.cid ) 
+      .then( result => {
+        is_key = result;
+        setIsLogin('Y');
+      })
+      .catch(error=>alert('E03:',error))
 
-      if(auto_login===1) {
+    }     
+    else // 재로그인
+    {      
+      if( refresh_token !== '' && is_access_token ==='N') {
         create_access_token( {refresh_token:refresh_token, url:store.url , sid:store.sid} )
         .then( result => {
           access_token = result;
-
-          if(access_token === null || access_token === '') {
+          if( access_token === '' ) {
             setIsLogin('N');
           }
-          else
+          else 
           {
             AsyncStorage.setItem('access_token',access_token)
-            .then( 
-              () => {
-                // 자동로그인일 경우는 잠시후 새로고침을 해야함
-                // setTimeout(()=>{navigation.replace('Home')},1000);
-                setTimeout(function(){ navigation.replace('Home') },2000);
-              }
-             )
-            .catch( error => alert(error));
+            .then(()=>{
+              is_access_token = 'Y';
+              setIsLogin('Y');
+            })
           }
         })
-        .catch(error=>alert(error))
-      }
-
-      else {
-        setIsLogin('N');
-      }
-    }
+        .catch( error => alert('E02:',error));
+      }   
+    }    
   }
 
   useEffect(()=>{        
@@ -129,20 +108,11 @@ function HomeScreen(props) {
       refresh_token = result;          
       return access_token_check ( access_token,store.url, store.sid );      
     })    
-    .then( result => {
-      is_access_token = result;
-      return check_key( access_token , store.url, store.sid , store.cid );
-    })
     .then ( result => {
-      is_key = result;
-
-      //console.log('access_token',access_token);
-      // console.log('refresh_token',refresh_token);
-      console.log('is_access_token',is_access_token);      
-      console.log('is_key',is_key);
-      handle_login();
-    })
-    .catch( error => console.log(error) );
+      is_access_token = result;
+      handle_login(); 
+    })    
+    .catch( error => console.log('E01:',error) );
    
 
   },[]);

@@ -118,7 +118,13 @@ export const create_access_token = params => {
     return new Promise ( function (resolve, reject ){
       axios.post(url+'/slim/token/createAccessToken',data,{timeout:3000})
       .then( result => {
-        resolve(result.data.access_token)
+          if( result.data.ret === 'Y') {
+            resolve(result.data.access_token);
+          } else
+          { 
+              resolve('');
+              console.log(result.data);
+          }
       })
       .catch( error => console.log(error) );
     });
