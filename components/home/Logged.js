@@ -221,8 +221,6 @@ function Logged( props ) {
     
     // 회원정보 로딩
     const member_one = () => {
-
-        console.log('member_one()');
                 
         const url = store.url + '/slim/member_one';
         const data = {
@@ -246,6 +244,7 @@ function Logged( props ) {
         })
         .catch(error=>console.log(error));
     }
+    
     useEffect(()=>{
         member_one();
     },[]);

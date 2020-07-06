@@ -40,7 +40,7 @@ let access_token = '';
 let result = '';
 let is_access_token = '';
 let is_refresh_token = '';
-let is_key = ''; // 출입키가 있는지
+let is_key = 'N'; // 출입키가 있는지
 
 function HomeScreen(props) {
 
@@ -63,7 +63,6 @@ function HomeScreen(props) {
         setIsLogin('Y');
       })
       .catch(error=>alert('E03:',error))
-
     }     
     else // 재로그인
     {      
