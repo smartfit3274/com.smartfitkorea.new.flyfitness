@@ -23,10 +23,21 @@ import cfg from '../data/cfg.json';
 import { PermissionsAndroid, DeviceEventEmitter, Platform } from 'react-native'
 import BleManager, { start } from 'react-native-ble-manager';
 import Beacons from 'react-native-beacons-manager';
-import { open_door, get_access_token, access_token_check, get_uuid } from '../lib/Function';
 import styled from 'styled-components';
 import Slick from 'react-native-slick';
 import moment from "moment";
+import {
+    get_uuid,
+    open_door,
+    get_access_token, 
+    get_refresh_token, 
+    net_state,
+    access_token_check,
+    create_access_token,
+    write_access_token,
+    write_refresh_token,
+    check_key
+  } from '../lib/Function';
 
 let access_token = '';
 let pin = '';
@@ -410,13 +421,12 @@ function Logged( props ) {
 
     function btn_logout(){               
         console.log('TAG: btn_logout()');     
-        AsyncStorage.setItem('refresh_token','')
-        .then( () => AsyncStorage.setItem('access_token','') )
+        AsyncStorage.setItem('access_token','')
+        .then( () => { return AsyncStorage.setItem('refresh_token','') } )
         .then( () => AsyncStorage.setItem('pin','') )
         .then( () => navigation.replace('Home') )
         .catch(error => alert(error));       
     } 
-
 
     // 번호로 로그인처리
     function handle_number() {        

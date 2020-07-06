@@ -131,8 +131,8 @@ android {
         applicationId "com.smartfitkorea.smartpass"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10408
-        versionName "1.4.8"
+        versionCode 10409
+        versionName "1.4.9"
     }
     splits {
         abi {
