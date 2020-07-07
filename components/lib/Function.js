@@ -44,6 +44,7 @@ export const get_access_token = () => {
     return new Promise (function (resolve , reject ) {
         AsyncStorage.getItem('access_token')
         .then( result => { 
+            if (result===null) result='';
             resolve (result);
         })
         .catch( error => {
@@ -57,7 +58,8 @@ export const get_refresh_token = () => {
     console.log('get_refresh_token()');
     return new Promise (function (resolve , reject ) {
         AsyncStorage.getItem('refresh_token')
-        .then( result => {         
+        .then( result => {   
+            if (result===null) result='';      
             resolve ( result );
         })
         .catch( error => {

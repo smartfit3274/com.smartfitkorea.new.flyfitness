@@ -62,28 +62,40 @@ function HomeScreen(props) {
         is_key = result;
         setIsLogin('Y');
       })
-      .catch(error=>alert('E03:',error))
+      .catch(error=>alert('E0001',error))
     }     
-    else // 재로그인
-    {      
-      if( refresh_token !== '' && is_access_token ==='N') {
-        create_access_token( {refresh_token:refresh_token, url:store.url , sid:store.sid} )
+    else
+    {  
+      //AsyncStorage.setItem('access_token','');
+      //AsyncStorage.setItem('refresh_token','');
+      console.log('access_token',access_token);
+      console.log('refresh_token',refresh_token);
+      console.log('is_access_token',is_access_token);
+
+      // 로그아웃 상태
+      if(access_token === '' && refresh_token ==='') {
+        setIsLogin('N');
+      }
+
+      // 최초 로그인
+      else if( refresh_token !== '' && is_access_token ==='N') {
+        create_access_token( {refresh_token:refresh_token, url:store.url , sid:store.sid} )   
         .then( result => {
           access_token = result;
-          if( access_token === '' ) {
-            setIsLogin('N');
-          }
-          else 
-          {
+          if(access_token !== '') {
             AsyncStorage.setItem('access_token',access_token)
             .then(()=>{
-              is_access_token = 'Y';
-              setIsLogin('Y');
+              is_key='Y';
+              setIsLogin('Y');              
             })
+            .catch(error=>alert('E0003'));
+          }
+          else {
+            setIsLogin('N');
           }
         })
-        .catch( error => alert('E02:',error));
-      }   
+        .catch(error=> alert('E0002'))     
+      }
     }    
   }
 
