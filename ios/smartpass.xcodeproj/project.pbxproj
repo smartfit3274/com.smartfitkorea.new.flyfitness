@@ -585,7 +585,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/smartgym.app/smartgym";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/스마트짐 옥포점.app/스마트짐 옥포점";
 			};
 			name = Debug;
 		};
@@ -610,7 +610,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/smartgym.app/smartgym";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/스마트짐 옥포점.app/스마트짐 옥포점";
 			};
 			name = Release;
 		};
