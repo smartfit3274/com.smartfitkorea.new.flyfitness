@@ -187,7 +187,7 @@ function CompanyText() {
         <CompanyTextContainer>
         <CompanyTextItem>{cfg.company}</CompanyTextItem>
         <CompanyTextItem>{cfg.address}</CompanyTextItem>
-        <CompanyTextItem>{cfg.reg}</CompanyTextItem>
+        {/* <CompanyTextItem>{cfg.reg}</CompanyTextItem> */}
         <CompanyTextItem>{cfg.charge}</CompanyTextItem>
         <CompanyTextItem>{cfg.phone}</CompanyTextItem>
         <CompanyTextItem>{cfg.resp}</CompanyTextItem>
