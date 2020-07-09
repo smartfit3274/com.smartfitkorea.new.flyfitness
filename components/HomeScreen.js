@@ -33,7 +33,7 @@ import {
   check_key
 } from './lib/Function';
 import Loading from '../components/Loading';
-
+import version_check from '../lib/version_check';
 
 let refresh_token = '';
 let access_token = '';
@@ -98,6 +98,15 @@ function HomeScreen(props) {
       }
     }    
   }
+
+  // version check
+  useEffect(()=>{
+    version_check({
+      current_version:store.app_version, 
+      store_id_android:store.store_id_android,
+      store_id_ios:store.store_id_ios
+    });
+  },[]);
 
   useEffect(()=>{        
     console.log('====== PROGRAM START ======'); 

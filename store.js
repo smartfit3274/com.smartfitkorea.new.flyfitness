@@ -17,7 +17,10 @@ const INITIAL_STATE = {
     debug_beacon_distance : "N",
     debug_beacon_console : "N",
     debug_door : "33",
-    iamport:"iamport"
+    iamport:"iamport",
+    app_version : "1.5.4",
+    store_id_android: "com.smartfitkorea.smartpass",
+    store_id_ios : "1397721927"
   }
 }
 
