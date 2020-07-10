@@ -1,9 +1,20 @@
 ### 스마트짐 앱
 
-### 안드로이드 배포시
-android/app/build.gradle
-    versionCode 10402
-    versionName "1.4.2"
+### 버전 업데이트
+
+android :
+    android/app/build.gradle
+    versionCode xxxxxxx
+    versionName "x.x.x"
+
+ios :
+    xcode > general
+    version x.x.x
+    build xxxxxx
+
+react-native :
+    store.js
+    app_version : x.x.x
 
 ### NativeBase
 node_modules/native-base/platform.js

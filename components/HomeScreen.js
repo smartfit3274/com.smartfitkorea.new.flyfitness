@@ -85,8 +85,15 @@ function HomeScreen(props) {
           if(access_token !== '') {
             AsyncStorage.setItem('access_token',access_token)
             .then(()=>{
-              is_key='Y';
-              setIsLogin('Y');              
+             
+              // 키 검사
+              check_key (access_token, store.url , store.sid, store.cid ) 
+              .then( result => {
+                is_key = result;
+                setIsLogin('Y');
+              })
+              .catch( error=> alert(error));
+              
             })
             .catch(error=>alert('E0003'));
           }

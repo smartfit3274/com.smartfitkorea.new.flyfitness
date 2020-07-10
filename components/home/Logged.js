@@ -478,7 +478,7 @@ function Logged( props ) {
         .then(result => result.success )
         .then((success)=>{
             if(success==true) {
-                open_door( access_token );
+                open_door( {sid:store.sid, cid: store.cid, access_token:access_token, url:store.url } );
             }
             else {
                 // ignore
