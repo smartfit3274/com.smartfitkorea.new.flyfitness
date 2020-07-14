@@ -619,7 +619,7 @@
 			baseConfigurationReference = F689FC56057B3DC80EE35EB8 /* Pods-smartpass.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 10504;
+				CURRENT_PROJECT_VERSION = 10505;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = B2W6Y7FP54;
 				INFOPLIST_FILE = smartpass/Info.plist;
@@ -627,7 +627,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.4;
+				MARKETING_VERSION = 1.5.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -645,14 +645,14 @@
 			baseConfigurationReference = 37906CA60044DFD8D6A8D9C9 /* Pods-smartpass.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CURRENT_PROJECT_VERSION = 10504;
+				CURRENT_PROJECT_VERSION = 10505;
 				DEVELOPMENT_TEAM = B2W6Y7FP54;
 				INFOPLIST_FILE = smartpass/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.4;
+				MARKETING_VERSION = 1.5.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

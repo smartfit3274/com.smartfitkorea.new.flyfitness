@@ -40,13 +40,13 @@
 		</dict>
 	</dict>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>아이비콘 서비스 이용을위해 권한이 필요합니다.</string>
+	<string>To find beacon</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>아이비콘 서비스 이용을위해 권한이 필요합니다.</string>
+	<string>To find beacon</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>출입문 개방을 위해 페이스아이디 기능을 사용합니다.</string>
+	<string>To unlock our door</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>아이비콘 서비스 이용을위해 권한이 필요합니다.</string>
+	<string>To make sure your location is near our gate and to open our door.</string>
 	<key>NSMainNibFile</key>
 	<string>LaunchScreen</string>
 	<key>UIAppFonts</key>
