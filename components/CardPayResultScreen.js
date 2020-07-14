@@ -25,6 +25,7 @@ import styled from "styled-components/native";
 import IMP from 'iamport-react-native';
 import Loading from './Loading';
 import { WebView } from 'react-native-webview';
+import {useSelector, useDispatch} from 'react-redux';  
 
 var access_token = '';
 
@@ -62,6 +63,7 @@ function CardPayResultScreen() {
         label, 
         value 
     } = resultStyles;
+    const store = useSelector(state => state.data);  
 
     useEffect(()=>{
         console.log('useEffect()');        
@@ -70,16 +72,8 @@ function CardPayResultScreen() {
         // 성공인경우 출입키 발급
         if(isSuccess==true) {
 
-
             console.log('isSuccess',isSuccess);
-            
-            let url = '';    
-            if(cfg.mode =='http') { url = cfg.http.host; }
-            if(cfg.mode =='https') { url = cfg.https.host; }
-            url = url + '/rest/cardKeyCreate';         
-            const config = { 
-                timeout: 3000
-            }
+
             const data = {
                 sid:cfg.sid,                
                 cid:cfg.cid,
@@ -87,9 +81,8 @@ function CardPayResultScreen() {
                 imp_success:imp_success,
                 imp_uid:imp_uid,
             }
-            console.log('data',data);
 
-            Axios.post(url,data,config)
+            Axios.post(store.url+'/slim/card_key_create',data,{timeout:3000})
             .then(function(res){
               console.log('success');
             })
