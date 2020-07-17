@@ -117,8 +117,8 @@ function CardPayScreen() {
         console.log('result();');        
         const response = {
             "imp_success": "true", 
-            "merchant_uid": "mid_1586262882514",
-            "imp_uid": "imp_1586242315139",            
+            "merchant_uid": "mid_1594703563150",
+            "imp_uid": "imp_202007140001",            
             "error_msg":"오류메시지"
         }
         navigation.navigate('CardPayResult',{response:response});
@@ -201,6 +201,14 @@ function CardPayScreen() {
           onConfirm={date=>handle_picker(date)}
           onCancel={()=>setShow(false)}
         />
+
+        {/*
+        <View>
+            <Button onPress={()=>btn_result()}>
+                <Text>결제 완료_TEST</Text>
+            </Button>            
+        </View>
+        */}
         
         <View style={ styles.dateContainer}>
             <View style={styles.dateSub}>
@@ -228,8 +236,7 @@ function CardPayScreen() {
                             </Left>
                     
                             <Right>
-                                {/* <Button info block style={{marginTop:10,marginBottom:10}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}> */}
-                                <Button info block style={{marginTop:10,marginBottom:10}} onPress={()=>alert('준비중인 기능입니다.')}>
+                                <Button info block style={{marginTop:10,marginBottom:10}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}>                                
                                     <Text>구매</Text>
                                 </Button>                         
                             </Right>
