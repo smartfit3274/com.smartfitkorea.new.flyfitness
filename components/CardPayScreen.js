@@ -17,9 +17,8 @@ import {
     Form,
     Item,
     Label,
-    Icon
 } from 'native-base';
-import { Alert, Image,Dimensions, RefreshControlBase, StyleSheet } from 'react-native';
+import { Alert, Image,Dimensions, RefreshControlBase, StyleSheet, StatusBar } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
@@ -43,6 +42,8 @@ import {
     check_key
 } from './lib/Function';
 import {useSelector, useDispatch} from 'react-redux';  
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { $Header } from './$Header';
 
 let access_token = '';
 let refresh_token = '';
@@ -55,6 +56,19 @@ const TextContainer = styled(View)`
     align-items:center;    
     background:#ccc;
     height: 60px;
+`
+
+const MainText = styled.Text`
+  font-size:20px;  
+  font-weight : 700;
+  color: #fff;
+  margin-bottom : 15px;
+  margin-top : 20px;
+`
+
+const SubText = styled.Text`
+  font-size : 14px;
+  color: #dedede;
 `
 
 function CardPayScreen() {
@@ -182,85 +196,54 @@ function CardPayScreen() {
 
 
     return (
-      <Container>
-    
-        <Header style={{backgroundColor:'#454545'}}>
+      <Container style={{backgroundColor:'#111111'}}>
+        <$Header style={{backgroundColor:'#111111'}} iosBarStyle={"light-content"}>
+            <StatusBar backgroundColor="#111"/>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
-                    <Icon type="MaterialCommunityIcons" name="close" style={{fontSize:30, color:"white"}}></Icon>
+                    <Icon name="close" style={{fontSize:30, color:"white"}}></Icon>
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
-                <Text style={{alignSelf:"center",color:"white"}}>카드결제</Text>
             </Body>
             <Right style={{flex:1}}></Right>
-        </Header>
-
+        </$Header>
         <DateTimePicker
           isVisible={show}
           onConfirm={date=>handle_picker(date)}
           onCancel={()=>setShow(false)}
+          locale = "ko"
         />
-
-        {/*
-        <View>
-            <Button onPress={()=>btn_result()}>
-                <Text>결제 완료_TEST</Text>
-            </Button>            
-        </View>
-        */}
-        
         <View style={ styles.dateContainer}>
             <View style={styles.dateSub}>
-                    <Text style={styles.dateTitle}>시작일을 선택하세요.</Text>                
+                    <MainText>카드결제</MainText>
+                    <SubText>시작일을 선택하세요.</SubText>                
                     <Item style={styles.item}>
-                        <Input editable={false} value={sdate}>
+                        <Input editable={false} value={sdate} style={styles.input}>
                         </Input>   
-                        <Button info onPress={()=>btn_calendar()}>
+                        <Button onPress={()=>btn_calendar()} style={styles.button}>
                             <Icon type="MaterialCommunityIcons" name="calendar" style={styles.icon} />
                         </Button>         
                     </Item>
             </View>
         </View>
-
         <Content contentContainerStyle={styles.container} scrollEnabled={true}>
-            
-            <View style={styles.content}>                
-
+            <View style={styles.content}>
                 <List>
                 { listItem.map((item,index)=>     
                     <ListItem key={index} style={styles.listitem}>                    
-                
-                            <Left>
-                                <Text style={{paddingLeft:10}}> {item.pas1506} {item.pas1505} / {item.pas1507_format} 원</Text>                        
-                            </Left>
-                    
-                            <Right>
-                                <Button info block style={{marginTop:10,marginBottom:10}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}>                                
-                                    <Text>구매</Text>
-                                </Button>                         
-                            </Right>
-                                            
+                        <Left>
+                            <Text style={{paddingLeft:10, color : 'white'}}> {item.pas1506} {item.pas1505}  <Text style={{color : '#dddddd'}}>{item.pas1507_format} 원</Text></Text>                        
+                        </Left>
+                        <Right>
+                            <Button info block style={{marginTop:10,marginBottom:10, height : 30, backgroundColor : '#4c6eec'}} onPress={()=>btn_cardpay(item.pas1506+' '+item.pas1505,item.pas1507,item.pas1502)}>
+                                <Text style={{width : 100, textAlign : 'center'}}>구매하기</Text>
+                            </Button>                         
+                        </Right>              
                     </ListItem>                        
-
                 )}
-                </List>                
-
-
-                           
+                </List>                  
             </View>
-
-            {/* { show && ( */}
-                {/* <DateTimePicker
-                timeZoneOffsetInMinutes={0}
-                value={new Date()}
-                mode={'date'}
-                is24Hour={true}
-                display="default"
-                
-                /> */}
-            {/* )} */}
-
         </Content>
       </Container>        
     );  
@@ -279,35 +262,39 @@ const styles = StyleSheet.create({
         alignItems:"center"
     },
     dateSub:{
-        width:"80%",
-    },
-    dateTitle:{
-        paddingTop:10,
+        width:"90%"
     },
     container:{
         alignItems:"center"
     },
     content:{
         marginTop:15,
-        width:"90%",
-    },
-    date: {   
-        borderWidth:1,
-        borderColor:"#cccccc",
-        width:120,
-        height: 40
-    },    
+        width:"90%"
+    },  
     item:{
         width:180,
-        marginTop:10
+        marginTop:10,
+        marginBottom : 30,
+        borderColor: '#fff',
     },  
+    input : {
+        color : '#15ff94'
+    },
+    button : {
+        backgroundColor : '#333',
+        paddingRight : 10,
+        paddingLeft : 10
+    },
     icon : {        
-        fontSize:18
+        fontSize:18,
+        color : '#fff',
+        alignSelf : 'center'
     },
     listitem:{
         display:"flex",
         borderWidth:1,
-        borderColor:"#cccccc",
-        marginBottom:15
+        borderColor:"#ffffff",
+        marginBottom:15,
+        marginLeft : 0
     }
 });

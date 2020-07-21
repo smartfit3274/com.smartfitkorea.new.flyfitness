@@ -20,34 +20,54 @@ import {
 } from 'native-base';
 import { 
     Image,Dimensions, RefreshControlBase,Alert,
-    StyleSheet
+    StyleSheet, StatusBar
 } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import styled from 'styled-components';
 import cfg from "./data/cfg.json";
 import axios from 'axios';
+import TitleContainer from './Title';
+import { $Header } from './$Header';
 
 const ItemStyle = styled(Item)`    
     height:60px;
     width:90%;
 `;
 
-const LabelTitleStyle = styled(Label)` 
-    flex:1;
-    background:#cccccc;
-    padding-top:3px;
-    padding-bottom:5px;
-    text-align:center;
-    font-size:13px;   
-    margin-right:5px; 
-`;
-
 const LabelBodyStyle = styled(Label)`  
     flex:2.5;
     font-size:13px;
 `;
+
+const ButtonAgree = styled.TouchableOpacity`
+  flex:1;
+  justify-content:center;  
+  align-items:center;  
+  font-size: 14px;
+  background-color : #4c6eec;
+`;
+
+const $Input = styled(Input)`
+  font-size:16px;  
+`;
+
+const LabelTitleStyle = styled(Label)` 
+    padding-top:4px;
+    padding-bottom:2px;
+    font-size:14px;   
+    font-weight : 700;
+    width : 30%;
+`;
+
+const $Content = styled(Content)`
+  flex : 1;
+  width:80%;
+  margin:0 auto;
+  max-width: 350px;
+  margin-top : 20px;
+`
 
 let url = '';
 let result = '';
@@ -89,6 +109,7 @@ function FindPassScreen() {
             else 
             {
                 alert(result.data.msg);
+                setMode("2");
             }
         })
         .catch(error => console.log(error));
@@ -129,73 +150,73 @@ function FindPassScreen() {
         })
         .catch(error => console.log(error));
     }    
-  
+
+    const titleData1 = {
+        mode : 'light',
+        mainText : '비밀번호찾기',
+        subText : '회원정보를 입력하세요.'
+    }
+
+    const titleData2 = {
+        mode : 'light',
+        mainText : '비밀번호찾기',
+        subText : '인증번호가 전달되었습니다.\n인증번호와 새 비밀번호를 입력하세요.'
+    }
     return (
       <>
-        <Header style={{backgroundColor:'#454545'}}>
-            <Left style={{flex:1}}>
-                <Button transparent onPress={()=>btn_close()}>
-                    <Icon name="close" style={{fontSize:30, color:"white"}}></Icon>
-                </Button>
-            </Left>
-            <Body style={{flex:1,justifyContent:"center"}}>
-                <Text style={{alignSelf:"center",color:"white"}}>비밀번호 찾기</Text>
-            </Body>
-            <Right style={{flex:1}}></Right>
-        </Header>
-        
-        <Container style={styles.container}>
-            <Content style={{ paddingLeft:'5%', paddingRight:'5%' }}>
-                
+        <Container>
+            <$Header iosBarStyle={"dark-content"}>
+                <StatusBar backgroundColor="white"/>
+                <Left style={{flex:1}}>
+                    <Button transparent onPress={()=>btn_close()}>
+                        <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"#aaaaaa"}}></Icon>
+                    </Button>
+                </Left>
+                <Body style={{flex:1,justifyContent:"center"}}>
+                </Body>
+                <Right style={{flex:1}}></Right>
+            </$Header>
                 { mode == "1"  &&
-                <View>
-                    <Text style={ margin.mt20 }>
-                        회원정보를 입력하세요.
-                    </Text>
+                <>
+                <TitleContainer data={titleData1}/>
+                <$Content>
                     <Item style={styles.phone}>
-                        <Icon name="phone" style={styles.phoneIcon} />
-                        <Input placeholder="휴대폰 (- 없이 입력)" 
+                        <LabelTitleStyle>휴대폰</LabelTitleStyle>
+                        <$Input placeholder="- 없이 입력" 
                             keyboardType="numeric"
                             placeholderTextColor='#cccccc'  
                             onChange={e=> phone = e.nativeEvent.text }
                         />
                     </Item>              
-                    <Button full style={styles.buttonStyle} onPress={()=>btn_req()}>
-                        <Text>인증번호 요청</Text>
-                    </Button>  
-                </View>
+                </$Content>
+                <Footer>            
+                  <ButtonAgree full onPress={()=>btn_req()}><Text style={{fontSize : 18, color : '#fff'}}>인증번호 요청</Text></ButtonAgree>               
+                </Footer>
+                </>
                 } 
                 { mode == 2 &&
-                <View style={styles.confirm}>
-                    <Text>인증번호가 전달되었습니다.</Text>
-                    <Text styles={color.gray}>
-                        인증번호와 새 비밀번호를 입력하세요.      
-                    </Text>
-
-                    <Item style={styles.phone}>
-                    <Icon name="lock" style={styles.phoneIcon} />
-                    <Input placeholder="인증번호" 
+                <>
+                <TitleContainer data={titleData2}/>
+                <$Content>
+                    <Item>
+                    <LabelTitleStyle>인증번호</LabelTitleStyle>
+                    <$Input placeholder="" 
                         keyboardType="numeric"
                         placeholderTextColor='#cccccc' 
                         onChange={e=>auth = e.nativeEvent.text}        
                     />
                     </Item>                    
-                    <Item style={styles.phone}>
-                        <Icon name="lock" style={styles.phoneIcon} />
-                        <Input placeholder="비밀번호" secureTextEntry={true} placeholderTextColor='#cccccc' onChange={e=>pass = e.nativeEvent.text}/>
-                    </Item>      
-                    <Text styles={color.gray}>
-                        (4-12 자리 영문/숫자 조합)          
-                    </Text>
-                    <Button full style={styles.buttonStyle} onPress={()=>btn_change()}>
-                        <Text styles={margin.mt10}>변경완료</Text>                    
-                    </Button>                      
-                </View>
+                    <Item>
+                        <LabelTitleStyle>비밀번호</LabelTitleStyle>
+                        <Input placeholder="4-12 자리 영문/숫자 조합" secureTextEntry={true} placeholderTextColor='#cccccc' onChange={e=>pass = e.nativeEvent.text}/>
+                    </Item>                 
+                </$Content>
+                <Footer>            
+                  <ButtonAgree full onPress={()=>btn_change()}><Text style={{fontSize : 18, color : '#fff'}}>변경완료</Text></ButtonAgree>               
+                </Footer>
+                </>
                 }
-
-            </Content>
         </Container>
-
       </>      
     );  
 }
@@ -218,12 +239,7 @@ const margin = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-    container : {
-        flex:1,
-        alignItems:"center"
-    },
     phone:{
-        width: 250
     },
     phoneIcon: {
         fontSize:18,

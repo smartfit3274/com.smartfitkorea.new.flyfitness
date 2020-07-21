@@ -20,7 +20,7 @@ import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
 import cfg from '../data/cfg.json';
-import { PermissionsAndroid, DeviceEventEmitter, Platform } from 'react-native'
+import { PermissionsAndroid, DeviceEventEmitter, Platform, StatusBar } from 'react-native'
 import BleManager, { start } from 'react-native-ble-manager';
 import Beacons from 'react-native-beacons-manager';
 import styled from 'styled-components';
@@ -38,6 +38,7 @@ import {
     write_refresh_token,
     check_key
   } from '../lib/Function';
+import { $Header } from '../$Header';
 
 let access_token = '';
 let pin = '';
@@ -49,17 +50,17 @@ let is_key = ''; // 출입키 보유 유무
 
 const show_distance = 'N'; // DEBUG
 const window = Dimensions.get('window'); 
-const height = (window.height*0.5)-100;
-const widthValue = window.width*0.8;
+const widthValue = window.width;
+const ContentHeight = window.height - 185;
 
-const $SatusView = styled(View)`
+const $StatusView = styled(View)`
     background-color : #333333;
-    height : 40px;
     text-align : center;
+    flex-basis : 50px;
 `
 
 const $StatusNameText = styled(Text)`
-    color : #fff;
+    color : #dedede;
     line-height : 40px;
     font-size : 12px;
     text-align : center;
@@ -67,7 +68,6 @@ const $StatusNameText = styled(Text)`
 
 const $StatusPriodText = styled(Text)`
     color : #fff;
-    font-weight : 700;
     font-size : 12px;
     text-align : center;
 `
@@ -81,12 +81,12 @@ const $StatusHighLightText = styled(Text)`
 const $SlideView = styled(View)`
     flex: 1;
     padding: 10px;
-    justify-content: center;
     align-items: center;
     background-color : #111111;
     border-bottom-color : #555;
     border-style : solid;
     border-width : 1px;
+    flex-direction:row;
 `
 
 const $SlideImage = styled(Image)`
@@ -96,17 +96,15 @@ const $SlideImage = styled(Image)`
 
 const $PaginationView = styled(View)`
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
     right: 30px; 
     flex-direction : row;
     display : flex;
 `
 const ButtonView = styled(TouchableOpacity)`
-    /* height : 350px; */
     justify-content: center;
     align-items: center;
     flex : 1;
-    height : ${(window.height*0.2)+100+'px'};
 `
 
 const $DoorButtonView = styled(ButtonView)`
@@ -122,7 +120,7 @@ const $PayButtonView = styled(ButtonView)`
     background-color : #111111;
 `
 const ButtonImg = styled(Image)`
-    height: 50px;
+    height : ${window.width*0.1 + 'px'};
     resize-mode: contain;
 `
 const $DoorButtonImg = styled(ButtonImg)`
@@ -134,7 +132,7 @@ const $PayButtonImg = styled(ButtonImg)`
 const $ButtonText = styled(Text)`
     color: #fff;
     font-size: 14px;
-    font-weight: bold;
+    /* font-weight: bold; */
     margin-top : 20px;
     text-align : center;
 `
@@ -150,10 +148,10 @@ const $ButtonTextSmall = styled(Text)`
     font-size: 10px;
 `
 
-const $Footer = styled(Footer)`
+const $Footer = styled(View)`
     background-color : #111111;
     color : white;
-    height : 65px;
+    height : 55px;
     border-top-color : #555;
     border-style : solid;
     border-width : 1px;
@@ -163,12 +161,18 @@ const $FooterTab = styled(FooterTab)`
 `
 
 const $FooterImage = styled.Image`
-    width : 20px;
+    height : 18px;
     resize-mode : contain;
+    margin-bottom : 5px;
 `
 const $FooterText = styled.Text`
     color : white;
     text-align : center;
+`
+
+const $EmptyView = styled.View`
+    height : 50px;
+    background-color : #111;
 `
 
 const renderPagination = (index, total, context) => {
@@ -221,6 +225,8 @@ function Logged( props ) {
     
     // 회원정보 로딩
     const member_one = () => {
+
+        console.log('member_one()');
                 
         const url = store.url + '/slim/member_one';
         const data = {
@@ -244,7 +250,7 @@ function Logged( props ) {
         })
         .catch(error=>console.log(error));
     }
-    
+
     useEffect(()=>{
         member_one();
     },[]);
@@ -545,21 +551,18 @@ function Logged( props ) {
 
     return (
       <>
-        <Header style={{backgroundColor:'#111111', height : 80}}>
+        <$Header style={{backgroundColor:'#111111', height : 80}} iosBarStyle={"light-content"} backgroundColor={'#111'}>
+            <StatusBar backgroundColor="#111"/>
             <Left style={{flex:1}}>
-                {/* <Button transparent onPress={()=>console.log('menu pressed!')}>
-                    <Icon name="menu" style={{color:"red", fontSize:20}}></Icon>
-                </Button> */}
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
                 <Image source={require('../images/logo_smartgym_white.png')} style={{alignSelf:"center", height: 35, resizeMode : 'contain'}}></Image>
             </Body>
             <Right style={{flex:1}}>           
             </Right>
-        </Header>
+        </$Header>
 
-        <Content scrollEnabled={false}>
-            
+        <Content scrollEnabled={false} style={{flex:1, flexDirection: 'column'}}>
             { store.debug_beacon_distance == 'Y' &&
                 <>
                     <Text> * 디버그 모드 * </Text>
@@ -570,17 +573,16 @@ function Logged( props ) {
                     <Text>비콘상태: {isBeacon} </Text>
                 </>
             }
-
-            <$SatusView>
+            <$StatusView>
                 <$StatusNameText>{MbInfo.mb_name}님, 반갑습니다.{'\u00A0'}{'\u00A0'}
                 { is_key == 'Y' ? <$StatusPriodText>이용가능기간 ~{MbInfo.edate}{'\u00A0'}
                                     <$StatusHighLightText>({MbInfo.count}일 남음)</$StatusHighLightText>
                                 </$StatusPriodText> : null }
                 { is_key == 'N' ? <$StatusPriodText>이용 가능한 스마트키가 없습니다.</$StatusPriodText> : null }
                 </$StatusNameText>
-            </$SatusView>
+            </$StatusView>
             <View style={{flex : 1, flexDirection : 'column', backgroundColor : '#111111'}}>
-                <Slick style={{height : height, paddingBottom:50 }} showsPagination={true} renderPagination={renderPagination} autoplay={true} autoplayTimeout={6}>
+                <Slick style={{height : ContentHeight*0.5, paddingBottom:0 }} showsPagination={true} renderPagination={renderPagination} autoplay={true} autoplayTimeout={6}>
                     <$SlideView>
                         <SlideUrl url={slideURL01} img={require('../images/banner1.png')} />
                     </$SlideView>
@@ -595,7 +597,7 @@ function Logged( props ) {
                     </$SlideView>
                 </Slick>
                 
-                <View style={{flex : 1, flexDirection : 'row', backgroundColor : '#111111'}}>
+                <View style={{height : ContentHeight*0.52, flexDirection : 'row', backgroundColor : '#111111'}}>
                     { ( ( is_key == 'Y' && isBeacon == 'Y' ) &&                 
                     <$DoorButtonView style={{backgroundColor : '#1ad57c'}} onPress={()=>btn_door_open()}>
                         <$DoorButtonImg source={require('../images/icon_key.png')} />
@@ -640,6 +642,7 @@ function Logged( props ) {
                     </$PayButtonView>
                 </View>
             </View>
+            <$EmptyView></$EmptyView>
         </Content>
 
         <$Footer>

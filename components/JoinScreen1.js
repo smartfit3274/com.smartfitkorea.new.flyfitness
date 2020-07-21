@@ -11,6 +11,7 @@ import {
   ScrollView,
   Keyboard,
   TouchableOpacity,
+  StatusBar
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
@@ -29,94 +30,79 @@ import {
 import Checkbox from '@react-native-community/checkbox';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { $Header } from './$Header';
+import TitleContainer from "./Title";
+
+const window = Dimensions.get('window'); 
 
 const BodyContainer = styled.View`
-   width:90%;
    margin:0 auto;
 `;
 
 const FooterStyle = styled(Footer)`
-  
 `;
+
+const CloseButtonView = styled.View`
+`
 
 const MyTitle = styled.Text`
   font-size:20px;
   margin-top: 30px;
 `;
 
-const SectionHelp = styled.View`
-  margin-top: 15px;
-  border: 1px solid #cccccc;
-  background: #fff;
-  padding:10px;
-`;
-
-const SectionAText = styled.Text`
-  font-size:16px;
-`;
-
+const CheckView = styled.TouchableOpacity`
+  flex-direction : row;
+  justify-content : space-between;
+  width : ${window.width*0.85+'px'};
+`
 const SectionCheck = styled.View`
-  background:#fff;
-  border: 1px solid #cccccc;
-  justify-content:flex-start;
-  margin-top: 10px;
+  width : 100%;
   padding:5px;
 `;
 
+const SectionCheckView = styled.View`
+  border-bottom-color : #ccc;
+  border-bottom-width : 1px;
+  padding: 7px;
+`
 const SectionCheckText = styled.Text`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
 `;
 
-const ItemText = styled.View`
-  font-size:16px;
-  margin-bottom: 5px;
-`;
-
-const ButtonNotAgree = styled.TouchableOpacity`
-  flex:1;
-  justify-content:center;  
-  align-items:center;  
-  font-size: 14px;
-  background-color: #95a5a6;
-`;
 const ButtonAgree = styled.TouchableOpacity`
   flex:1;
   justify-content:center;  
   align-items:center;  
   font-size: 14px;
-  background: ${props => props.disabled == true?'#7f8c8d':'#2980b9'};
+  background: ${props => props.disabled == true?'#d5d5d5':'#4c6eec'};
 `;
 
 const ButtonText = styled.Text`
   color:#fff;
-  font-weight: bold;
 `;
 
 const TextStyle = styled.Text`
-  margin-left:10px;
-  font-size:16px;  
+  font-size:14px;  
+  align-self : stretch;
+  height : 30px;
+  line-height : 25px;
 `;
+
+const TextView = styled.Text`
+  font-size:14px;
+  color : #999;
+`
 
 const $ScrollView = styled.ScrollView`
-
+  height : ${window.height+'px'};
+  margin-top : 20px;
 `;
-
-function AgreeSectionComp () {
-  return (
-    <SectionHelp>
-      <SectionAText>
-      이용약관, 개인정보 수집 및 이용에 관한 내용을 각각 확인 후 동의하시기 바랍니다. 
-      </SectionAText>
-    </SectionHelp>
-  );
-}
 
 function TitleSectionComp(props) {
   return(
-    <View style={{width: '90%', marginTop:10, paddingLeft:10}}>
-      <SectionCheckText><Text>{props.title}</Text></SectionCheckText>
-    </View>
+    <SectionCheckView>
+      <SectionCheckText>{props.title}</SectionCheckText>
+    </SectionCheckView>
   );
 }
 
@@ -137,26 +123,26 @@ function CheckSectionComp(props) {
 
   return (
   <SectionCheck>     
-    <ListItem>
-      <Checkbox disabled = {true} value = {check1} />
-      <TextStyle onPress={()=>agreeBtnPressed(1)}>1조 센터 가입원칙 관련 사항에 대하여 동의합니다. [ 약관보기 ] </TextStyle>              
-    </ListItem>
-    <ListItem>
-      <Checkbox disabled = {true} value = {check2} />
-      <TextStyle onPress={()=>agreeBtnPressed(2)}>2조 센터 사용관련 회원 준수사항에 대하여 동의합니다. [ 약관보기 ]</TextStyle>              
-    </ListItem>
-    <ListItem>
-      <Checkbox disabled = {true} value = {check3} />
-      <TextStyle onPress={()=>agreeBtnPressed(3)}>3,4조 명의 변경 및 휴회(정지)적용에 대하여 이해하였습니다. [ 약관보기 ]</TextStyle>              
-    </ListItem>
-    <ListItem>
-      <Checkbox disabled = {true} value = {check5} />
-      <TextStyle onPress={()=>agreeBtnPressed(5)}>5조 환불약정금(위약금10%) 및 환불금 지급방식에 대하여 동의합니다. [ 약관보기 ]</TextStyle>              
-    </ListItem>
-    <ListItem>
-      <Checkbox disabled = {true} value = {check6} />
-      <TextStyle onPress={()=>agreeBtnPressed(6)}>6조 영업시간 및 서비스 시간과 각종사고 책임범위에 대하여 동의합니다. [ 약관보기 ]</TextStyle>              
-    </ListItem>    
+    <CheckView onPress={()=>agreeBtnPressed(1)}>
+      <TextStyle>센터 가입원칙 관련 사항 동의</TextStyle> 
+      <Checkbox disabled = {true} value = {check1} style={{height : 25}}/>            
+    </CheckView>
+    <CheckView onPress={()=>agreeBtnPressed(2)}>
+      <TextStyle>센터 사용관련 회원 준수사항 동의</TextStyle>              
+      <Checkbox disabled = {true} value = {check2} style={{height : 25}}/>
+    </CheckView>
+    <CheckView onPress={()=>agreeBtnPressed(3)}>
+      <TextStyle>명의 변경 및 휴회(정지)적용 동의</TextStyle>              
+      <Checkbox disabled = {true} value = {check3} style={{height : 25}}/>
+    </CheckView>
+    <CheckView onPress={()=>agreeBtnPressed(5)}>
+      <TextStyle>환불약정금(위약금 10%) 및 환불금 지급방식 동의</TextStyle>              
+      <Checkbox disabled = {true} value = {check5} style={{height : 25}}/>
+    </CheckView>
+    <CheckView onPress={()=>agreeBtnPressed(6)}>
+      <TextStyle>영업 및 서비스 시간과 각종사고 책임범위 동의</TextStyle>              
+      <Checkbox disabled = {true} value = {check6} style={{height : 25}}/>
+    </CheckView>    
   </SectionCheck>
   )
 }
@@ -172,10 +158,10 @@ function CheckPriComp(props) {
 
   return (
     <SectionCheck>
-      <ListItem>
-        <Checkbox disabled = {true} value = {check10} />
-        <TextStyle onPress={()=>agreeBtnPressed(10)}>개인정보 수집 및 이용에 대하여 동의합니다. [ 약관보기 ]</TextStyle>
-      </ListItem> 
+      <CheckView onPress={()=>agreeBtnPressed(10)}>
+        <TextStyle>개인정보 수집 및 이용에 대하여 동의합니다.</TextStyle>
+        <Checkbox disabled = {true} value = {check10} style={{height : 30}}/>
+      </CheckView> 
     </SectionCheck>
   )
 }
@@ -255,44 +241,42 @@ export default function JoinScreen(props) {
   const btn_close = () => {
     navigation.pop();
   }
+
+  const titleData = {
+    mode : 'light',
+    mainText : '회원가입',
+    subText : '이용약관, 개인정보 수집 및 이용에 관한 내용을 \n각각 확인 후 동의하시기 바랍니다.',
+    width : '85'
+  }
  
   return (      
 
         <Container>
-          <$Header>
+          <$Header iosBarStyle={"dark-content"}>
+            <StatusBar backgroundColor="white"/>
               <Left style={{flex:1}}>
                   <Button transparent onPress={()=>btn_close()}>
-                      <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"white"}}></Icon>
+                      <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"#aaaaaa"}}></Icon>
                   </Button>
               </Left>
               <Body style={{flex:1,justifyContent:"center"}}>
-                  <Text style={{alignSelf:"center",color:"white"}}>회원가입</Text>
               </Body>
               <Right style={{flex:1}}></Right>
           </$Header>          
-
+          <TitleContainer data={titleData} />
             <Body>
-              <SafeAreaView>
               <BodyContainer>
                 <$ScrollView showsVerticalScrollIndicator={false}>
-                  <MyTitle>회원가입 (약관동의)</MyTitle>
-                  <AgreeSectionComp/> 
-                  <TitleSectionComp title="이용약관 (필수)"/>
+                  <TitleSectionComp title="서비스 이용약관에 대한 동의 (필수)"/>
                   <CheckSectionComp data={{check1:check1,check2:check2,check3:check3, check4:check4, check5:check5, check6:check6}}/>
-                  <TitleSectionComp title="개인정보 수집 및 이용에 대한 안내 (필수)"/>
+                  <TitleSectionComp title="개인정보 수집 및 이용에 대한 동의 (필수)"/>
                   <CheckPriComp data={{ check10:check10 }} />
-                  <View style={{ paddingTop:30}}>                    
-                  </View>
                 </$ScrollView>
               </BodyContainer>            
-              </SafeAreaView>
             </Body>    
-            
             <FooterStyle>            
-              <ButtonNotAgree onPress={()=>BtnNotAgree(false)}><ButtonText>동의 안함</ButtonText></ButtonNotAgree>      
               <ButtonAgree disabled={BtnDisabled} onPress={()=>BtnAgree(true)}><ButtonText>동의 완료({count}/6)</ButtonText></ButtonAgree> 
             </FooterStyle>
-    
         </Container>
       
   );

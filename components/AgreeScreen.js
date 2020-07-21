@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import { View, Text,StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text,StyleSheet, SafeAreaView, StatusBar } from 'react-native';
 import styled from 'styled-components/native';
 import { useNavigation, goBack } from 'react-navigation-hooks';
 import { ScrollView } from 'react-native-gesture-handler';
 import { NavigationEvents } from 'react-navigation';
 import data from './data/agreement.json';
-import { Container,Content, Footer } from 'native-base';
+import { Container,Content, Header, Left, Footer, Button } from 'native-base';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { $Header } from './$Header';
 
+const CloseButtonView = styled.View`
+`
 
 const TextTitle = styled.Text`
   font-size:17px;
   font-weight: bold;
   margin-bottom: 10px;
-  margin-top:20px;
 `;
 
 const TextItem = styled.Text`
@@ -25,17 +28,18 @@ const ButtonContainer = styled.View`
   height: 60px;
 `;
 
-const Button = styled.TouchableOpacity`
+const $Button = styled.TouchableOpacity`
   flex:1;
   justify-content:center;  
   align-items:center;  
   background: ${props => (props.Agree ? '#7f8c8d':'#2980b9' )};
-  font-size: 14px;
+  background-color : #4c6eec;
+  height : 55px;
 `;
 
 const ButtonText = styled.Text`
   color:#fff;
-  font-weight: bold;
+  font-size : 18px;
 `;
 
 export default function AgreeScreen (props) {
@@ -63,6 +67,14 @@ export default function AgreeScreen (props) {
   return (
     
       <Container>        
+        <$Header iosBarStyle={"dark-content"}>
+            <StatusBar backgroundColor="white"/>
+            <Left style={{flex:1}}>
+                <Button transparent onPress={()=>BtnNotAgree()}>
+                  <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"#aaaaaa"}}></Icon>
+                </Button>
+            </Left>
+        </$Header>
 
         <Content contentContainerStyle={styles.container}>
           <SafeAreaView>
@@ -74,14 +86,9 @@ export default function AgreeScreen (props) {
         </Content>
 
         <Footer>
-          <Button Agree onPress={()=>BtnNotAgree()}><ButtonText>동의 안함</ButtonText></Button>
-          <Button notAgree onPress={()=>BtnAgree()}><ButtonText>동의함</ButtonText></Button>          
+          <$Button notAgree onPress={()=>BtnAgree()}><ButtonText>동의</ButtonText></$Button>          
         </Footer>
- 
       </Container>
-    
-
-
   );
 }
 

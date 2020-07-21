@@ -18,7 +18,7 @@ import {
 } from 'native-base';
 import { 
     Image,Dimensions, RefreshControlBase,
-    Alert
+    Alert, StatusBar
 } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -37,25 +37,38 @@ import {
     write_access_token,
     check_key
  } from './lib/Function';
+ import TitleContainer from "./Title";
+ import { $Header } from './$Header';
+ import { $Footer } from './$Footer';
 
 const ItemStyle = styled(Item)`    
     height:60px;
-    width:90%;
+    width:80%;
+    margin: 0 auto;
+    border-bottom-color : #4f4f4f;
 `;
 
 const LabelTitleStyle = styled(Label)` 
     flex:1;
-    background:#cccccc;
-    padding-top:3px;
-    padding-bottom:5px;
-    text-align:center;
-    font-size:13px;   
-    margin-right:5px; 
+    padding-top:4px;
+    padding-bottom:2px;
+    font-size:14px;   
+    font-weight : 700;
+    color : #fff;
 `;
 
 const LabelBodyStyle = styled(Label)`  
     flex:2.5;
     font-size:13px;
+    color : #fff;
+`;
+
+const ButtonAgree = styled.TouchableOpacity`
+  flex:1;
+  justify-content:center;  
+  align-items:center;  
+  font-size: 14px;
+  background-color : #4c6eec;
 `;
 
 var access_token = '';
@@ -132,23 +145,30 @@ function MyInfoScreen() {
     function btn_close() {
         navigation.pop();
     }
+
+    const titleData = {
+        mode : 'dark',
+        mainText : '내정보',
+        subText : '스마트짐을 이용해주셔서 감사합니다.'
+    }
   
     return (
       <>
-        <Header style={{backgroundColor:'#454545'}}>
+        <$Header style={{backgroundColor:'#111111'}} iosBarStyle={"light-content"}>
+            <StatusBar backgroundColor="#111"/>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
                     <Icon name="close" style={{fontSize:30, color:"white"}}></Icon>
                 </Button>
             </Left>
             <Body style={{flex:1,justifyContent:"center"}}>
-                <Text style={{alignSelf:"center",color:"white"}}>내 정보</Text>
             </Body>
             <Right style={{flex:1}}></Right>
-        </Header>
+        </$Header>
 
-        <Content scrollEnabled={false}>
-            <Form>
+        <Content scrollEnabled={false} style={{backgroundColor : '#111111'}}>
+            <TitleContainer data={titleData} />
+            <Form style={{marginTop : 50}}>
                 <ItemStyle fixedLabel>
                     <LabelTitleStyle>이름</LabelTitleStyle>
                     <LabelBodyStyle>{MbInfo.mb_name}</LabelBodyStyle>
@@ -166,9 +186,11 @@ function MyInfoScreen() {
                     <LabelBodyStyle>{MbInfo.edate}</LabelBodyStyle>
                 </ItemStyle>
             </Form>    
-    <Text style={{textAlign:"center",marginTop:30}}>{cfg.name}을 이용해주셔서 감사합니다.</Text>        
+        <Text style={{textAlign:"center",marginTop:30}}>{cfg.name}을 이용해주셔서 감사합니다.</Text>        
         </Content>
-
+        <$Footer style={{backgroundColor:'#111111'}}>            
+            <ButtonAgree full onPress={()=>btn_close()}><Text style={{fontSize : 18, color : '#fff'}}>확인</Text></ButtonAgree> 
+        </$Footer>
       </>      
     );  
 }

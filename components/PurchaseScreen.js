@@ -21,7 +21,7 @@ import {
 import { 
     Image,Dimensions, RefreshControlBase,
     Alert,
-    StyleSheet
+    StyleSheet, StatusBar
 } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
@@ -41,25 +41,23 @@ import {
     write_access_token,
     check_key
  } from './lib/Function';
+import { $Header } from './$Header';
+import { $Footer } from './$Footer';
+const MainText = styled.Text`
+  font-size:20px;  
+  font-weight : 700;
+  color: #fff;
+  width : 90%;
+  margin : 20px auto 25px auto;
+  background-color : #111;
+`
 
-const ItemStyle = styled(Item)`    
-    height:60px;
-    width:90%;
-`;
-
-const LabelTitleStyle = styled(Label)` 
-    flex:1;
-    background:#cccccc;
-    padding-top:3px;
-    padding-bottom:5px;
-    text-align:center;
-    font-size:13px;   
-    margin-right:5px; 
-`;
-
-const LabelBodyStyle = styled(Label)`  
-    flex:2.5;
-    font-size:13px;
+const ButtonAgree = styled.TouchableOpacity`
+  flex:1;
+  justify-content:center;  
+  align-items:center;  
+  font-size: 14px;
+  background-color : #4c6eec;
 `;
 
 var access_token = '';
@@ -138,19 +136,19 @@ function PurchaseScreen() {
     
     return (
       <>
-        <Header style={{backgroundColor:'#454545'}}>
+        <$Header style={{backgroundColor:'#111111'}} iosBarStyle={"light-content"}>
+            <StatusBar backgroundColor="#111"/>
             <Left style={{flex:1}}>
                 <Button transparent onPress={()=>btn_close()}>
                     <Icon name="close" style={{fontSize:30, color:"white"}}></Icon>
                 </Button>
             </Left>
-            <Body style={{flex:1,justifyContent:"center"}}>
-                <Text style={{alignSelf:"center",color:"white"}}>구매 내역</Text>
-            </Body>
-            <Right style={{flex:1}}></Right>
-        </Header>
-
-        <Content scrollEnabled={true}>
+        </$Header>
+        <View style={{backgroundColor:'#111111'}}>
+            <MainText>구매내역</MainText>
+        </View>
+        <Content contentContainerStyle={styles.container} scrollEnabled={true} style={{backgroundColor:'#111111'}}>
+            <View style={styles.content}>
             <List>
                 {PurchaseInfo.map((item, index) =>{
                     const { p_date, p_name, sdate, edate, price } = item;
@@ -170,28 +168,37 @@ function PurchaseScreen() {
                     var month3 = edate.substring(4, 6);
                     var day3 = edate.substring(6, 8);
                     var formatEdate = year3 + '.' + month3 + "." + day3;
+
+                    var formatPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    
                     return (
                         <ListItem style={styles.listitem} key={index}>    
+                            <Left style={styles.listLeft}>
                             <View style={{flex : 1, alignSelf: 'stretch'}}>
-                                <Text >{formatPdate}</Text>
+                                <Text style={{color : '#999'}}>{formatPdate}</Text>
                             </View> 
                             <View style={{flex : 1, alignSelf: 'stretch'}}>
-                                <Text>{p_name}</Text>   
+                                <Text style={{color : 'white'}}>{p_name}</Text>   
                             </View>
                             <View style={{flex : 1, alignSelf: 'stretch'}}>
-                                <Text style={{color : '#999'}}>{formatSdate}~{formatEdate}</Text>
+                                <Text style={{color : 'white'}}>{formatSdate}~{formatEdate}</Text>
                             </View>
-                            <View style={{flex : 1, alignSelf: 'stretch'}}>
-                                <Text style={{textAlign : "right", fontSize : 18}}>{price}원</Text>    
-                            </View>                                                                                                                                                        
+                            </Left>
+                            <Right style={{flexDirection : 'column', flexBasis : 60}}>
+                            <View style={{alignSelf: 'flex-end'}}>
+                                <Text style={{textAlign : "right", fontSize : 18, color:"white"}} numberOfLines={1}>{formatPrice}원</Text>    
+                            </View>   
+                            </Right>                                                                                                                                                     
                         </ListItem>
                     )
                 }  
                 )}
-
             </List>  
+            </View>
         </Content>
-
+        <$Footer style={{backgroundColor:'#111111'}}>            
+            <ButtonAgree full onPress={()=>btn_close()}><Text style={{fontSize : 18, color : '#fff'}}>확인</Text></ButtonAgree> 
+        </$Footer>
       </>      
     );  
 }
@@ -201,12 +208,21 @@ export default PurchaseScreen;
 
 const styles = StyleSheet.create({
     listitem:{
+        marginLeft : 0
+    },
+    listLeft:{
         flex : 1,
         flexDirection : 'column'
     },
     item01Text : {
         fontWeight : "bold",
         fontSize : 18
-    }
+    },
+    container:{
+        alignItems:"center"
+    },
+    content:{
+        width:"90%"
+    }, 
 
 }); 

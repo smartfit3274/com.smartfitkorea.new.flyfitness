@@ -9,7 +9,8 @@ import {
   ScrollView,
   Keyboard,
   TouchableOpacity,
-  Alert
+  Alert,
+  StatusBar
 } from 'react-native';
 import { useNavigation } from 'react-navigation-hooks'
 import axios from 'axios';
@@ -26,72 +27,48 @@ import {
   Left,
   Right,
   Body,
-  Text
+  Text,
+  Form,
+  Label
 } from 'native-base';
 import styled from 'styled-components/native';
 import cfg from './data/cfg.json';
 import {useSelector, useDispatch} from 'react-redux';
-
-const SubContainer = styled.View`
-  flex:1;  
-  /* border:2px solid green; */
-`;
-
-const Title = styled.Text`
-  font-size:18px;
-  margin-top:20px;
-  margin-bottom: 20px;
-  padding-left:3%;
-  text-align:center;
-`;
+import TitleContainer from './Title';
+import { $Header } from './$Header';
 
 const BottomContainer = styled.View`
   height:60px;
   flex-direction:row;
 `;
 
-const ButtonNotAgree = styled.TouchableOpacity`
+const ButtonAgree = styled.TouchableOpacity`
   flex:1;
-  align-items:center;
-  justify-content:center;
-  background-color: #95a5a6;
-`;
-
-const ButtonAgree = styled(Button)`
-  margin-top:30px;
-`;
-
-const ButtonAgreeTxt = styled.Text`
-  color:#fff;
-  font-size:16px;  
-`;
-
-const $Header = styled(Header)`
-  background-color:#454545;
+  justify-content:center;  
+  align-items:center;  
+  font-size: 14px;
+  background-color : #4c6eec;
 `;
 
 const $Content = styled(Content)`
-  display:flex;
-  width:90%;
+  flex : 1;
+  width:80%;
   margin:0 auto;
   max-width: 350px;
+  margin-top : 20px;
 `
 
 const $Input = styled(Input)`
   font-size:16px;  
 `;
 
-const BodyComp = styled(Body)`
+const LabelTitleStyle = styled(Label)` 
+    padding-top:4px;
+    padding-bottom:2px;
+    font-size:14px;   
+    font-weight : 700;
+    width : 30%;
 `;
-
-const BodyText = styled(Text)`
-  color:white;
-  align-self:center;
-`
-
-const ButtonContainer = styled.View`
-  padding-bottom:60px;
-`
 
 let url = "";
 
@@ -162,59 +139,53 @@ export default function JoinScreen2(props) {
     console.log(text);
   }
 
+  const titleData = {
+    mode : 'light',
+    mainText : '회원가입',
+    subText : '회원정보를 입력하세요.'
+  }
+
   return (  
     <Container>
-                
-        <$Header>
-            <Left style={{flex:1}}>
-                <Button transparent onPress={()=>btn_close()}>
-                  <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"white"}}></Icon>
-                </Button>
-            </Left>
-            <Body style={{flex:1,justifyContent:"center"}}>
-                <Text style={{alignSelf:"center",color:"white"}}>회원가입</Text>
-            </Body>
-            <Right style={{flex:1}}></Right>
-        </$Header>
-
-        <$Content> 
-
-          <Title>회원정보를 입력하세요.</Title>
-
-          <Item>
-            <Icon name="phone" style={{ fontSize:18,paddingRight:5,color:'#666666'}}/>
-            <$Input placeholder="휴대폰 (- 없이 입력)" 
-            keyboardType="numeric" 
-            onChange={ e => setPhone(e.nativeEvent.text) } 
-            placeholderTextColor='#666666'         
-            />
-          </Item>
-
-          <Item>
-            <Icon name="account-box" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
-            <$Input placeholder="이름 (실명)" 
-            onChange={(e)=>setName(e.nativeEvent.text)} 
-            placeholderTextColor='#666666'/>
-          </Item>
-
-          <Item>
-            <Icon name="lock" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
-            <$Input placeholder="비밀번호 (4-12 자리 영문/숫자 조합)" secureTextEntry={true} onChange={(e)=>setPass(e.nativeEvent.text)} placeholderTextColor='#666666'/>
-          </Item>          
-
-          <Item>
-            <Icon name="lock" style={{ fontSize:18,paddingRight:5,color:'#666666' }}/>
-            <$Input placeholder="비밀번호 확인"  secureTextEntry={true} onChange={(e)=>setPassConfirm(e.nativeEvent.text)} placeholderTextColor='#666666'/>
-          </Item>
-
-          <ButtonContainer>
-            <ButtonAgree full onPress={()=>btn_ok()}>
-              <ButtonAgreeTxt>확인</ButtonAgreeTxt>              
-            </ButtonAgree>
-          </ButtonContainer>
-      
+      <$Header iosBarStyle={"dark-content"}>
+          <StatusBar backgroundColor="white"/>
+          <Left style={{flex:1}}>
+              <Button transparent onPress={()=>btn_close()}>
+                  <Icon name="keyboard-arrow-left" style={{fontSize:30, color:"#aaaaaa"}}></Icon>
+              </Button>
+          </Left>
+          <Body style={{flex:1,justifyContent:"center"}}>
+          </Body>
+          <Right style={{flex:1}}></Right>
+      </$Header>
+      <TitleContainer data={titleData}/>
+      <$Content>
+        <Item>
+          <LabelTitleStyle>휴대폰</LabelTitleStyle>
+          <$Input placeholder="- 없이 입력" 
+          keyboardType="numeric" 
+          onChange={ e => setPhone(e.nativeEvent.text) } 
+          placeholderTextColor='#666666'         
+          />
+        </Item>
+        <Item>
+          <LabelTitleStyle>이름</LabelTitleStyle>
+          <$Input placeholder="실명" 
+          onChange={(e)=>setName(e.nativeEvent.text)} 
+          placeholderTextColor='#666666'/>
+        </Item>
+        <Item>
+          <LabelTitleStyle>비밀번호</LabelTitleStyle>
+          <$Input placeholder="4-12 자리 영문/숫자 조합" secureTextEntry={true} onChange={(e)=>setPass(e.nativeEvent.text)} placeholderTextColor='#666666'/>
+        </Item>          
+        <Item>
+          <LabelTitleStyle>비밀번호 확인</LabelTitleStyle>
+          <$Input placeholder="비밀번호 확인"  secureTextEntry={true} onChange={(e)=>setPassConfirm(e.nativeEvent.text)} placeholderTextColor='#666666'/>
+        </Item>
       </$Content>
-      
+      <Footer>            
+        <ButtonAgree full onPress={()=>btn_ok()}><Text style={{fontSize : 18, color : '#fff'}}>다음</Text></ButtonAgree>               
+      </Footer>
     </Container>
   );
 

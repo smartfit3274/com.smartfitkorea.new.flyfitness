@@ -5,8 +5,11 @@ import {
     TextInput,
     Alert,
     Image,
+    SafeAreaView,
+    StatusBar,
+    Dimensions
 } from 'react-native';
-import { Button,Text } from 'native-base';
+import { Button,Text, Footer } from 'native-base';
 import styled from 'styled-components/native';
 import cfg from "../data/cfg.json";
 import axios from 'axios';
@@ -15,15 +18,35 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import DeviceInfo from 'react-native-device-info';
+import TitleContainer from "../Title";
+import { $Header } from '../$Header';
+
+const window = Dimensions.get('window'); 
 
 const TitleView = styled.View`
-  margin-top: 30px;
-  align-items:center;
+  width : 75%;
+  margin : 0 auto;
+  margin-top: 20px;
+  margin-bottom : 20px;
+  flex : 3;
 `;
 
+const LogoImage = styled.Image`
+  width : 80px;
+  resize-mode : contain;
+  margin-bottom : 10px;
+`
+
 const MainText = styled.Text`
-  font-size:18px;  
-  text-align:center;
+  font-size:20px;  
+  color : #111111;
+  font-weight : 700;
+  /* text-align:center; */
+`
+
+const SubText = styled.Text`
+  font-size : 14px;
+  color : #747474;
 `
 
 const Logo = styled.Image`
@@ -31,14 +54,22 @@ const Logo = styled.Image`
   height: 30px;
 `;
 
+const $Content = styled.View`
+  flex : 3;
+  justify-content : space-between;
+`
+
 const InputContainer = styled.View`  
   margin-top: 30px;
+  margin-bottom : 30px;
   width: 100%;
   align-items:center;
+  flex : 2;
 `;
 
 const LoginInput = styled.TextInput`
-  border:2px solid gray;
+  border-bottom-width : 1px;
+  border-bottom-color : #e8e6e7;
   font-size: 15px;
   width: 80%;
   max-width: 300px;
@@ -47,39 +78,53 @@ const LoginInput = styled.TextInput`
 
 const PassInput = styled.TextInput`
   margin-top: 5px;
-  border:2px solid gray;
+  border-bottom-width : 1px;
+  border-bottom-color : #e8e6e7;
   font-size: 15px;  
   width: 80%;
   max-width: 300px;
   padding:10px;
 `;
 
-const ButtonContainer = styled.View`
-  width: 80%;
-  margin:0 auto;
-`;
+const SubContainer = styled.View`
+  flex-direction : row;
+  align-self : center;
+  flex : 1;
+`
 
-const LostPassContainer = styled.View`
-  align-items:center;
-  margin-top: 10px;
+const PassText = styled.Text`
+  font-size : 12px;
+` 
+
+const JoinText = styled.Text`
+  font-size : 12px;
+`
+
+const SectionText = styled.Text`
+  margin : 0 20px;
+  font-size : 12px;
+`
+
+const ButtonContainer = styled.View`
+  flex :2;
 `;
 
 const LoginButton = styled(Button)`  
-  margin-top: 20px;
+  /* margin-top: 20px; */
+  background-color : #4c6eec;
+  height : 55px;
 `;
 
-const JoinButton = styled(Button)`
-  margin-top: 5px;  
-`;
 
 const CompanyTextItem = styled.Text`
-  font-size: 13px;
+  font-size: 10px;
+  color : #747474;
 `;
 
 const CompanyTextContainer = styled.View`
-  margin-top: 40px;
-  align-items:center;
-  padding-bottom: 30px;  
+  /* align-self : center; */
+  align-items:center; 
+  flex : 2;
 `;
 
 let result = '';
@@ -152,33 +197,48 @@ function Login () {
     .catch(error => alert(error));
   }
 
+  const titleData = {
+    mode : 'light',
+    mainText : '안녕하세요. \n'+store.name+'입니다.',
+    subText : '스마트짐을 이용해주셔서 감사합니다.'
+  }
+
   return (
-      <ScrollView style={{width: '100%'}} keyboardShouldPersistTaps="handled">          
-          <TitleView>
-              <Image source={require('../images/logo_smartgym2.png')} style={{width:160, height:40, alignSelf:"center"}}></Image>
-              <MainText>{store.name}</MainText>              
-          </TitleView>
-
-          <InputContainer>        
-              <LoginInput placeholder="휴대폰번호 - 없이 입력" 
-              onChange={(e)=>setPhone(e.nativeEvent.text)}
-              keyboardType={'numeric'}></LoginInput>    
-              <PassInput placeholder="비밀번호" onChange={(e)=>setPass(e.nativeEvent.text)}
-              secureTextEntry={true}
-              ></PassInput>
-          </InputContainer>
-
-          <ButtonContainer>            
-              <LoginButton full onPress={btn_login_press}><Text>로그인</Text></LoginButton>
-              <JoinButton full onPress={()=>btn_join_press()}><Text>회원가입</Text></JoinButton>                     
-          </ButtonContainer>
-
-          <LostPassContainer>
-              <Text onPress={()=>btn_find_pass()}>비밀번호를 잊어버리셨나요?</Text>
-          </LostPassContainer>
-
-          <CompanyText></CompanyText>
+    <>
+      <$Header iosBarStyle={"dark-content"} style={{height : 10}}>
+        <StatusBar backgroundColor="white"/>
+      </$Header>
+      <View style={{height : window.height - 35}}>
+      <ScrollView keyboardShouldPersistTaps="handled">
+      <View style={{width: '100%', flexDirection : 'column', flex : 1, height : window.height*0.7}} keyboardShouldPersistTaps="handled">          
+          <View style={{flex : 0.2}}></View>
+          <TitleContainer data={titleData} />
+          <$Content>
+            <InputContainer>        
+                <LoginInput placeholder="휴대폰번호 - 없이 입력" 
+                onChange={(e)=>setPhone(e.nativeEvent.text)}
+                keyboardType={'numeric'}></LoginInput>    
+                <PassInput placeholder="비밀번호" onChange={(e)=>setPass(e.nativeEvent.text)}
+                secureTextEntry={true}
+                ></PassInput>
+            </InputContainer>
+            <SubContainer>
+              <PassText onPress={()=>btn_find_pass()}>비밀번호 찾기</PassText>
+              <SectionText>|</SectionText>
+              <JoinText onPress={()=>btn_join_press()}>회원가입</JoinText>
+            </SubContainer>
+          </$Content>
+      </View>
+      
       </ScrollView>
+      <View style={{minHeight : 150, height : window.height*0.25, display : 'flex'}}>
+          <ButtonContainer>            
+              <LoginButton full onPress={btn_login_press}><Text style={{fontSize : 18}}>로그인하기</Text></LoginButton>               
+          </ButtonContainer>
+          <CompanyText></CompanyText>
+      </View>
+      </View>
+    </>
   );  
 }
 
@@ -187,9 +247,7 @@ function CompanyText() {
         <CompanyTextContainer>
         <CompanyTextItem>{cfg.company}</CompanyTextItem>
         <CompanyTextItem>{cfg.address}</CompanyTextItem>
-        {/* <CompanyTextItem>{cfg.reg}</CompanyTextItem> */}
         <CompanyTextItem>{cfg.charge}</CompanyTextItem>
-        <CompanyTextItem>{cfg.phone}</CompanyTextItem>
         <CompanyTextItem>{cfg.resp}</CompanyTextItem>
         </CompanyTextContainer>
     )
