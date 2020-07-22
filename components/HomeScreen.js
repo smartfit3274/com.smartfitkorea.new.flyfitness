@@ -146,21 +146,22 @@ function HomeScreen(props) {
 
   
   // 카드결제를 완료하고
-  // 팝업창이 닫힐때 새로고침  
+  // 팝업창이 닫힐때 새로고침 
   const { pop_id } = ( navigation.state.params ) ? navigation.state.params:"";  
   useEffect(()=>{
-    if(pop_id !== '' )
-    {
+    if(pop_id !== undefined && pop_id !== '' )
+    {      
       check_key (access_token, store.url , store.sid, store.cid ) 
       .then( result => {
         is_key = result;      
         console.log('HomeScreen();');
         console.log('is_key', is_key);
         setIsLogin('');
-        setIsLogin('Y');
+        setIsLogin(isLogin);
       });
+      console.log('aaa');
     }    
-  },[pop_id]);
+  },[pop_id]);  
 
 
   return (              
