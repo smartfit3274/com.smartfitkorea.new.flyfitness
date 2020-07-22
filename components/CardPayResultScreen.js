@@ -26,6 +26,7 @@ import IMP from 'iamport-react-native';
 import Loading from './Loading';
 import { WebView } from 'react-native-webview';
 import {useSelector, useDispatch} from 'react-redux';  
+import uuid from 'uuid';
 
 var access_token = '';
 
@@ -121,7 +122,7 @@ function CardPayResultScreen() {
         bordered
         transparent
         style={btn}
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate('Home',{pop_id:uuid.v4()})}        
     >
         <Icon name="arrow-left-circle" style={btnIcon} />
         <Text style={btnText}>돌아가기</Text>

@@ -1,25 +1,23 @@
 import React from 'react';
-import {Text} from 'react-native';
 import { useNavigation } from 'react-navigation-hooks'
+import { View,Button,Text } from 'native-base';
+import uuid from 'uuid';
 
 export default function TestScreen(props) {
     const navigation = useNavigation();
     const params = props.navigation.state.params;
+
+    const close = () => {
+        navigation.navigate('Home',{pop_id:uuid.v4()});
+    }
+
     return (
-        <Text>Hello?</Text>
+        <View>
+            <Text>Hello?</Text>
+            <Button onPress={close}>
+                <Text>닫기</Text>
+            </Button>
+        </View>
+
     );   
 }
-
-
-// navigation.replace('Join2',data); // 2단계로 전달
-// 전달받음 ---
-// const params = props.navigation.state.params;
-// console.log(params);
-// useEffect( async () => {
-//   await Font.loadAsync({
-//     Roboto: require('native-base/Fonts/Roboto.ttf'),
-//     Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-//     ...Ionicons.font,
-//   });
-//   console.log('[TAG] Font ready!');
-// },[]);
