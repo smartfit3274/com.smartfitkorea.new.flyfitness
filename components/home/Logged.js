@@ -36,7 +36,8 @@ import {
     create_access_token,
     write_access_token,
     write_refresh_token,
-    check_key
+    check_key,
+    get_image
   } from '../lib/Function';
 import { $Header } from '../$Header';
 
@@ -47,6 +48,7 @@ let confirm = '';
 let uuid = '';
 let disconnectCount = 0;
 let is_key = ''; // 출입키 보유 유무
+let images = [{"link": "", "uri": "https://admin.smartg.kr/img/banner.jpg"}, {"link": "", "uri": "https://admin.smartg.kr/img/banner.jpg"}, {"uri": "https://admin.smartg.kr/img/banner.jpg"}, {"uri": "https://admin.smartg.kr/img/banner.jpg"}];
 
 const show_distance = 'N'; // DEBUG
 const window = Dimensions.get('window'); 
@@ -91,6 +93,7 @@ const $SlideView = styled(View)`
 
 const $SlideImage = styled(Image)`
     width: ${widthValue+'px'};
+    height : ${ContentHeight*0.5 + 'px'};
     resize-mode: contain;
 `
 
@@ -184,12 +187,7 @@ const renderPagination = (index, total, context) => {
     )
   }
 
-  const slideURL01 = "https://www.smartmall.kr/product/detail.html?product_no=121&cate_no=57&display_group=1";
-  const slideURL02 = "https://www.smartmall.kr/product/detail.html?product_no=27&cate_no=93&display_group=1";
-  const slideURL03 = "https://www.smartmall.kr/product/detail.html?product_no=17&cate_no=57&display_group=1";
-  const slideURL04 = "https://www.smartmall.kr/product/detail.html?product_no=97&cate_no=75&display_group=1";
-
-  const SlideUrl = ({ url, img }) => {
+  const SlideUrl = ({ url, uri }) => {
     const handlePress = useCallback(async () => {
       // Checking if the link is supported for links with custom URL scheme.
       const supported = await Linking.canOpenURL(url);
@@ -203,7 +201,7 @@ const renderPagination = (index, total, context) => {
       }
     }, [url]);
   
-    return <TouchableHighlight style={{flex : 1}} onPress={handlePress} ><$SlideImage source={img}/></TouchableHighlight>
+    return <TouchableHighlight style={{flex : 1}} onPress={handlePress} ><$SlideImage source={{uri : uri}}/></TouchableHighlight>
   };
 
 function Logged( props ) {
@@ -295,6 +293,16 @@ function Logged( props ) {
                 DeviceEventEmitter.removeAllListeners();      
             }   
         }        
+    },[]);
+
+    useEffect(()=>{
+        get_image( { cid:store.cid, sid:store.sid, url:store.url, img : 'banner'} )
+        .then( result => { 
+            images = result;
+            console.log(images);
+        })
+        .catch( error => console.log(error) ); 
+
     },[]);
 
     // 비콘 시작
@@ -583,20 +591,19 @@ function Logged( props ) {
             </$StatusView>
             <View style={{flex : 1, flexDirection : 'column', backgroundColor : '#111111'}}>
                 <Slick style={{height : ContentHeight*0.5, paddingBottom:0 }} showsPagination={true} renderPagination={renderPagination} autoplay={true} autoplayTimeout={6}>
-                    <$SlideView>
-                        <SlideUrl url={slideURL01} img={require('../images/banner1.png')} />
-                    </$SlideView>
-                    <$SlideView>
-                        <SlideUrl url={slideURL02} img={require('../images/banner2.png')} />
-                    </$SlideView>
-                    <$SlideView>
-                        <SlideUrl url={slideURL03} img={require('../images/banner3.png')} />
-                    </$SlideView>
-                    <$SlideView>
-                        <SlideUrl url={slideURL04} img={require('../images/banner4.png')} />
-                    </$SlideView>
+                    {
+                        images.map((item, index) => {
+                            const { link, uri } = item;
+                            if(uri){
+                                return(
+                                    <$SlideView key={index}>
+                                        <SlideUrl url={link} uri={uri} />
+                                    </$SlideView>
+                                )
+                            }
+                        })
+                    }
                 </Slick>
-                
                 <View style={{height : ContentHeight*0.52, flexDirection : 'row', backgroundColor : '#111111'}}>
                     { ( ( is_key == 'Y' && isBeacon == 'Y' ) &&                 
                     <$DoorButtonView style={{backgroundColor : '#1ad57c'}} onPress={()=>btn_door_open()}>

@@ -194,3 +194,23 @@ export const get_uuid = params => {
         .catch(error=>resolve(''));
     })      
 }
+
+// 배너 가져오기
+export const get_image = params => {
+    console.log('get_image()');
+
+    const { sid,cid,url,img } = params;
+    const data = {
+        sid: sid,      
+        cid : cid,
+        img : img,
+    }    
+
+    return new Promise(function(resolve,reject) {
+        axios.post(url+'/slim/app/get_image',data)
+        .then(result => { 
+            resolve( result.data )            
+        })
+        .catch(error=>resolve(''));
+    })      
+}
