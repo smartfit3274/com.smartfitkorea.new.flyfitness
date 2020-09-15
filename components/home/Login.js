@@ -124,7 +124,7 @@ const CompanyTextItem = styled.Text`
 const CompanyTextContainer = styled.View`
   /* align-self : center; */
   align-items:center; 
-  flex : 2;
+  flex : 3;
 `;
 
 let result = '';
@@ -246,10 +246,11 @@ function CompanyText() {
     return(
         <CompanyTextContainer>
         <CompanyTextItem>{cfg.company}</CompanyTextItem>
-        <CompanyTextItem>{cfg.address}</CompanyTextItem>
         <CompanyTextItem>{cfg.charge}</CompanyTextItem>
+        <CompanyTextItem>{cfg.address}</CompanyTextItem>
         <CompanyTextItem>{cfg.phone}</CompanyTextItem>
         <CompanyTextItem>{cfg.resp}</CompanyTextItem>
+        <CompanyTextItem>{cfg.service}</CompanyTextItem>
         </CompanyTextContainer>
     )
 }
