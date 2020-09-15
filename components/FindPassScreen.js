@@ -30,6 +30,7 @@ import cfg from "./data/cfg.json";
 import axios from 'axios';
 import TitleContainer from './Title';
 import { $Header } from './$Header';
+import { useSelector, useDispatch } from 'react-redux';
 
 const ItemStyle = styled(Item)`    
     height:60px;
@@ -79,7 +80,8 @@ function FindPassScreen() {
 
     const navigation = useNavigation();
     const [mode,setMode] = useState('1');
-    
+    const store = useSelector(state => state.data);
+
     useEffect(()=>{
 
     },[]);        
@@ -91,10 +93,7 @@ function FindPassScreen() {
     function btn_req() {
         console.log('TAG: btn_req()');
 
-        url = '';
-        if(cfg.mode =='http') { url = cfg.http.host; }
-        if(cfg.mode =='https') { url = cfg.https.host; }
-        url = url + '/rest/find_pass';    
+        url = store.url + '/slim/app/find_pass';   
         const data = {
           sid:cfg.sid,
           cid:cfg.cid,
@@ -118,10 +117,7 @@ function FindPassScreen() {
     function btn_change() {
         console.log('TAG: btn_change()');
 
-        url = '';
-        if(cfg.mode =='http') { url = cfg.http.host; }
-        if(cfg.mode =='https') { url = cfg.https.host; }
-        url = url + '/rest/change_pass';    
+        url = store.url + '/slim/app/change_pass';   
         const data = {
           sid:cfg.sid,
           cid:cfg.cid,
