@@ -10,18 +10,18 @@ const INITIAL_STATE = {
     local   : "http://192.168.76.51:80",   
     server  : "https://admin.smartg.kr",
     sid     : "smartgym",    
-    cid     : "CT14Z01170314.HXZb9",
-    name    : "스마트짐 옥포점",
+    cid     : "CT18T25131655.yADF0",
+    name    : "스마트짐 메트로자이점",
     debug_beacon_local   : "N",
     dubug_beacon_uuid: "0b2b0848-205f-11e9-ab14-820316983006",
     debug_beacon_distance : "N",
     debug_beacon_console : "N",
     debug_door : "33",
     app_version : "1.6.0",
-    store_id_android: "com.smartfitkorea.smartpass",
+    store_id_android: "com.smartfitkorea.metroxi",
     store_id_ios : "1397721927",
     iamport:"imp76426114",
-    tier_code:"G01"    
+    tier_code:"G03"    
   }
 }
 
