@@ -128,7 +128,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.smartfitkorea.smartpass"
+        applicationId "com.smartfitkorea.metroxi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 10607
