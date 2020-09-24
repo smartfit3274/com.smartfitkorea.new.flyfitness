@@ -362,6 +362,8 @@ function Logged( props ) {
         BleManager.start({ showAlert: false })
         .then(() => BleManager.enableBluetooth() )
         .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION) )
+        .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION) )
+        // .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION) )
         .then(() => Beacons.detectIBeacons() )
         .then(() => Beacons.startRangingBeaconsInRegion(region) )
         .then(() => {
