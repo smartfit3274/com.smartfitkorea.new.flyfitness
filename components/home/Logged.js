@@ -48,7 +48,7 @@ let confirm = '';
 let uuid = '';
 let disconnectCount = 0;
 let is_key = ''; // 출입키 보유 유무
-let images = [{"link": "", "uri": "https://admin.smartg.kr/img/banner.jpg"}, {"link": "", "uri": "https://admin.smartg.kr/img/banner.jpg"}, {"uri": "https://admin.smartg.kr/img/banner.jpg"}, {"uri": "https://admin.smartg.kr/img/banner.jpg"}];
+let temp_images = [{"link": "", "uri": "https://admin.smartg.kr/img/banner.jpg"}, {"link": "", "uri": "https://admin.smartg.kr/img/banner.jpg"}, {"uri": "https://admin.smartg.kr/img/banner.jpg"}, {"uri": "https://admin.smartg.kr/img/banner.jpg"}];
 
 const show_distance = 'N'; // DEBUG
 const window = Dimensions.get('window'); 
@@ -82,7 +82,7 @@ const $StatusHighLightText = styled(Text)`
 
 const $SlideView = styled(View)`
     flex: 1;
-    padding: 10px;
+    /* padding: 10px; */
     align-items: center;
     background-color : #111111;
     border-bottom-color : #555;
@@ -220,6 +220,7 @@ function Logged( props ) {
     });
     const store = useSelector(state => state.data);
     const {is_key,access_token} = props.params;
+    const [images, setImages] = useState(temp_images);
     
     // 회원정보 로딩
     const member_one = () => {
@@ -298,8 +299,7 @@ function Logged( props ) {
     useEffect(()=>{
         get_image( { cid:store.cid, sid:store.sid, url:store.url, img : 'banner'} )
         .then( result => { 
-            images = result;
-            console.log(images);
+            setImages(result);
         })
         .catch( error => console.log(error) ); 
 
