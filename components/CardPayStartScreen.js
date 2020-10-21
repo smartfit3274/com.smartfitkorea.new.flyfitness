@@ -72,6 +72,7 @@ function CardPayStartScreen() {
         pid: pid,
         sid: store.sid,
         sdate: sdate,
+        display: {card_quota : [2,3]}
     }    
 
     // console.log(data);
