@@ -119,6 +119,7 @@ const LoginButton = styled(Button)`
 const CompanyTextItem = styled.Text`
   font-size: 10px;
   color : #747474;
+  text-align : center;
 `;
 
 const CompanyTextContainer = styled.View`
