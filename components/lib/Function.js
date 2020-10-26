@@ -214,3 +214,23 @@ export const get_image = params => {
         .catch(error=>resolve(''));
     })      
 }
+
+// 배이스코드 가져오기
+export const get_basecode = params => {
+    console.log('get_basecode()');
+
+    const { sid,gubun,url,name } = params;
+    const data = {
+        sid: sid,      
+        gubun : gubun,
+        name : name,
+    }
+
+    return new Promise(function(resolve,reject) {
+        axios.post(url+'/slim/app/get_basecode',data)
+        .then(result => { 
+            resolve( result.data )            
+        })
+        .catch(error=>resolve(''));
+    })      
+}

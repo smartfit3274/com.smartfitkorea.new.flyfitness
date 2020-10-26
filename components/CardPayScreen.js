@@ -39,11 +39,13 @@ import {
     access_token_check,
     create_access_token,
     write_access_token,
-    check_key
+    check_key,
+    get_basecode
 } from './lib/Function';
 import {useSelector, useDispatch} from 'react-redux';  
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { $Header } from './$Header';
+import { addMonths } from 'date-fns';
 
 let access_token = '';
 let refresh_token = '';
@@ -77,6 +79,7 @@ function CardPayScreen() {
     const [listItem, setListItem] = useState([]);
     const [sdate,setSDate] = useState(null);
     const [show, setShow] = useState(false);
+    const [maxDate, setMaxDate] = useState(new Date());
     const store = useSelector(state => state.data);
 
     const btn_close = () => {
@@ -194,6 +197,18 @@ function CardPayScreen() {
 
     },[]);  
 
+    useEffect(()=>{
+        get_basecode( { sid:store.sid, gubun:store.cid, url:store.url, name:'max_month'} )
+        .then( result => { 
+            console.log('basecode : '+result);
+            console.log(result[0].result);
+            var maxMonth = result[0].result
+            var d = new Date();
+            setMaxDate(addMonths(d, maxMonth));
+        })
+        .catch( error => console.log(error) ); 
+
+    },[]);
 
     return (
       <Container style={{backgroundColor:'#111111'}}>
@@ -213,6 +228,7 @@ function CardPayScreen() {
           onConfirm={date=>handle_picker(date)}
           onCancel={()=>setShow(false)}
           locale = "ko"
+          maximumDate={maxDate}
         />
         <View style={ styles.dateContainer}>
             <View style={styles.dateSub}>
