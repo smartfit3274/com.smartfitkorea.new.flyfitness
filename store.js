@@ -8,7 +8,7 @@ const INITIAL_STATE = {
     url     : "",      
     mode    : "server",
     local   : "http://192.168.76.51:80",   
-    server  : "https://admin.smartg.kr",
+    server  : "https://api.smartg.kr",
     sid     : "smartgym",    
     cid     : "CT18T25131655.yADF0",
     name    : "스마트짐 메트로자이점",
