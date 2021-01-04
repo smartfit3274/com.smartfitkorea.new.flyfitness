@@ -16,6 +16,7 @@ import CardPayStartScreen from '../components/CardPayStartScreen';
 import CardPayResultScreen from '../components/CardPayResultScreen';
 import PinScreen from '../components/PinScreen';
 import FindPassScreen from '../components/FindPassScreen';
+import TeachingGuideScreen from '../components/TeachingGuideScreen';
 
 const AppNavigator = createStackNavigator({    
   Home: {
@@ -96,6 +97,12 @@ const AppNavigator = createStackNavigator({
       title: 'FindPass'
     })       
   },    
+  TeachingGuideScreen: {
+    screen: TeachingGuideScreen,
+    navigatResulttions: ({
+      title: ''
+    })       
+  },      
 }, 
 {    
   defaultNavigationOptions: {

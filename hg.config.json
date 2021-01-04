@@ -1,0 +1,15 @@
+{
+    "title": "헬스가이드티칭 환경설정 파일",
+    "production": {
+        "mobile_host":"http://hg-mobile.smartg.kr",
+        "api_host":"https://api.smartg.kr:3000"
+    },
+    "development": {
+        "mobile_host":"http://192.168.76.51:80",
+        "api_host":"https://192.168.76.51:3000"
+    },
+    "staging": {
+        "mobile_host":"http://192.168.76.23:80",
+        "api_host":"https://192.168.76.23:3000"
+    }
+}
