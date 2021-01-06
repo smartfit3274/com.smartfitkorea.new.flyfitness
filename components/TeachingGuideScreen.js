@@ -30,18 +30,14 @@ const Container = styled.View`
   justify-content:center;
 `;
 
-const onWebViewMessage = () => {
-  navigation.pop();
-}
+const mode = 1; // 1.development, 2.staging, 3.production
+let config;
+if (mode === 1) config = hg_config.development;
+else if (mode === 2) config = hg_config.staging;
+else if (mode === 3) config = hg_config.production;
+const { mobile_host, api_host } = config;
 
 export default function ({ navigation, route }) {
-
-  const mode = 1; // 1.development, 2.staging, 3.production
-  let config;
-  if (mode === 1) config = hg_config.development;
-  else if (mode === 2) config = hg_config.staging;
-  else if (mode === 3) config = hg_config.production;
-  const { mobile_host, api_host } = config
 
   const [token, setToken] = useState('');
   const store = useSelector(state => state.data);
@@ -68,17 +64,16 @@ export default function ({ navigation, route }) {
         </Container>
         :
         <>
-        <WebView source={{ uri: mobile_host + '/hg_home?token=' + token + '&cid=' + store.cid }}
-          onMessage={onMessage}
-          javaScriptEnabled={true}
-        />
+          <WebView source={{ uri: mobile_host + '/hg_home?token=' + token + '&cid=' + store.cid }}
+            onMessage={onMessage}
+            javaScriptEnabled={true}
+            scrollEnabled={true}
+          />
         </>
       }
     </>);
 }
 
-
-// 
 // https://github.com/iamport/iamport-react-native/blob/master/exampleForWebView/src/Home.js
 // injectedJavascript={`(function() {
 //   window.postMessage = function(data) {
