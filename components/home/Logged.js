@@ -659,8 +659,8 @@ function Logged(props) {
             <$Footer>
                 <$FooterTab>
                     <Button vertical onPress={() => tg_guide_click()}>
-                        <Text>아이콘</Text>
-                        <$FooterText>티칭가이드</$FooterText>
+                        <$FooterImage source={require('../images/icon_hg.png')} ></$FooterImage>
+                        <$FooterText>헬스가이드</$FooterText>
                     </Button>
                     <Button vertical onPress={() => btn_purchase()}>
                         <$FooterImage source={require('../images/icon_cart.png')} ></$FooterImage>
