@@ -17,7 +17,7 @@ const INITIAL_STATE = {
     debug_beacon_distance : "N",
     debug_beacon_console : "N",
     debug_door : "33",
-    app_version : "1.6.4",
+    app_version : "1.6.5",
     store_id_android: "com.smartfitkorea.metroxi",
     store_id_ios : "1534844508",
     iamport:"imp76426114",
