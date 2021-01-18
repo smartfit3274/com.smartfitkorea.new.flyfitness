@@ -30,7 +30,7 @@ const Container = styled.View`
   justify-content:center;
 `;
 
-const mode = 1; // 1.development, 2.staging, 3.production
+const mode = 3; // 1.development, 2.staging, 3.production
 let config;
 if (mode === 1) config = hg_config.development;
 else if (mode === 2) config = hg_config.staging;
