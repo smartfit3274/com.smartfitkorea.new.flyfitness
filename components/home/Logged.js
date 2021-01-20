@@ -15,7 +15,7 @@ import {
     Button
 } from 'native-base';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Image, Dimensions, RefreshControlBase, Animated, Alert, Linking, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { Image, Dimensions, RefreshControlBase, Animated, Alert, Linking, TouchableHighlight, TouchableOpacity, SafeAreaView } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 import axios from 'axios';
@@ -39,6 +39,8 @@ import {
     check_key,
     get_image
 } from '../lib/Function';
+import { getStatusBarHeight } from "react-native-status-bar-height";
+import { getBottomSpace } from "react-native-iphone-x-helper";
 import { $Header } from '../$Header';
 
 let access_token = '';
@@ -53,7 +55,7 @@ let temp_images = [{ "link": "", "uri": "https://admin.smartg.kr/img/banner.jpg"
 const show_distance = 'N'; // DEBUG
 const window = Dimensions.get('window');
 const widthValue = window.width;
-const ContentHeight = window.height - 185;
+const ContentHeight = window.height - getStatusBarHeight() - getBottomSpace() - 180 + 10;
 
 const $StatusView = styled(View)`
     background-color : #333333;
@@ -156,6 +158,7 @@ const $Footer = styled(View)`
     color : white;
     height : 55px;
     border-top-color : #555;
+    border-bottom-color : #111;
     border-style : solid;
     border-width : 1px;
 `
@@ -562,7 +565,7 @@ function Logged(props) {
     }
 
     return (
-        <>
+        <SafeAreaView style={{ flex : 1, backgroundColor : '#111'}}>
             <$Header style={{ backgroundColor: '#111111', height: 80 }} iosBarStyle={"light-content"} backgroundColor={'#111'}>
                 <StatusBar backgroundColor="#111" />
                 <Left style={{ flex: 1 }}>
@@ -575,16 +578,6 @@ function Logged(props) {
             </$Header>
 
             <Content scrollEnabled={false} style={{ flex: 1, flexDirection: 'column' }}>
-                {store.debug_beacon_distance == 'Y' &&
-                    <>
-                        <Text> * 디버그 모드 * </Text>
-                        <Text>최소거리: {cfg.beacon_range} </Text>
-                        <Text>비콘과의 거리 (안드로이드): {distance} </Text>
-                        <Text>비콘과의 근접 (아이폰): {proximity} </Text>
-                        <Text>출입키 보유: {is_key} </Text>
-                        <Text>비콘상태: {isBeacon} </Text>
-                    </>
-                }
                 <$StatusView>
                     <$StatusNameText>{MbInfo.mb_name}님, 반갑습니다.{'\u00A0'}{'\u00A0'}
                         {is_key == 'Y' ? <$StatusPriodText>이용가능기간 ~{MbInfo.edate}{'\u00A0'}
@@ -608,13 +601,13 @@ function Logged(props) {
                             })
                         }
                     </Slick>
-                    <View style={{ height: ContentHeight * 0.52, flexDirection: 'row', backgroundColor: '#111111' }}>
+                    <View style={{ height: ContentHeight * 0.5, flexDirection: 'row', backgroundColor: '#111111' }}>
                         {((is_key == 'Y' && isBeacon == 'Y') &&
                             <$DoorButtonView style={{ backgroundColor: '#1ad57c' }} onPress={() => btn_door_open()}>
                                 <$DoorButtonImg source={require('../images/icon_key.png')} />
                                 <$ButtonText>
                                     문열기
-                        </$ButtonText>
+                                </$ButtonText>
                             </$DoorButtonView>
                         )}
                         {((is_key == 'Y' && (isBeacon == 'N' || isBeacon == 'null')) &&
@@ -622,8 +615,8 @@ function Logged(props) {
                                 <$DoorButtonImg source={require('../images/icon_key.png')} />
                                 <$ButtonText>
                                     <$ButtonTextHighLight>출입구 가까이</$ButtonTextHighLight> 가시면 {"\n"}
-                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight>됩니다.
-                        </$ButtonText>
+                                    문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight>됩니다.
+                                </$ButtonText>
                                 <$ButtonTextSmall>* 이용기간 종료시 버튼 비활성화</$ButtonTextSmall>
                             </$DoorButtonView>
                         )}
@@ -632,8 +625,8 @@ function Logged(props) {
                                 <$DoorButtonImg source={require('../images/icon_key.png')} />
                                 <$ButtonText>
                                     <$ButtonTextHighLight>출입구 가까이</$ButtonTextHighLight> 가시면 {"\n"}
-                            문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight>됩니다.
-                        </$ButtonText>
+                                    문열기 버튼이 <$ButtonTextHighLight>활성화</$ButtonTextHighLight>됩니다.
+                                </$ButtonText>
                                 <$ButtonTextSmall>* 이용기간 종료시 버튼 비활성화</$ButtonTextSmall>
                             </$DoorButtonView>
                         )}
@@ -642,7 +635,7 @@ function Logged(props) {
                                 <$DoorButtonImg source={require('../images/icon_key.png')} />
                                 <$ButtonText>
                                     비콘 오류
-                        </$ButtonText>
+                                </$ButtonText>
                             </$DoorButtonView>
                         )}
                         <$PayButtonView onPress={() => btn_cardpay()}>
@@ -676,7 +669,7 @@ function Logged(props) {
                     </Button>
                 </$FooterTab>
             </$Footer>
-        </>
+        </SafeAreaView>
     );
 }
 
