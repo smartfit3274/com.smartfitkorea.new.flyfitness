@@ -57,7 +57,7 @@ export default function ({ navigation, route }) {
   }
 
   return (
-    <>
+    <SafeAreaView style={{flex : 1, backgroundColor : '#111'}}>
       { token === '' ?
         <Container>
           <Text style={{ color: "#ffffff" }}>Loading...</Text>
@@ -71,7 +71,7 @@ export default function ({ navigation, route }) {
           />
         </>
       }
-    </>);
+    </SafeAreaView>);
 }
 
 // https://github.com/iamport/iamport-react-native/blob/master/exampleForWebView/src/Home.js
