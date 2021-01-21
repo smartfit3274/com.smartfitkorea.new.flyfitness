@@ -156,11 +156,12 @@ const $ButtonTextSmall = styled(Text)`
 const $Footer = styled(View)`
     background-color : #111111;
     color : white;
-    height : 55px;
+    height : 62px;
     border-top-color : #555;
     border-bottom-color : #111;
     border-style : solid;
     border-width : 1px;
+    padding-top : 10px;
 `
 const $FooterTab = styled(FooterTab)`
     background-color : #111111;
@@ -179,6 +180,7 @@ const $FooterText = styled.Text`
 const $EmptyView = styled.View`
     height : 50px;
     background-color : #111;
+    width : 100%;
 `
 
 const renderPagination = (index, total, context) => {
@@ -601,7 +603,7 @@ function Logged(props) {
                             })
                         }
                     </Slick>
-                    <View style={{ height: ContentHeight * 0.5, flexDirection: 'row', backgroundColor: '#111111' }}>
+                    <View style={{ height: ContentHeight * 0.55, flexDirection: 'row', backgroundColor: '#111111' }}>
                         {((is_key == 'Y' && isBeacon == 'Y') &&
                             <$DoorButtonView style={{ backgroundColor: '#1ad57c' }} onPress={() => btn_door_open()}>
                                 <$DoorButtonImg source={require('../images/icon_key.png')} />
@@ -642,7 +644,7 @@ function Logged(props) {
                             <$PayButtonImg source={require('../images/icon_card.png')} />
                             <$ButtonText>
                                 등록하기
-                        </$ButtonText>
+                            </$ButtonText>
                         </$PayButtonView>
                     </View>
                 </View>
