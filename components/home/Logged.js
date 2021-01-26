@@ -558,7 +558,7 @@ function Logged(props) {
     function no_door_message() {
         Alert.alert(
             '* 출입문 열기 안내 *',
-            '출입문 근처에서 문 열기 버튼이 활성화됩니다. 블루트스 기능이 필요합니다.',
+            '출입문 근처에서 문 열기 버튼이 활성화됩니다. 블루투스 기능이 필요합니다.',
             [{ text: 'ok', onPress: () => console.log('OK pressed') }],
             {
                 cancelable: false,
