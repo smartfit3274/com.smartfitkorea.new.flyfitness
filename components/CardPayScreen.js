@@ -46,6 +46,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { $Header } from './$Header';
 import { addMonths } from 'date-fns';
+import Checkbox from '@react-native-community/checkbox';
 
 let access_token = '';
 let refresh_token = '';
@@ -73,6 +74,18 @@ const SubText = styled.Text`
   color: #dedede;
 `
 
+const AgreeContainer = styled.View`
+    width:85%;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
+const TextDefault = styled.Text`
+    font-size:15px;
+    color:white;
+`
+
 function CardPayScreen() {
 
     const navigation = useNavigation();
@@ -80,7 +93,12 @@ function CardPayScreen() {
     const [sdate,setSDate] = useState(null);
     const [show, setShow] = useState(false);
     const [maxDate, setMaxDate] = useState(new Date());
+    const [ckAgree, setCkAgree] = useState(false);
     const store = useSelector(state => state.data);
+
+    const pop_agree = () => {
+        navigation.navigate("CardPayAgree");
+    }
 
     const btn_close = () => {
         navigation.pop();
@@ -114,6 +132,18 @@ function CardPayScreen() {
                 }
             );   
             return false;                
+        }
+
+        if(ckAgree==false) {
+            Alert.alert(
+                '약관동의 오류',
+                '약관보기를 클릭하여 약관을 동의하시기 바랍니다.',
+                [{ text: 'ok', onPress: () => console.log('OK pressed') }],
+                {
+                    cancelable: false,
+                }
+            );
+            return false;            
         }
         
         const userCode = store.iamport;       
@@ -210,6 +240,15 @@ function CardPayScreen() {
 
     },[]);
 
+    const agree = navigation.getParam('agree');
+
+    // 약관동의
+    useEffect(() => {
+        if(agree == true) {
+            setCkAgree(true);
+        }
+    },[agree]);
+
     return (
       <Container style={{backgroundColor:'#111111'}}>
         <$Header style={{backgroundColor:'#111111'}} iosBarStyle={"light-content"}>
@@ -242,6 +281,23 @@ function CardPayScreen() {
                         </Button>         
                     </Item>
             </View>
+            <AgreeContainer>
+                <View style={{  flex:1, flexDirection: "row", alignItems:"center"}}>
+                    <View>
+                        <Checkbox
+                            value={ckAgree}
+                            disabled={true}
+                            tintColors={{ false: 'white', true: 'white' }}
+                        ></Checkbox>
+                    </View>
+                    <View>
+                        <TextDefault>(필수) 서비스 이용약관 동의</TextDefault>
+                    </View>
+                </View>
+                <View>
+                    <TextDefault onPress={()=>pop_agree()}>[ 약관보기 ]</TextDefault>
+                </View>
+            </AgreeContainer>
         </View>
         <Content contentContainerStyle={styles.container} scrollEnabled={true}>
             <View style={styles.content}>

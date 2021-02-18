@@ -14,6 +14,7 @@ import NetworkScreen from '../components/NetworkScreen';
 import CardPayScreen from '../components/CardPayScreen';
 import CardPayStartScreen from '../components/CardPayStartScreen';
 import CardPayResultScreen from '../components/CardPayResultScreen';
+import CardPayAgreeScreen from '../components/CardPayAgreeScreen';
 import PinScreen from '../components/PinScreen';
 import FindPassScreen from '../components/FindPassScreen';
 import TeachingGuideScreen from '../components/TeachingGuideScreen';
@@ -70,7 +71,7 @@ const AppNavigator = createStackNavigator({
   CardPay: {
     screen: CardPayScreen,
     navigationOptions: ({
-      title: 'CardPay'
+      title: '카드결제'
     })       
   },
   CardPayStart: {
@@ -85,6 +86,22 @@ const AppNavigator = createStackNavigator({
       title: 'CardPayResult'
     })       
   },  
+  CardPayAgree: {
+    screen: CardPayAgreeScreen,
+    navigationOptions: ({
+      title: '이용약관 동의',
+      headerShown: true,
+      headerTitleAlign: 'center',
+      headerStyle: {
+        backgroundColor: '#111111',
+        shadowOffset: { height: 0, width: 0 }
+      },
+      headerTitleStyle: {
+        color: 'white'
+      },
+      headerTintColor : 'white'
+    })       
+  },
   Pin: {
     screen: PinScreen,
     navigatResulttions: ({
