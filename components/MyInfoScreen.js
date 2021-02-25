@@ -71,6 +71,25 @@ const ButtonAgree = styled.TouchableOpacity`
   background-color : #4c6eec;
 `;
 
+const ButtonContainer = styled.View`
+    margin-top : 50px;
+`
+
+const ButtonStyle = styled(Button)`
+    background-color : #4c6eec;
+    align-self : center;
+    padding-left : 25px;
+    padding-right : 10px;
+    border-radius : 25px;
+    height :35px;
+`
+
+const ButtonImage = styled.Image`
+    width : 20px;
+    height : 18px;
+    resize-mode : contain;
+    margin-right : -9px;
+`
 var access_token = '';
 var refresh_token = '';
 var is_access_token = 'N';
@@ -146,6 +165,24 @@ function MyInfoScreen() {
         navigation.pop();
     }
 
+    function btn_logout() {
+        console.log('TAG: btn_logout()');
+        Alert.alert(
+            '로그아웃',
+            '로그아웃 하시겠습니까?',
+            [{text:'로그아웃',onPress:()=> {
+                AsyncStorage.setItem('access_token', '')
+                    .then(() => { return AsyncStorage.setItem('refresh_token', '') })
+                    .then(() => AsyncStorage.setItem('pin', ''))
+                    .then(() => navigation.replace('Home'))
+                    .catch(error => alert(error));
+            }},
+            {text:'취소',onPress:()=>console.log('cancel pressed')}
+            ]
+        ); 
+        
+    }
+
     const titleData = {
         mode : 'dark',
         mainText : '내정보',
@@ -186,7 +223,9 @@ function MyInfoScreen() {
                     <LabelBodyStyle>{MbInfo.edate}</LabelBodyStyle>
                 </ItemStyle>
             </Form>    
-        <Text style={{textAlign:"center",marginTop:30}}>{cfg.name}을 이용해주셔서 감사합니다.</Text>        
+            <ButtonContainer>
+                <ButtonStyle onPress={() => btn_logout()}><ButtonImage source={require('./images/icon_logout.png')} ></ButtonImage><Text>로그아웃</Text></ButtonStyle>
+            </ButtonContainer>
         </Content>
         <$Footer style={{backgroundColor:'#111111'}}>            
             <ButtonAgree full onPress={()=>btn_close()}><Text style={{fontSize : 18, color : '#fff'}}>확인</Text></ButtonAgree> 

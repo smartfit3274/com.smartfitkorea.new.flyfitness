@@ -3,7 +3,7 @@ import { Text, StyleSheet, Image, StatusBar } from 'react-native';
 import { View, Header } from 'native-base';
 
 function Loading() {``
-  const { container, contents, text } = styles;
+  const { container, contents, text, image } = styles;
   return (
     <>
     <Header iosBarStyle={"light-content"}>
@@ -11,7 +11,7 @@ function Loading() {``
     </Header>
     <View style={container}>
       <View style={contents}>
-        <Image source={require('./images/logo_smartgym_black.png')} />
+        <Image style={image} source={require('./images/logo_smartgym_black.png')} />
         <Text style={text}>잠시만 기다려주세요...</Text>
       </View>
     </View>
@@ -39,6 +39,10 @@ const styles = StyleSheet.create({
     lineHeight: 25,
     color : '#fff'
   },
+  image : {
+    width : 230,
+    resizeMode : 'contain'
+  }
 });
 
 export default Loading;

@@ -7,9 +7,13 @@ const TitleView = styled.View`
 `;
 
 const LogoImage = styled.Image`
-  width : 85px;
+  height : 50px;
+  width : 230px;
   resize-mode : contain;
-  margin-bottom : 10px;
+  margin-top : 5%;
+  margin-bottom : 15%;
+  align-self : center;
+  margin-left : -10%;
 `
 
 const MainText = styled.Text`
