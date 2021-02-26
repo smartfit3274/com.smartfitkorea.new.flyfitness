@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "911025684470",
+    "firebase_url": "https://smartgym-gooseo.firebaseio.com",
+    "project_id": "smartgym-gooseo",
+    "storage_bucket": "smartgym-gooseo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:7b9e249574f746da0d11d7",
+        "android_client_info": {
+          "package_name": "com.daveno.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-9rgp7pe4d2i5scn62hbme2o1cd891fqp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.daveno.samplefirebase"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:12acbf73890c1a9c0d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.metroxi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-9rgp7pe4d2i5scn62hbme2o1cd891fqp.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.daveno.samplefirebase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

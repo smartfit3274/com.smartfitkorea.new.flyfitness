@@ -9,9 +9,4 @@ target 'smartpass' do
 
   use_react_native!(:path => config["reactNativePath"])
 
-  target 'smartpassTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
 end

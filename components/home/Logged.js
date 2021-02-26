@@ -42,6 +42,7 @@ import {
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import { $Header } from '../$Header';
+import { initPush } from '../../lib/Fcm';
 
 let access_token = '';
 let pin = '';
@@ -565,6 +566,11 @@ function Logged(props) {
             }
         );
     }
+
+    // 푸시서비스
+    useEffect(()=>{
+        initPush();
+    },[]);
 
     return (
         <SafeAreaView style={{ flex : 1, backgroundColor : '#111'}}>
