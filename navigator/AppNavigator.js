@@ -18,6 +18,7 @@ import CardPayAgreeScreen from '../components/CardPayAgreeScreen';
 import PinScreen from '../components/PinScreen';
 import FindPassScreen from '../components/FindPassScreen';
 import TeachingGuideScreen from '../components/TeachingGuideScreen';
+import NoticeScreen from '../components/NoticeScreen';
 
 const AppNavigator = createStackNavigator({    
   Home: {
@@ -119,7 +120,13 @@ const AppNavigator = createStackNavigator({
     navigatResulttions: ({
       title: ''
     })       
-  },      
+  },    
+  Notice: {
+    screen: NoticeScreen,
+    navigationOptions: ({
+      title: 'Notice'
+    })       
+  },    
 }, 
 {    
   defaultNavigationOptions: {

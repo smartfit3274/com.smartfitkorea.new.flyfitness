@@ -43,7 +43,7 @@ import { getStatusBarHeight } from "react-native-status-bar-height";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import { $Header } from '../$Header';
 import { initPush } from '../../lib/Fcm';
-
+import NoticeIcon from '../NoticeIcon';
 let access_token = '';
 let pin = '';
 let auth_type = '';
@@ -582,6 +582,7 @@ function Logged(props) {
                     <Image source={require('../images/logo_smartgym_white.png')} style={{ alignSelf: "center", height: 35, resizeMode: 'contain' }}></Image>
                 </Body>
                 <Right style={{ flex: 1 }}>
+                    <NoticeIcon navigation={navigation}></NoticeIcon>
                 </Right>
             </$Header>
 
