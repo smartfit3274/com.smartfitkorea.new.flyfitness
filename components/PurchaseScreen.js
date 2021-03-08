@@ -113,7 +113,11 @@ function PurchaseScreen() {
         navigation.pop();
     }
 
-    
+    const btn_refund = (p_id) => {
+        navigation.navigate("Refund", {p_id : p_id});
+    }
+
+    const { refresh } = ( navigation.state.params ) ? navigation.state.params:""; 
     useEffect(()=>{
         
         get_access_token()
@@ -131,7 +135,7 @@ function PurchaseScreen() {
         })        
         .catch(error => alert(error));
 
-    },[]);
+    },[refresh]);
 
     
     return (
@@ -151,7 +155,7 @@ function PurchaseScreen() {
             <View style={styles.content}>
             <List>
                 {PurchaseInfo.map((item, index) =>{
-                    const { p_date, p_name, sdate, edate, price } = item;
+                    const { p_id, p_date, p_name, sdate, edate, price, state } = item;
                     var year1 = p_date.substring(0, 4);
                     var month1 = p_date.substring(4, 6);
                     var day1 = p_date.substring(6, 8);
@@ -170,6 +174,20 @@ function PurchaseScreen() {
                     var formatEdate = year3 + '.' + month3 + "." + day3;
 
                     var formatPrice = price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    var temp_edate = moment(edate).format('YYYY-MM-DD');
+                    var now = moment().format('YYYY-MM-DD');
+                    var isRefund = false;
+                    var refundState = '';
+                    if(now <= temp_edate){
+                        isRefund = true;
+                        if(state === '회원신청' || state === '지점승인'){
+                            refundState = '환불신청'
+                        }
+                        if(state === '본사승인'){
+                            refundState = '환불완료'
+                        }
+                    }
+
                     
                     return (
                         <ListItem style={styles.listitem} key={index}>    
@@ -187,7 +205,20 @@ function PurchaseScreen() {
                             <Right style={{flexDirection : 'column', flexBasis : 60}}>
                             <View style={{alignSelf: 'flex-end'}}>
                                 <Text style={{textAlign : "right", fontSize : 18, color:"white"}} numberOfLines={1}>{formatPrice}원</Text>    
-                            </View>   
+                            </View>  
+                            {
+                                isRefund && refundState === '' ? 
+                                <View style={{alignSelf: 'flex-end'}}>
+                                    <Button info block style={{marginTop:10, height : 30, backgroundColor : '#4c6eec'}} onPress={()=>btn_refund(p_id)}>
+                                        <Text style={{width : 100, textAlign : 'center'}}>환불신청</Text>
+                                    </Button> 
+                                </View> 
+                                : <></>
+                            }
+                            {
+                                refundState !== '' ? <Text style={{color : 'white'}}>{refundState}</Text> : <></>
+                            }
+                            
                             </Right>                                                                                                                                                     
                         </ListItem>
                     )
