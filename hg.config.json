@@ -6,10 +6,10 @@
     },
     "development": {
         "mobile_host":"http://192.168.76.51:80",
-        "api_host":"https://192.168.76.51:3000"
+        "api_host":"http://192.168.76.51:3000"
     },
     "staging": {
-        "mobile_host":"http://192.168.76.23:80",
-        "api_host":"https://192.168.76.23:3000"
+        "mobile_host":"http://192.168.76.23:3001",
+        "api_host":"http://192.168.76.23:3000"
     }
 }
