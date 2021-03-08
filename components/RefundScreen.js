@@ -131,7 +131,7 @@ var access_token = '';
 var refresh_token = '';
 var is_access_token = 'N';
 
-const mode = 2; // 1.development, 2.staging, 3.production
+const mode = 3; // 1.development, 2.staging, 3.production
 let config;
 if (mode === 1) config = hg_config.development;
 else if (mode === 2) config = hg_config.staging;
