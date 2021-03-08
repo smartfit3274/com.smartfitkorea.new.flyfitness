@@ -41,7 +41,17 @@ export default function ({ navigation, route }) {
 
   const [token, setToken] = useState('');
   const store = useSelector(state => state.data);
+  let frequency = '';
+  if(navigation.state.params){
+    frequency = navigation.state.params.frequency;
+  }
 
+  let uri = '';
+  if(frequency === 'Y'){
+    uri = mobile_host + '/hg_home?token=' + token + '&cid=' + store.cid + '&isFrequency=Y'
+  }else{
+    uri = mobile_host + '/hg_home?token=' + token + '&cid=' + store.cid
+  }
   useEffect(() => {
     (async function () {
       const result = await AsyncStorage.getItem('refresh_token');
@@ -64,10 +74,11 @@ export default function ({ navigation, route }) {
         </Container>
         :
         <>
-          <WebView source={{ uri: mobile_host + '/hg_home?token=' + token + '&cid=' + store.cid }}
+          <WebView source={{ uri: uri }}
             onMessage={onMessage}
             javaScriptEnabled={true}
             scrollEnabled={true}
+            bounces={false}
           />
         </>
       }

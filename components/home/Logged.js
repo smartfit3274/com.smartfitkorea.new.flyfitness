@@ -231,6 +231,10 @@ function Logged(props) {
         navigation.push('TeachingGuideScreen');
     }
 
+    const tg_frequency_click = () => {
+        navigation.push('TeachingGuideScreen', {frequency : 'Y'});
+    }
+
     // 회원정보 로딩
     const member_one = () => {
 
@@ -657,6 +661,10 @@ function Logged(props) {
                         <$FooterImage source={require('../images/icon_hg.png')} ></$FooterImage>
                         <$FooterText>헬스가이드</$FooterText>
                     </Button>
+                    <Button vertical onPress={() => tg_frequency_click()}>
+                        <$FooterImage source={require('../images/icon_frequency.png')} ></$FooterImage>
+                        <$FooterText>프리퀀시</$FooterText>
+                    </Button>
                     <Button vertical onPress={() => btn_purchase()}>
                         <$FooterImage source={require('../images/icon_cart.png')} ></$FooterImage>
                         <$FooterText>구매내역</$FooterText>
@@ -665,10 +673,10 @@ function Logged(props) {
                         <$FooterImage source={require('../images/icon_mypage.png')} ></$FooterImage>
                         <$FooterText>내 정보</$FooterText>
                     </Button>
-                    <Button vertical onPress={() => btn_logout()}>
+                    {/* <Button vertical onPress={() => btn_logout()}>
                         <$FooterImage source={require('../images/icon_logout.png')} ></$FooterImage>
                         <$FooterText>로그아웃</$FooterText>
-                    </Button>
+                    </Button> */}
                 </$FooterTab>
             </$Footer>
         </SafeAreaView>
