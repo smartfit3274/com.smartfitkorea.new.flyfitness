@@ -72,7 +72,8 @@ const ButtonAgree = styled.TouchableOpacity`
 `;
 
 const ButtonContainer = styled.View`
-    margin-top : 50px;
+    margin-top : 20px;
+    padding-bottom : 20px;
 `
 
 const ButtonStyle = styled(Button)`
@@ -203,7 +204,7 @@ function MyInfoScreen() {
             <Right style={{flex:1}}></Right>
         </$Header>
 
-        <Content scrollEnabled={false} style={{backgroundColor : '#111111'}}>
+        <Content scrollEnabled={true} style={{backgroundColor : '#111111'}}>
             <TitleContainer data={titleData} />
             <Form style={{marginTop : 50}}>
                 <ItemStyle fixedLabel>
