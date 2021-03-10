@@ -666,7 +666,7 @@ function Logged(props) {
                 <$FooterTab>
                     <Button vertical onPress={() => tg_guide_click()}>
                         <$FooterImage source={require('../images/icon_hg.png')} ></$FooterImage>
-                        <$FooterText>헬스가이드</$FooterText>
+                        <$FooterText>수업예약</$FooterText>
                     </Button>
                     <Button vertical onPress={() => tg_frequency_click()}>
                         <$FooterImage source={require('../images/icon_frequency.png')} ></$FooterImage>
