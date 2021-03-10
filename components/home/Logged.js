@@ -42,7 +42,8 @@ import {
 import { getStatusBarHeight } from "react-native-status-bar-height";
 import { getBottomSpace } from "react-native-iphone-x-helper";
 import { $Header } from '../$Header';
-
+import { initPush } from '../../lib/Fcm';
+import NoticeIcon from '../NoticeIcon';
 let access_token = '';
 let pin = '';
 let auth_type = '';
@@ -570,6 +571,11 @@ function Logged(props) {
         );
     }
 
+    // 푸시서비스
+    useEffect(()=>{
+        initPush();
+    },[]);
+
     return (
         <SafeAreaView style={{ flex : 1, backgroundColor : '#111'}}>
             <$Header style={{ backgroundColor: '#111111', height: 80 }} iosBarStyle={"light-content"} backgroundColor={'#111'}>
@@ -580,6 +586,7 @@ function Logged(props) {
                     <Image source={require('../images/logo_smartgym_white.png')} style={{ alignSelf: "center", height: 35, resizeMode: 'contain' }}></Image>
                 </Body>
                 <Right style={{ flex: 1 }}>
+                    <NoticeIcon navigation={navigation}></NoticeIcon>
                 </Right>
             </$Header>
 
