@@ -176,7 +176,7 @@ function RefundScreen(props) {
         .then( result => {       
             console.log(result.data)
             let res_data = result.data;
-            let a = ['origin_price', 'fees', 'use_price', 'use_day', 'refund_price'];
+            let a = ['origin_price', 'fees', 'use_price', 'use_day', 'refund_price', 'start_date', 'end_date'];
             let b = [];
             a.map((item, index) => {
                 res_data.map((i, idx) => {
@@ -185,7 +185,6 @@ function RefundScreen(props) {
                     }
                 })
             })
-            // console.log(b);
             setRefundData(b);
         })
         .catch(error=>console.log(error));
@@ -219,13 +218,14 @@ function RefundScreen(props) {
             token: refresh_token
         } 
 
-        let refund_price = '';
-        refundData.map((item, index) => {
-            if(item.key == 'refund_price'){
-                refund_price = item.val;
-            }
-        })
-        console.log(refund_price);
+        let original_price = refundData[0].val;
+        let fees = refundData[1].val;
+        let use_price = refundData[2].val;
+        let use_day = refundData[3].val;
+        let refund_price = refundData[4].val;
+        let start_date = refundData[5].val;
+        let end_date = refundData[6].val;
+
         axios.post(url1,data1,{timeout:3000})
         .then( result => {       
             const url2 = api_host + '/refund/add_refund';       
@@ -239,7 +239,13 @@ function RefundScreen(props) {
                 account_bank : accountBank,
                 account_num : accountNum,
                 account_name : accountName,
-                refund_price : refund_price
+                original_price : original_price,
+                fees : fees,
+                use_price : use_price,
+                use_day : use_day,
+                refund_price : refund_price,
+                start_date : start_date,
+                end_date : end_date,
             } 
             axios.post(url2,data2,{timeout:3000})
             .then( result => {
