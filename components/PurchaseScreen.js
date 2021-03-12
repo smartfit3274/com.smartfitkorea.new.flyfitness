@@ -68,6 +68,7 @@ function PurchaseScreen() {
 
     const navigation = useNavigation();
     const [PurchaseInfo, setPurchaseInfo] = useState([]);
+    const [isLoaded, setIsLoaded] = useState(false);
     const store = useSelector(state => state.data);
 
     const member_purchase = () => {
@@ -90,6 +91,7 @@ function PurchaseScreen() {
         axios.post(url,data,{timeout:3000})
         .then( result => {       
             setPurchaseInfo(result.data)
+            setIsLoaded(true);
         })
         .catch(error=>console.log(error));
 
@@ -180,8 +182,11 @@ function PurchaseScreen() {
                     var refundState = '';
                     if(now <= temp_edate){
                         isRefund = true;
-                        if(state === '회원신청' || state === '지점승인'){
+                        if(state === '회원신청'){
                             refundState = '환불신청'
+                        }
+                        if(state === '지점승인'){
+                            refundState = '처리중'
                         }
                         if(state === '본사승인'){
                             refundState = '환불완료'
@@ -203,9 +208,13 @@ function PurchaseScreen() {
                             </View>
                             </Left>
                             <Right style={{flexDirection : 'column', flexBasis : 60}}>
-                            <View style={{alignSelf: 'flex-end'}}>
-                                <Text style={{textAlign : "right", fontSize : 18, color:"white"}} numberOfLines={1}>{formatPrice}원</Text>    
-                            </View>  
+                            {
+                                refundState === '' ?
+                                <View style={{alignSelf: 'flex-end'}}>
+                                    <Text style={{textAlign : "right", fontSize : 18, color:"white"}} numberOfLines={1}>{formatPrice}원</Text>    
+                                </View>  
+                                : <></>
+                            }
                             {
                                 isRefund && refundState === '' ? 
                                 <View style={{alignSelf: 'flex-end'}}>
@@ -224,6 +233,13 @@ function PurchaseScreen() {
                     )
                 }  
                 )}
+                {
+                    isLoaded && PurchaseInfo.length === 0 ? 
+                    <ListItem style={styles.listitem}>
+                        <View><Text style={{color : 'white'}}>구매 내역이 없습니다.</Text></View>
+                    </ListItem>
+                    : <></>
+                }
             </List>  
             </View>
         </Content>
