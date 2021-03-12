@@ -176,7 +176,7 @@ function RefundScreen(props) {
         .then( result => {       
             console.log(result.data)
             let res_data = result.data;
-            let a = ['origin_price', 'fees', 'use_price', 'use_day', 'refund_price', 'start_date', 'end_date'];
+            let a = ['origin_price', 'fees', 'use_price', 'use_day', 'refund_price', 'start_date'];
             let b = [];
             a.map((item, index) => {
                 res_data.map((i, idx) => {
@@ -224,7 +224,6 @@ function RefundScreen(props) {
         let use_day = refundData[3].val;
         let refund_price = refundData[4].val;
         let start_date = refundData[5].val;
-        let end_date = refundData[6].val;
 
         axios.post(url1,data1,{timeout:3000})
         .then( result => {       
@@ -244,8 +243,7 @@ function RefundScreen(props) {
                 use_price : use_price,
                 use_day : use_day,
                 refund_price : refund_price,
-                start_date : start_date,
-                end_date : end_date,
+                start_date : start_date
             } 
             axios.post(url2,data2,{timeout:3000})
             .then( result => {
@@ -394,6 +392,7 @@ function RefundScreen(props) {
                     <CalculatorItemText>환불예상금액</CalculatorItemText>
                 </CalculatorItem>
             </CalculatorContainer>
+            <Text style={{color : '#fee558', fontSize : 14, marginBottom : 10}}>※ 환불은 재정경제부 재정 소비자피해보상규정 제 3조 별지 2 제 20항에 의거하여 처리됩니다.</Text>
             <Item>
             <LabelTitleStyle>이름</LabelTitleStyle>
             <$Input placeholder="실명" 
