@@ -132,8 +132,8 @@ android {
         applicationId "com.smartfitkorea.metroxi"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10609
-        versionName "1.6.9"
+        versionCode 10700
+        versionName "1.7.0"
         multiDexEnabled = true
     }
     splits {
