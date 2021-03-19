@@ -210,7 +210,7 @@ const SlideUrl = ({ url, uri }) => {
     return <TouchableHighlight style={{ flex: 1 }} onPress={handlePress} ><$SlideImage source={{ uri: uri }} /></TouchableHighlight>
 };
 
-function Logged(props) {
+function Logged(props) {    
 
     const window = Dimensions.get('window');
     const navigation = useNavigation();

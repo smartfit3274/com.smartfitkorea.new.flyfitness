@@ -33,3 +33,8 @@ react-native run-android
 
 ### Meterial Icon
 https://material.io/resources/icons/?icon=keyboard_arrow_left&style=baseline
+
+### 카드결제 TEST
+/store.js
+  cid     : "CT18T25131655.yADF0", ===>  cid     : "CT14S15143839.Pdfg3",
+  iamport:"imp76426114", ===> iamport:"iamport",

@@ -25,8 +25,8 @@ import styled from "styled-components/native";
 import IMP from 'iamport-react-native';
 import Loading from './Loading';
 import {useSelector, useDispatch} from 'react-redux';  
-
-var access_token = '';
+import GetApiHost from '../lib/GetApiHost';
+import { pr } from "../lib/pr";
 
 const TextContainer = styled(View)`
     justify-content:center;
@@ -37,18 +37,22 @@ const TextContainer = styled(View)`
 
 function CardPayStartScreen() {
 
+    const [loaded,setLoaded] = useState(false)
     const navigation = useNavigation();
     const params = navigation.getParam('params');
     const merchant_uid = 'mid_'+new Date().getTime();
-    const {
+    let {
         userCode,
         name,
         amount,
         mcd,
         pid,
-        sdate,
+        sdate,    
+        buyer_name,
+        couponSeq,
     } = params;   
     const store = useSelector(state => state.data);  
+    const api_host = GetApiHost();    
 
     /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
     function callback(response) {
@@ -62,7 +66,7 @@ function CardPayStartScreen() {
         name: name,
         merchant_uid: merchant_uid,
         amount: amount,
-        buyer_name:'고객',
+        buyer_name:buyer_name,
         buyer_tel: '',
         buyer_email: '',
         buyer_addr: '',
@@ -72,31 +76,47 @@ function CardPayStartScreen() {
         pid: pid,
         sid: store.sid,
         sdate: sdate,
-        display: {card_quota : [2,3]}
-    }    
+        display: {card_quota : [2,3]},
+        couponSeq: couponSeq
+    }       
 
-    // console.log(data);
-
-    // 결제정보 저장    
-    Axios.post(store.url+'/slim/card_pay_start',data,{timeout:3000})
-    .then(function(res){
-        console.log('card_pay_start()');        
-    })
-    .catch(function(error){
-        console.log(error);
-        // 결제창 종료
-    }); 
- 
-    // return (<View><Text>DEBUG</Text></View>)
-    return (  
-        <IMP.Payment
-        userCode={store.iamport}     // 가맹점 식별코드
-        loading={<Loading />}   // 웹뷰 로딩 컴포넌트
-        data={data}             // 결제 데이터
-        callback={callback}     // 결제 종료 후 콜백
-        tierCode={store.tier_code} // 하위가맹점 코드
-        />
-    );  
+    // 프로그램 시작
+    async function init() {
+        pr('init');
+        let result;               
+        result = await Axios.post(api_host+'/sp/card_pay_start',data); // 결제전 저장
+        setLoaded(true);
+    }
+    init();  
+        
+    if(store.iamport !== 'iamport') {
+        return (  
+            <>
+            {loaded===true?
+            <IMP.Payment
+            userCode={store.iamport}// 가맹점 식별코드
+            loading={<Loading />}   // 웹뷰 로딩 컴포넌트
+            data={data}             // 결제 데이터
+            callback={callback}     // 결제 종료 후 콜백
+            tierCode={store.tier_code} // 하위가맹점 코드
+            />:<Text>Please wait ...</Text>}
+            </>
+        );    
+    }
+    else  // TEST MODE
+    {        
+        return (  
+            <>
+            {loaded===true?
+            <IMP.Payment
+            userCode={store.iamport}// 가맹점 식별코드
+            loading={<Loading />}   // 웹뷰 로딩 컴포넌트
+            data={data}             // 결제 데이터
+            callback={callback}     // 결제 종료 후 콜백
+            />:<Text>Please wait ...</Text>}
+            </>
+        );            
+    }
 }
 
 export default CardPayStartScreen;
