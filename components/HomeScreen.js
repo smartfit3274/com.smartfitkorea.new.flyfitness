@@ -17,6 +17,7 @@ import {useNavigation} from 'react-navigation-hooks';
 import axios from 'axios';
 import AsyncStorage from '@react-native-community/async-storage';
 import Login from './home/Login';
+import Intro from './IntroScreen.js';
 import Logged from './home/Logged';
 import cfg from "./data/cfg.json";
 import { Button,Text,Drawer,Container } from 'native-base';
@@ -147,7 +148,7 @@ function HomeScreen(props) {
   
   // 카드결제를 완료하고
   // 팝업창이 닫힐때 새로고침 
-  const { pop_id } = ( navigation.state.params ) ? navigation.state.params:"";  
+  const { pop_id, go_login } = ( navigation.state.params ) ? navigation.state.params:"";  
   useEffect(()=>{
     if(pop_id !== undefined && pop_id !== '' )
     {      
@@ -163,12 +164,20 @@ function HomeScreen(props) {
     }    
   },[pop_id]);  
 
+  useEffect(()=>{
+    if(go_login !== undefined && go_login !== '' && go_login === 'Y' )
+    {      
+      navigation.replace('Login');
+    }    
+  },[go_login]);
+
 
   return (              
       <Container> 
         { isLogin == '' ? <Loading/> : null }      
         { isLogin == 'Y' ? <Logged params={{is_key:is_key, access_token: access_token }} /> : null }      
-        { isLogin == 'N' ? <Login/> : null }              
+        {/* { isLogin == 'N' ? <Login/> : null }               */}
+        { isLogin == 'N' ? <Intro/> : null }              
       </Container>       
   );
 

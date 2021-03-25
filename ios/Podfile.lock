@@ -69,7 +69,7 @@ PODS:
     - GoogleUtilities/Logger
   - GoogleUtilities/UserDefaults (7.2.2):
     - GoogleUtilities/Logger
-  - IamportReactNative (1.5.2):
+  - IamportReactNative (1.6.2):
     - React
   - nanopb (2.30907.0):
     - nanopb/decode (= 2.30907.0)
@@ -514,7 +514,7 @@ SPEC CHECKSUMS:
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
   GoogleDataTransport: 1024b1a4dfbd7a0e92cb20d7e0a6f1fb66b449a4
   GoogleUtilities: 31c5b01f978a70c6cff2afc6272b3f1921614b43
-  IamportReactNative: 397d8e34dff83d8b01d8384f3f33779ed09a0a4b
+  IamportReactNative: 4fc56afe84c0be57587fbcdbd6ca2c593fa4cbdb
   nanopb: 59221d7f958fb711001e6a449489542d92ae113e
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   RCTRequired: 48884c74035a0b5b76dbb7a998bd93bcfc5f2047

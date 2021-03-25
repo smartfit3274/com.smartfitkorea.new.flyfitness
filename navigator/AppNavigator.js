@@ -4,7 +4,9 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {Image} from 'react-native';
 import TestScreen from '../components/TestScreen';
+import CenterInfoScreen from '../components/CenterInfoScreen';
 import HomeScreen from '../components/HomeScreen';
+import LoginScreen from '../components/home/Login';
 import AgreeScreen from '../components/AgreeScreen';
 import JoinScreen1 from '../components/JoinScreen1';
 import JoinScreen2 from '../components/JoinScreen2';
@@ -27,6 +29,18 @@ const AppNavigator = createStackNavigator({
     screen: HomeScreen,
     navigationOptions: ({
       title: 'SmartGYM'
+    })
+  },
+  CenterInfo: {
+    screen: CenterInfoScreen,
+    navigationOptions: ({
+      title: '센터소개'
+    })
+  },
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: ({
+      title: '로그인'
     })
   },
   Join1: {
