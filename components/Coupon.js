@@ -12,6 +12,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 const Container = styled.View`
     padding-top:15px;
     padding-bottom:10px;
+    z-index : 9999;
 `;
 
 const CouponText = styled.Text`

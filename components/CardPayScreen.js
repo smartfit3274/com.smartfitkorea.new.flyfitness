@@ -93,8 +93,9 @@ const TextDefault = styled.Text`
 `
 
 const AgreeButton = styled.TouchableOpacity`
-    background-color:#cccccc;
+    background-color:#efefef;
     padding:5px 10px;
+    border-radius : 5px;
 `
 
 const AgreeButtonText = styled.Text`
@@ -418,6 +419,7 @@ const styles = StyleSheet.create({
 
     dateContainer: {
         alignItems: "center",
+        zIndex : 99999
     },
     dateSub: {
         width: "90%",
