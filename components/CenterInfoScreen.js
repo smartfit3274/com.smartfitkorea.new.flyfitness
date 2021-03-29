@@ -17,7 +17,17 @@ const { mobile_host, api_host } = config;
 export default function ({ navigation, route }) {
 
   const store = useSelector(state => state.data);
-  let uri = mobile_host + '/center?cid=' + store.cid;
+  let logged = '';
+  if(navigation.state.params){
+    logged = navigation.state.params.logged;
+  }
+
+  let uri = '';
+  if(logged === 'Y'){
+    uri = mobile_host + '/center?cid=' + store.cid + "&isLogged=Y";
+  }else{
+    uri = mobile_host + '/center?cid=' + store.cid;
+  }
 
   const onMessage = (message) => {
     const { data } = message.nativeEvent;

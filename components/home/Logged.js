@@ -169,7 +169,7 @@ const $FooterTab = styled(FooterTab)`
 `
 
 const $FooterImage = styled.Image`
-    height : 18px;
+    height : 25px;
     resize-mode : contain;
     margin-bottom : 5px;
 `
@@ -436,6 +436,11 @@ function Logged(props) {
         console.log('TAG: btn_home()');
     }
 
+    function btn_center() {
+        console.log('TAG: btn_center()');
+        navigation.push('CenterInfo', {logged : 'Y'});
+    }
+
     function btn_purchase() {
         console.log('TAG: btn_purchase()');
         navigation.push('Purchase')
@@ -671,6 +676,10 @@ function Logged(props) {
                     <Button vertical onPress={() => tg_frequency_click()}>
                         <$FooterImage source={require('../images/icon_frequency.png')} ></$FooterImage>
                         <$FooterText>프리퀀시</$FooterText>
+                    </Button>
+                    <Button vertical onPress={() => btn_center()}>
+                        <$FooterImage source={require('../images/icon_center.png')} ></$FooterImage>
+                        <$FooterText>센터소개</$FooterText>
                     </Button>
                     <Button vertical onPress={() => btn_purchase()}>
                         <$FooterImage source={require('../images/icon_cart.png')} ></$FooterImage>
