@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View,Text } from 'react-native';
 import styled from "styled-components/native";
 import { Content, Separator } from 'native-base'
-import { ViewPropTypes } from 'react-native';
+import { ViewPropTypes, Platform } from 'react-native';
 import { pr } from '../lib/pr';
 import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
@@ -12,7 +12,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 const Container = styled.View`
     padding-top:15px;
     padding-bottom:10px;
-    z-index : 9999;
+    ${Platform.OS !== 'android' ? 'z-index:10' : null}
 `;
 
 const CouponText = styled.Text`

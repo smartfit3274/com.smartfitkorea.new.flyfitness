@@ -18,7 +18,7 @@ import {
     Item,
     Label,
 } from 'native-base';
-import { Alert, Image, Dimensions, RefreshControlBase, StyleSheet, StatusBar } from 'react-native';
+import { Alert, Image, Dimensions, RefreshControlBase, StyleSheet, StatusBar, Platform } from 'react-native';
 import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
@@ -100,6 +100,11 @@ const AgreeButton = styled.TouchableOpacity`
 
 const AgreeButtonText = styled.Text`
     color:#000000;
+`
+
+const DateContainer = styled.View`
+    align-items : center;
+    ${Platform.OS !== 'android' ? 'z-index:10' : null}
 `
 
 function CardPayScreen() {
@@ -342,7 +347,7 @@ function CardPayScreen() {
                 locale="ko"
                 maximumDate={maxDate}
             />
-            <View style={styles.dateContainer}>
+            <DateContainer>
                 <View style={styles.dateSub}>
 
                     <SubText>시작일을 선택하세요.</SubText>
@@ -383,7 +388,7 @@ function CardPayScreen() {
                         <Text>결제완료 테스트!!!!</Text>
                     </Button>
                 </View> */}
-            </View>
+            </DateContainer>
             <View style={{ borderTopWidth:1, borderTopColor:"gray", width:'90%', alignSelf:"center"}}>                
             </View>
             <Content contentContainerStyle={styles.container} scrollEnabled={true}>
@@ -416,11 +421,6 @@ const margin = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-
-    dateContainer: {
-        alignItems: "center",
-        zIndex : 99999
-    },
     dateSub: {
         width: "90%",
     },
