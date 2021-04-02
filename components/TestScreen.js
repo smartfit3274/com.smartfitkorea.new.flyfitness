@@ -1,23 +1,26 @@
 import React from 'react';
 import { useNavigation } from 'react-navigation-hooks'
 import { View,Button,Text } from 'native-base';
-import uuid from 'uuid';
+import DeviceInfo from 'react-native-device-info';
 
-export default function TestScreen(props) {
-    const navigation = useNavigation();
-    const params = props.navigation.state.params;
+function TestScreen() {
 
-    const close = () => {
-        navigation.navigate('Home',{pop_id:uuid.v4()});
+    let device = {
+        uniqueId:DeviceInfo.getUniqueId(),
+        brand:DeviceInfo.getBrand(),
+        model:DeviceInfo.getModel()
     }
+    // .getBrand
+    // .getModel
 
-    return (
-        <View>
-            <Text>Hello?</Text>
-            <Button onPress={close}>
-                <Text>닫기</Text>
-            </Button>
-        </View>
-
-    );   
+    return(
+        <>
+        <Text>Hello!</Text>
+        <Text>UID : {device.uniqueId}</Text>
+        <Text>BRAND : {device.brand}</Text>
+        <Text>MODEL : {device.model}</Text>
+        </>
+    );  
 }
+
+export default TestScreen;

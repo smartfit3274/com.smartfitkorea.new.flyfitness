@@ -64,7 +64,7 @@ function PinScreen(props) {
 
     const pinView = useRef(null)
     const navigation = useNavigation();
-    const {mode , sid, cid, access_token, url} = props.navigation.state.params;  // navigation.getParam('') ?
+    const {mode , sid, cid, token, url, beacon_id} = props.navigation.state.params;  // navigation.getParam('') ?
 
 
     // 핀번호 GET
@@ -107,7 +107,7 @@ function PinScreen(props) {
         navigation.pop();
         if(savedPin == pin) {
             // 핀번호 일치 (문열기)
-            open_door( {sid:sid, cid: cid, access_token:access_token, url:url } );
+            open_door( {sid:sid, cid: cid, token:token, url:url, beacon_id:beacon_id } );
         } else {
             alert('비밀번호가 일치하지 않습니다.', savedPin);
         }

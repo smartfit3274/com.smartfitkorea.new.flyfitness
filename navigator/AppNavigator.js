@@ -31,6 +31,12 @@ const AppNavigator = createStackNavigator({
       title: 'SmartGYM'
     })
   },
+  Test: {
+    screen: TestScreen,
+    navigationOptions: ({
+      title: 'TEST'
+    })       
+  },     
   CenterInfo: {
     screen: CenterInfoScreen,
     navigationOptions: ({
@@ -61,12 +67,6 @@ const AppNavigator = createStackNavigator({
       title: '회원가입'
     })       
   },    
-  Test: {
-    screen: TestScreen,
-    navigationOptions: ({
-      title: 'TEST'
-    })       
-  }, 
   Purchase: {
     screen: PurchaseScreen,
     navigationOptions: ({

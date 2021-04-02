@@ -44,11 +44,15 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 import { $Header } from '../$Header';
 import { initPush } from '../../lib/Fcm';
 import NoticeIcon from '../NoticeIcon';
+import GetApiHost from '../../lib/GetApiHost';
+import { pr } from '../../lib/pr';
+
+
 let access_token = '';
 let pin = '';
 let auth_type = '';
 let confirm = '';
-let uuid = '';
+let beacon_id = '';
 let disconnectCount = 0;
 let is_key = ''; // 출입키 보유 유무
 let temp_images = [{ "link": "", "uri": "https://admin.smartg.kr/img/banner.jpg" }, { "link": "", "uri": "https://admin.smartg.kr/img/banner.jpg" }, { "uri": "https://admin.smartg.kr/img/banner.jpg" }, { "uri": "https://admin.smartg.kr/img/banner.jpg" }];
@@ -210,12 +214,11 @@ const SlideUrl = ({ url, uri }) => {
     return <TouchableHighlight style={{ flex: 1 }} onPress={handlePress} ><$SlideImage source={{ uri: uri }} /></TouchableHighlight>
 };
 
-function Logged(props) {    
+function Logged(props) {
 
     const window = Dimensions.get('window');
     const navigation = useNavigation();
     const [distance, setDistance] = useState(0);
-    const [proximity, setProximity] = useState('');
     const [isBeacon, setIsBeacon] = useState('N');  // 비콘이 근처에 있는지
     const [MbInfo, setMbInfo] = useState({
         mb_name: '',
@@ -233,8 +236,12 @@ function Logged(props) {
     }
 
     const tg_frequency_click = () => {
-        navigation.push('TeachingGuideScreen', {frequency : 'Y'});
+        navigation.push('TeachingGuideScreen', { frequency: 'Y' });
     }
+
+    let result;
+    let beacion_id = '';
+    const api_host = GetApiHost();    
 
     // 회원정보 로딩
     const member_one = () => {
@@ -268,43 +275,23 @@ function Logged(props) {
         member_one();
     }, []);
 
-
     // 구매한 키가 있는경우 비콘 처리 시작
-    // 비콘문열기
     useEffect(() => {
 
-        // 비콘ID 서버에서 내려받기        
-        if (is_key === 'Y') {
-
-            get_uuid({ cid: store.cid, sid: store.sid, url: store.url })
-                .then(result => {
-
-                    uuid = result;
-
-                    // 개발용 비콘
-                    if (store.debug_beacon == 'Y') {
-                        uuid = store.dubug_beacon_uuid;
-                    }
-
-                    if (uuid == '') {
-                        alert('비콘정보 수신오류');
-                        return;
-                    }
-
-                    if (Platform.OS == 'ios') {
-                        start_beacon_ios()
-                    }
-
-                    if (Platform.OS == 'android') {
-                        start_beacon_android();
-                    }
-                })
-                .catch(error => console.log(error));
-
-            // 프로그램 종료시 비콘 리스너 종료
-            return () => {
-                DeviceEventEmitter.removeAllListeners();
+        if(is_key==='Y') {
+            // 비콘 시작
+            if (Platform.OS == 'ios') {
+                start_beacon_ios()
             }
+
+            if (Platform.OS == 'android') {
+                start_beacon_android();
+            }            
+        }       
+
+        // 프로그램 종료시 비콘 리스너 종료
+        return () => {
+            DeviceEventEmitter.removeAllListeners();
         }
     }, []);
 
@@ -317,119 +304,130 @@ function Logged(props) {
 
     }, []);
 
-    // 비콘 시작
-    const start_beacon_ios = () => {
+    // [비콘시작] iphone
+    const start_beacon_ios = async () => {
         console.log('TAG: start_beacon_ios()');
-
+        
+        beacon_id = await get_uuid({ cid: store.cid, sid: store.sid, url: store.url }); // 비콘ID
         const region = {
-            identifier: "iBeacon",
-            uuid: uuid
+            identifier: 'Estimotes',
+            uuid: beacon_id
         };
 
-        Beacons.requestWhenInUseAuthorization();
-        Beacons.startRangingBeaconsInRegion(region);
-        DeviceEventEmitter.addListener(
-            'beaconsDidRange',
-            (response => {
+        try {
+            await Beacons.requestWhenInUseAuthorization();
+        } catch(e) {
+            alert('[BLE] 블루투스 사용을 허용하세요.');
+        }
 
-                let count = 0;
-                response.beacons.forEach(beacon => {
-                    if (beacon.proximity) {
-                        setProximity(beacon.proximity);
-                        if (beacon.proximity === 'immediate' || beacon.proximity === 'near') {
-                            setIsBeacon('Y');
-                            count++;
+        try {
+            await Beacons.startRangingBeaconsInRegion(region);
+        } catch (e) {
+            alert('[Beacon] 비콘 범위지정 오류');
+        }
+
+        DeviceEventEmitter.addListener(
+            'beaconsDidRange', response => {
+                let find = 0;
+                response.beacons.forEach(beacon => {                
+                    if (beacon.uuid.toLowerCase() === beacon_id.toLowerCase()) { // 내가 찾는 비콘이 가까이 있으면
+                        if (beacon.proximity) {
+                            if (beacon.proximity === 'immediate' || beacon.proximity === 'near') {
+                                find = 1;
+                            }
                         }
-                        console.log('proximity:', beacon.proximity);
                     }
                 });
-
-                if (count === 0) {
-                    disconnectCount++;
+                if (find === 1) {
+                    setIsBeacon('Y');
+                    Beacons.stopRangingBeaconsInRegion(region);
+                    setTimeout(()=>{
+                        Beacons.startRangingBeaconsInRegion(region);
+                    },10000); // 연결되면 10초 동안 정지 (접속 불안정 처리)
                 }
-
-                if (count > 0) {
-                    disconnectCount = 0;
-                }
-
-                if (disconnectCount > 9) {
-                    disconnectCount = 0;
-                    if (isBeacon == 'N') setIsBeacon('N');
-                }
-                console.log('disconnectCount:', disconnectCount);
-            })
+                else {
+                    setIsBeacon('N');
+                }               
+            }
         );
     }
 
-    const start_beacon_android = () => {
+    // [비콘시작] android
+    const start_beacon_android = async () => {
+        pr('start_beacon_android()');        
 
-        console.log('TAG: start_beacon_android()');
-
-        const region = {
-            identifier: "iBeacon",
-            uuid: uuid
-        };
-
+        // 비콘ID
+        beacon_id = await get_uuid({ cid: store.cid, sid: store.sid, url: store.url });
+        
         // 블루투스 권한요청
-        BleManager.start({ showAlert: false })
-            .then(() => BleManager.enableBluetooth())
-            .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION))
-            .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION))
-            // .then(() => PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION) )
-            .then(() => Beacons.detectIBeacons())
-            .then(() => Beacons.startRangingBeaconsInRegion(region))
-            .then(() => {
-                DeviceEventEmitter.addListener(
+        await BleManager.start({ showAlert: false });
+        try {
+            await BleManager.enableBluetooth();
+        } catch (e) {
+            alert('[BLE] 블루투스 사용을 허용하세요.' + e);
+        }
 
-                    'beaconsDidRange', response => {
+        try {
+            await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION);
+        } catch (e) {
+            alert('[BLE] 위치 권한을 허용하세요.' + e);
+        }
 
-                        if (store.debug_beacon_console === 'Y') {
-                            console.log(response);
-                        }
+        try {
+            await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        } catch (e) {
+            alert('[BLE] 자세한 위치 허용하세요.' + e);
+        }
 
-                        let count = 0;
-                        response.beacons.forEach(beacon => {
-                            count++;
-                            if (beacon.distance) {
-                                if (store.debug_beacon_console === 'Y') {
-                                    console.log('TAG: found beacon', beacon.distance);
-                                }
-                            }
-                            else {
-                                console.log('TAG: no beacon!');
-                            }
+        try {
+            await Beacons.detectIBeacons();
+        } catch (e) {
+            alert('[Beacon] 비콘인식 인식 오류');
+        }
 
-                            setDistance(beacon.distance);
-                            if (beacon.distance > 0 && beacon.distance < cfg.beacon_range) {
-                                setIsBeacon('Y');
-                            } else {
-                                setIsBeacon('F'); // 근처에 없슴
-                            }
-                        });
+        try {
+            await Beacons.startRangingBeaconsInRegion('REGION1');
+        } catch (e) {
+            alert('[Beacon] 비콘 범위지정 오류');
+        }
 
-                        // 비콘신호가 자주 끊어짐
-                        // 10초동안 신호가 없으면 비콘끊김 처리
-                        if (count == 0) {
-                            disconnectCount++;
+        DeviceEventEmitter.addListener(
+            'beaconsDidRange', response => {
+                pr('beaconDidRange()');
+                let find = 0;
+                response.beacons.forEach(beacon => {                    
+                    if (beacon.uuid === beacon_id) { // 내가 찾는 비콘이 가까이 있으면
+                        if (beacon.distance > 0 && beacon.distance < cfg.beacon_range) {
+                            find = 1;
                         }
-                        if (count > 0) {
-                            disconnectCount = 0;
-                        }
-                        if (disconnectCount > 9) {
-                            setIsBeacon('N');
-                            disconnectCount = 0;
-                        }
-                        if (store.debug_beacon_console === 'Y') {
-                            console.log('disconnectCount', disconnectCount);
-                        }
-                    })
-            })
-            .catch(error => alert('비콘초기화 오류', error));
+                    }
+                });
+                if (find === 1) {
+                    setIsBeacon('Y');
+                    Beacons.stopRangingBeaconsInRegion('REGION1');
+                    setTimeout(()=>{
+                        Beacons.startRangingBeaconsInRegion('REGION1');
+                    },10000); // 연결되면 10초 동안 정지 (접속 불안정 처리)
+                }
+                else {
+                    setIsBeacon('N');
+                }
+            }
+        );
+    }
+
+    async function handle_logout() {
+        // 로그아웃
+        // 홈으로이동
+        await AsyncStorage.setItem('access_token', '');
+        await AsyncStorage.setItem('refresh_token', '');
+        await AsyncStorage.setItem('pin', '');
+        navigation.replace('Home');        
     }
 
     function btn_mypage() {
         console.log('TAG: btn_mypage()');
-        navigation.push('MyInfo')
+        navigation.push('MyInfo',{handle_logout:handle_logout});
     }
 
     function btn_home() {
@@ -438,7 +436,7 @@ function Logged(props) {
 
     function btn_center() {
         console.log('TAG: btn_center()');
-        navigation.push('CenterInfo', {logged : 'Y'});
+        navigation.push('CenterInfo', { logged: 'Y' });
     }
 
     function btn_purchase() {
@@ -461,68 +459,54 @@ function Logged(props) {
     }
 
     // 번호로 로그인처리
-    function handle_number() {
+    async function handle_number() {        
+        const refresh_token = await AsyncStorage.getItem('refresh_token');                
         AsyncStorage.getItem('pin')
             .then(result => {
                 if (result == null || result == '') {
                     navigation.navigate('Pin', { mode: 'create' }); // 신규등록
                 }
                 else {
-                    navigation.navigate('Pin', { mode: 'confirm', sid: store.sid, cid: store.cid, access_token: access_token, url: store.url }); // 번호확인
+                    navigation.navigate('Pin', { mode: 'confirm', 
+                    sid: store.sid, cid: store.cid, token: refresh_token, url: store.url, 
+                    beacon_id:beacon_id }); // 번호확인
                 }
             })
             .catch(error => console.log(error));
     }
 
     // 아이폰 지문처리
-    function handle_ios_finger() {
-        ReactNativeBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint' })
-            .then(result => result.success)
-            .then((success) => {
-                if (success == true) {
-                    open_door({ sid: store.sid, cid: store.cid, access_token: access_token, url: store.url });
-                }
-                else {
-                    // ignore
-                }
-            })
-            .catch(error => console.log(error));
+    async function handle_ios_finger() {
+        const token = await AsyncStorage.getItem('refresh_token');                
+        result = await ReactNativeBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint' })
+        if(result.success=== true) {
+            open_door( { cid: cfg.cid, token:token, beacon_id:beacon_id } );    
+        }
     }
 
     // 아이폰 얼굴처리
-    function handle_ios_face() {
-        ReactNativeBiometrics.simplePrompt({ promptMessage: 'Confirm FaceID' })
-            .then(result => result.success)
-            .then((success) => {
-                if (success == true) {
-                    open_door({ sid: store.sid, cid: store.cid, access_token: access_token, url: store.url });
-                }
-                else {
-                    // ignore
-                }
-            })
-            .catch(error => console.log(error));
+    async function handle_ios_face() {
+        const token = await AsyncStorage.getItem('refresh_token');                
+        result = await ReactNativeBiometrics.simplePrompt({ promptMessage: 'Confirm FaceID' })
+        if(result.success=== true) {
+            open_door( { cid: cfg.cid, token:token, beacon_id:beacon_id } );    
+        }
     }
 
     // 안드로이드 지문처리
-    function handle_android_finger() {
-
-        ReactNativeBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint' })
-            .then(result => result.success)
-            .then((success) => {
-                if (success == true) {
-                    open_door({ sid: store.sid, cid: store.cid, access_token: access_token, url: store.url });
-                }
-                else {
-                    // ignore
-                }
-            })
-            .catch(error => console.log(error));
+    async function handle_android_finger() {
+        const token = await AsyncStorage.getItem('refresh_token');                
+        result = await ReactNativeBiometrics.simplePrompt({ promptMessage: 'Confirm fingerprint' });
+        if(result.success=== true) {
+            open_door( { cid: cfg.cid, token:token, beacon_id:beacon_id } );    
+        }
     }
 
-    // 출입문개방 클릭
-    function btn_door_open() {
-        find_auth_type();
+    // 출입문 열기 클릭
+    async function btn_door_open() {
+        const token = await AsyncStorage.getItem('refresh_token');                
+        open_door( { cid: cfg.cid, token:token, beacon_id:beacon_id } );                
+        // find_auth_type();
     }
 
     // 인증타입 선택
@@ -568,7 +552,7 @@ function Logged(props) {
     function no_door_message() {
         Alert.alert(
             '* 출입문 열기 안내 *',
-            '출입문 근처에서 문 열기 버튼이 활성화됩니다. 블루투스 기능이 필요합니다.',
+            '출입문 근처에서 문 열기 버튼이 활성 됩니다. 블루투스 기능이 필요합니다.',
             [{ text: 'ok', onPress: () => console.log('OK pressed') }],
             {
                 cancelable: false,
@@ -577,12 +561,12 @@ function Logged(props) {
     }
 
     // 푸시서비스
-    useEffect(()=>{
+    useEffect(() => {
         initPush();
-    },[]);
+    }, []);
 
     return (
-        <SafeAreaView style={{ flex : 1, backgroundColor : '#111'}}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: '#111' }}>
             <$Header style={{ backgroundColor: '#111111', height: 80 }} iosBarStyle={"light-content"} backgroundColor={'#111'}>
                 <StatusBar backgroundColor="#111" />
                 <Left style={{ flex: 1 }}>

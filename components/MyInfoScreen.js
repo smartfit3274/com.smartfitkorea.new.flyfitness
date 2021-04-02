@@ -105,6 +105,7 @@ function MyInfoScreen() {
         edate:'',
     });
     const store = useSelector(state => state.data);
+    const handle_logout = navigation.getParam('handle_logout');
     
     useEffect(()=>{
 
@@ -167,21 +168,8 @@ function MyInfoScreen() {
     }
 
     function btn_logout() {
-        console.log('TAG: btn_logout()');
-        Alert.alert(
-            '로그아웃',
-            '로그아웃 하시겠습니까?',
-            [{text:'로그아웃',onPress:()=> {
-                AsyncStorage.setItem('access_token', '')
-                    .then(() => { return AsyncStorage.setItem('refresh_token', '') })
-                    .then(() => AsyncStorage.setItem('pin', ''))
-                    .then(() => navigation.replace('Home'))
-                    .catch(error => alert(error));
-            }},
-            {text:'취소',onPress:()=>console.log('cancel pressed')}
-            ]
-        ); 
-        
+        handle_logout();
+        setTimeout(() => navigation.pop(), 500);
     }
 
     const titleData = {
