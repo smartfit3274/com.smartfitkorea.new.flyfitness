@@ -21,7 +21,7 @@ const INITIAL_STATE = {
     store_id_android: "com.smartfitkorea.metroxi",
     store_id_ios : "1534844508",
     iamport:"imp76426114",
-    tier_code:"G03"    
+    tier_code:"G08"    
   }
 }
 
