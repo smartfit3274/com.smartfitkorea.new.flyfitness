@@ -1,4 +1,4 @@
-package com.smartfitkorea.metroxi;
+package com.smartfitkorea.docircuit;
 
 import com.facebook.react.ReactActivity;
 

@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.smartfitkorea.metroxi"
+        applicationId "com.smartfitkorea.docircuit"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 10702

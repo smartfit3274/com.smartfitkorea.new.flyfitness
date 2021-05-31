@@ -1,4 +1,4 @@
-package com.smartfitkorea.metroxi;
+package com.smartfitkorea.docircuit;
 
 import android.app.Application;
 import android.content.Context;

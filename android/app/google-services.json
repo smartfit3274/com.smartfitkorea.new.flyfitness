@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:911025684470:android:7b9e249574f746da0d11d7",
+        "mobilesdk_app_id": "1:911025684470:android:e020e9c5db41de8f0d11d7",
         "android_client_info": {
-          "package_name": "com.daveno.firebase"
+          "package_name": "com.smartfitkorea.dadaepo"
         }
       },
       "oauth_client": [
@@ -32,10 +32,190 @@
               "client_type": 3
             },
             {
-              "client_id": "911025684470-9rgp7pe4d2i5scn62hbme2o1cd891fqp.apps.googleusercontent.com",
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.daveno.samplefirebase"
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:5bfaf9aae4a0d3c50d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.docircuit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:9158f7772f360c020d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.gohyeon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:1fabadad2f9521e90d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.gooseo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:c55b6f04eb20ba0c0d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.hadan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:9aff25fcb4c589f00d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.kijang"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
               }
             }
           ]
@@ -68,10 +248,118 @@
               "client_type": 3
             },
             {
-              "client_id": "911025684470-9rgp7pe4d2i5scn62hbme2o1cd891fqp.apps.googleusercontent.com",
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.daveno.samplefirebase"
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:7b41c6702bc72b940d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.physicalbase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:6b07e75f4d42e4b00d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.saha"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:9b8a887f3f5e37090d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.smartpass"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
               }
             }
           ]
