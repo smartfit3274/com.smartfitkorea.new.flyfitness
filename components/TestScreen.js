@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigation } from 'react-navigation-hooks'
-import { View,Button,Text } from 'native-base';
 import DeviceInfo from 'react-native-device-info';
 
 function TestScreen() {
