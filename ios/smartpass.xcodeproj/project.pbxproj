@@ -34,7 +34,7 @@
 		5231A288E4907A400FCB06ED /* libPods-smartpass.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-smartpass.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5507B06F95D7C1759B608B27 /* Pods-smartpass-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartpass-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-smartpass-tvOSTests/Pods-smartpass-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		6A76FF92BD738498B7EDD315 /* Pods-smartpassTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartpassTests.debug.xcconfig"; path = "Target Support Files/Pods-smartpassTests/Pods-smartpassTests.debug.xcconfig"; sourceTree = "<group>"; };
-		BA619CD12660E35100FE8270 /* 짐패스 두써킷.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "짐패스 두써킷.entitlements"; path = "../../../../Desktop/짐패스 두써킷.entitlements"; sourceTree = "<group>"; };
+		BA59056226981F9F00364084 /* 짐패스 정관점.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "짐패스 정관점.entitlements"; path = "smartpass/짐패스 정관점.entitlements"; sourceTree = "<group>"; };
 		BA619CD22660E47E00FE8270 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BCBFC71178BDE4E10A0F0F80 /* libPods-smartpass-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-smartpass-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C202DE21D96AB5BD8915F543 /* Pods-smartpass-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartpass-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-smartpass-tvOS/Pods-smartpass-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -140,7 +140,7 @@
 		13B07FAE1A68108700A75B9A /* smartpass */ = {
 			isa = PBXGroup;
 			children = (
-				BA619CD12660E35100FE8270 /* 짐패스 두써킷.entitlements */,
+				BA59056226981F9F00364084 /* 짐패스 정관점.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -490,7 +490,7 @@
 			baseConfigurationReference = F689FC56057B3DC80EE35EB8 /* Pods-smartpass.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "smartpass/짐패스 두써킷.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "smartpass/짐패스 정관점.entitlements";
 				CURRENT_PROJECT_VERSION = 10702;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = B2W6Y7FP54;
@@ -517,7 +517,7 @@
 			baseConfigurationReference = 37906CA60044DFD8D6A8D9C9 /* Pods-smartpass.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = "smartpass/짐패스 두써킷.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "smartpass/짐패스 정관점.entitlements";
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 10702;

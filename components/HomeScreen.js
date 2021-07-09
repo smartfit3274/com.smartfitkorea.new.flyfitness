@@ -28,14 +28,62 @@ const Container = styled.SafeAreaView`
   flex:1;
 `;
 
+// 스마트키 확인
+// 비콘찾기
+// 버전체크  
+// 푸시메시지 받기
+// 웹뷰처리
+
 function HomeScreen(props) {
   const navigation = useNavigation();
   const {uri,cid} = store;
+  const [smartkey, setSmartKey] = useState(false); // 스마트키
+  
+  
+  // [ 웹뷰통신 ] 
+  // loaded : true - 페이지 로딩완료
+  // smartkey : true - 출입키 오류
+  const onWebvieMessage = (event) => {
+    const data = event.nativeEvent.data;
+    const {k,v} = JSON.parse(data);
+    console.log('onMessage.',event.nativeEvent.data);;    
+    
+    // 스마트키
+    if(k==='smartkey' && v==='true') {
+      setSmartKey(true);
+    }
+  };
 
-  // 버전체크
-  // 비콘찾기
-  // 푸시메시지 받기
-  // 웹뷰처리
+  return (
+    <Container>
+      <View>
+        <Text style={{color:"white"}}>
+          {smartkey?<Text>Key:Y</Text>:<Text>key:N</Text>}        
+        </Text>
+      </View>
+      <WebView
+        source={{uri: uri+'?cid='+cid}}
+        onMessage={onWebvieMessage}
+        javaScriptEnabled={true}
+        scrollEnabled={true}
+        bounces={false}
+      />
+    </Container>
+  );
+}
+
+
+export default HomeScreen;
+
+
+{/* <SafeAreaView style={{flex : 1, backgroundColor : '#111'}}>
+        <WebView source={{ uri: uri }}
+          onMessage={onMessage}
+          javaScriptEnabled={true}
+          scrollEnabled={true}
+          bounces={false}
+        />
+    </SafeAreaView> */}
 
   // const [isLogin,setIsLogin] = useState('');
   // const store = useSelector(state => state.data);
@@ -165,33 +213,3 @@ function HomeScreen(props) {
   //       { isLogin == 'N' ? <Intro/> : null }
   //     </Container>
   // );
-
-  const onMessage = message => {
-    pr(message);
-  };
-
-  return (
-    <Container>
-      <WebView
-        source={{uri: uri+'?cid='+cid}}
-        onMessage={onMessage}
-        javaScriptEnabled={true}
-        scrollEnabled={true}
-        bounces={false}
-      />
-    </Container>
-  );
-}
-
-export default HomeScreen;
-
-{
-  /* <SafeAreaView style={{flex : 1, backgroundColor : '#111'}}>
-        <WebView source={{ uri: uri }}
-          onMessage={onMessage}
-          javaScriptEnabled={true}
-          scrollEnabled={true}
-          bounces={false}
-        />
-    </SafeAreaView>); */
-}
