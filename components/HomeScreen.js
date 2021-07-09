@@ -11,13 +11,20 @@ import {
   Keyboard,
   Alert,
   EdgeInsetsPropType,
-  Platform,
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
 import pr from '../lib/pr';
 import store from '../lib/Store';
 import {WebView} from 'react-native-webview';
+import startBeacon from '../lib/startBeacon';
+import {
+  PermissionsAndroid,
+  DeviceEventEmitter,
+  Platform,
+  StatusBar,
+} from 'react-native';
+// import { startRangingBeaconsInRegion } from 'react-native-beacons-manager';
 // import axios from 'axios';
 // import AsyncStorage from '@react-native-community/async-storage';
 // import { checkState } from 'react-native-ble-manager';
@@ -37,10 +44,11 @@ const Container = styled.SafeAreaView`
 function HomeScreen(props) {
   const navigation = useNavigation();
   const {uri,cid} = store;
-  const [smartkey, setSmartKey] = useState(false); // 스마트키
+  const [smartkey, setSmartKey] = useState(false); // 스마트키 확인
+  const [uuid, setUUID] = useState(''); // 비콘 확인
   
   
-  // [ 웹뷰통신 ] 
+  // [ 웹뷰 통신 ] 
   // loaded : true - 페이지 로딩완료
   // smartkey : true - 출입키 오류
   const onWebvieMessage = (event) => {
@@ -50,9 +58,29 @@ function HomeScreen(props) {
     
     // 스마트키
     if(k==='smartkey' && v==='true') {
-      setSmartKey(true);
+      setSmartKey(true);     
     }
+
+    // 비콘ID 
+    if(k==='uuid') {
+      setUUID(v);    
+    }    
   };
+
+  // [ 비콘찾기 시작 ]
+  useEffect(()=>{
+    if(smartkey === true && uuid !=='') {      
+      startBeacon();
+    }  
+  },[smartkey, uuid]);
+
+  // [ 비콘 리스너 종료 ]
+  useEffect(()=>{
+    return () => {
+      pr('dismiss');
+      // DeviceEventEmitter.removeAllListeners();      
+    };
+  },[]);  
 
   return (
     <Container>
