@@ -11,7 +11,7 @@ import {
   Keyboard,
   Alert,
   EdgeInsetsPropType,
-  Button
+  Button,
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
@@ -49,13 +49,13 @@ function HomeScreen(props) {
   const [uuid, setUUID] = useState(''); // 비콘 확인
   const webViewRef = useRef();
 
-  // [ 웹뷰 통신 ]
+  // 웹뷰 통신
   // loaded : true - 페이지 로딩완료
   // smartkey : true - 출입키 오류
   const onWebvieMessage = event => {
     const data = event.nativeEvent.data;
     const {k, v} = JSON.parse(data);
-    console.log('onMessage.', event.nativeEvent.data);    
+    console.log('onMessage.', event.nativeEvent.data);
 
     // 스마트키
     if (k === 'smartkey' && v === 'true') {
@@ -68,19 +68,26 @@ function HomeScreen(props) {
     }
   };
 
-  const postMessage = params => {
-    const {k, v} = params;
-    webviewRef.postMessage({key:k, val:v});
-  }
 
-  // [ 비콘찾기 시작 ]
+  // 메시지 전달 : 앱 -> 웹뷰
+  const onPostMessage = params => {    
+    pr('PostMessage');
+    const {k, v} = params;
+    const data = {
+      k: k,
+      v: v,
+    };
+    webViewRef.current.postMessage(JSON.stringify(data)); 
+  };
+
+  // 비콘찾기 시작 
   useEffect(() => {
     if (smartkey === true && uuid !== '') {
-      startBeacon({uuid:uuid});
+      startBeacon({uuid: uuid, onPostMessage:onPostMessage});
     }
   }, [smartkey, uuid]);
 
-  // [ 비콘 리스너 종료 ]
+  // 비콘 리스너 종료
   useEffect(() => {
     return () => {
       pr('will dismiss');
@@ -90,20 +97,22 @@ function HomeScreen(props) {
 
   return (
     <Container>
-      <View>
+      {/* <View>
         <Text style={{color: 'white'}}>
           {smartkey ? <Text>Key:Y</Text> : <Text>key:N</Text>}
         </Text>
-        <Button title="전송">          
-        </Button>
-      </View>
+        <Button
+          title="전송"
+          onPress={() => onPostMessage({k: 'beacon', v: 'on'})}
+        />
+      </View> */}
       <WebView
-        ref = {webViewRef}
+        ref={webViewRef}
         source={{uri: uri + '?cid=' + cid}}
         onMessage={onWebvieMessage}
         javaScriptEnabled={true}
         scrollEnabled={true}
-        bounces={false}        
+        bounces={false}
       />
     </Container>
   );
