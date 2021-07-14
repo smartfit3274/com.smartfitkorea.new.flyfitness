@@ -26,6 +26,7 @@ import {
   Platform,
   StatusBar,
 } from 'react-native';
+import DeviceInfo from 'react-native-device-info';
 
 const Container = styled.SafeAreaView`
   background-color: #111;
@@ -44,7 +45,9 @@ function HomeScreen(props) {
   const {uri, cid} = store;
   const [smartkey, setSmartKey] = useState(false); // 스마트키 확인
   const [uuid, setUUID] = useState(''); // 비콘 확인
-  const webViewRef = useRef();
+  const webViewRef = useRef();  
+  const device = DeviceInfo.getBrand() + ' ' + DeviceInfo.getModel(); // 휴대폰 정보
+  const sn = DeviceInfo.getUniqueId();
 
   // 웹뷰 통신
   // loaded : true - 페이지 로딩완료
@@ -72,6 +75,8 @@ function HomeScreen(props) {
     const data = {
       k: k,
       v: v,
+      device: device,
+      sn : sn
     };
     webViewRef.current.postMessage(JSON.stringify(data));
   };
@@ -104,7 +109,7 @@ function HomeScreen(props) {
       </View> */}
       <WebView
         ref={webViewRef}
-        source={{uri: uri + '?cid=' + cid}}
+        source={{uri: uri + '?cid='+cid}}
         onMessage={onWebvieMessage}
         javaScriptEnabled={true}
         scrollEnabled={true}
