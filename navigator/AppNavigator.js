@@ -4,6 +4,8 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import TestScreen from '../components/TestScreen';
 import HomeScreen from '../components/HomeScreen';
+import CardPayScreen from '../components/CardPayScreen';
+import CardPayResultScreen from '../components/CardPayResultScreen';
 
 // import CenterInfoScreen from '../components/CenterInfoScreen';
 // import LoginScreen from '../components/home/Login';
@@ -37,6 +39,19 @@ const AppNavigator = createStackNavigator({
       title: 'TEST'
     })       
   },     
+  CardPay: {
+    screen: CardPayScreen,
+    navigationOptions: ({
+      title: '카드결제'
+    })       
+  },
+  CardPayResult: {
+    screen: CardPayResultScreen,
+    navigatResulttions: ({
+      title: '카드결제결과'
+    })       
+  },    
+
   // CenterInfo: {
   //   screen: CenterInfoScreen,
   //   navigationOptions: ({

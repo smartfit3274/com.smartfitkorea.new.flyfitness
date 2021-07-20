@@ -1,88 +1,122 @@
-import React, {useState, useEffect} from 'react';
-import {useNavigation} from 'react-navigation-hooks';
+import React, { useState, useEffect } from 'react';
+import { useNavigation } from 'react-navigation-hooks';
 import {
-  Image,
-  Dimensions,
-  RefreshControlBase,
-  StyleSheet,
-  StatusBar,
-  Platform,
   View,
   Text,
+  Header,
+  Footer,
+  FooterTab,
+  Left,
+  Right,
+  Body,
+  Title,
+  Content,
   Button,
-} from 'react-native';
-import ReactNativeBiometrics from 'react-native-biometrics';
+  List,
+  ListItem
+} from 'native-base';
+import { Image, Dimensions, RefreshControlBase, StyleSheet, StatusBar, Platform } from 'react-native';
+import ReactNativeBiometrics from 'react-native-biometrics'
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Axios from 'axios';
-import cfg from './data/cfg.json';
-import styled from 'styled-components/native';
+import cfg from "./data/cfg.json";
+import styled from "styled-components/native";
 import IMP from 'iamport-react-native';
 import Loading from './Loading';
-import {WebView} from 'react-native-webview';
-import {useSelector, useDispatch} from 'react-redux';
+import { WebView } from 'react-native-webview';
+import { useSelector, useDispatch } from 'react-redux';
 import uuid from 'uuid';
 import GetApiHost from '../lib/GetApiHost';
+import { pr } from "../lib/pr";
 
 var access_token = '';
 
 const TextContainer = styled(View)`
-  justify-content: center;
-  align-items: center;
-  background: #ccc;
-  height: 60px;
-`;
-
-const List = styled.View``;
-
-const ListItem = styled.View`
-  height: 25px;
-`;
+    justify-content:center;
+    align-items:center;    
+    background:#ccc;
+    height: 60px;
+`
 
 function CardPayResultScreen() {
+
   const api_host = GetApiHost();
   const navigation = useNavigation();
-
-  // 카드결제창이 닫힐때 처리
-  const {response} = navigation.state.params ? navigation.state.params : '';
-  const {imp_success, success, imp_uid, merchant_uid, error_msg} = response;
-
-  if (false) {
-    const imp_success = 'false';
-    const success = 'false';
-    const imp_uid = '';
-    const merchant_uid = '';
-    const error_msg = '';
-  }
+  const response = navigation.getParam('response');
+  const {
+    imp_success,
+    success,
+    imp_uid,
+    merchant_uid,
+    error_msg
+  } = response;
 
   // [WARNING: 이해를 돕기 위한 것일 뿐, imp_success 또는 success 파라미터로 결제 성공 여부를 장담할 수 없습니다.]
   // 아임포트 서버로 결제내역 조회(GET /payments/${imp_uid})를 통해 그 응답(status)에 따라 결제 성공 여부를 판단하세요.
-  const isSuccess = !(
-    imp_success === 'false' ||
-    imp_success === false ||
-    success === 'false' ||
-    success === false
-  );
+  const isSuccess = !(imp_success === 'false' || imp_success === false || success === 'false' || success === false);
+  const { icon, btn, btnText, btnIcon } = isSuccess ? resultSuccessStyles : resultFailureStyles;
+  const {
+    wrapper,
+    title,
+    listContainer,
+    list,
+    label,
+    value
+  } = resultStyles;
+  const store = useSelector(state => state.data);
+  let result;
+  
+  async function init() {
+    if (isSuccess === true) {
+      const data = {
+        sid: cfg.sid,
+        cid: cfg.cid,
+        merchant_uid: merchant_uid,
+        imp_success: imp_success,
+        imp_uid: imp_uid,
+      }
+      result = await Axios.post(api_host +'/sp/card_key_create',data);
+      pr(result.data);
+    }
+  }
 
-  const {icon, btn, btnText, btnIcon} = isSuccess
-    ? resultSuccessStyles
-    : resultFailureStyles;
-  const {wrapper, title, listContainer, list, label, value} = resultStyles;
+  useEffect(() => {
+    init();
+  }, [])
 
-  // 카드결제 완료처리
-  console.log('카드결제완료');
+  /*
+  useEffect(()=>{
+      
+      // 성공인 경우 출입키 발급    
+      if(isSuccess==true) {
+          const data = {
+              sid:cfg.sid,                
+              cid:cfg.cid,
+              merchant_uid:merchant_uid,
+              imp_success:imp_success,
+              imp_uid:imp_uid,
+          }
+          
+          Axios.post(store.url+'/slim/card_key_create',data,{timeout:3000})
+          // .then(function(res){
+          //   console.log('success');
+          // })
+          // .catch(function(error) {
+          //   console.log(error);
+          // })
+      }
+
+  },[]);
+  */
 
   return (
     <View style={wrapper}>
       <Icon
         style={icon}
-        name={
-          isSuccess ? 'checkbox-marked-circle-outline' : 'alert-circle-outline'
-        }
+        name={isSuccess ? 'checkbox-marked-circle-outline' : 'alert-circle-outline'}
       />
-      <Text style={title}>{`결제에 ${
-        isSuccess ? '성공' : '실패'
-      }하였습니다`}</Text>
+      <Text style={title}>{`결제에 ${isSuccess ? '성공' : '실패'}하였습니다`}</Text>
       <List style={listContainer}>
         <ListItem style={list}>
           <Text style={label}>거래코드</Text>
@@ -102,18 +136,17 @@ function CardPayResultScreen() {
       </List>
       <Button
         bordered
+        transparent
         style={btn}
-        onPress={() => navigation.navigate('Home', {pop_id: uuid.v4()})}
-        title="돌아가기"
-      />
+        onPress={() => navigation.navigate('Home', { pop_id: uuid.v4() })}
+      >
+        <Icon name="arrow-left-circle" style={btnIcon} />
+        <Text style={btnText}>돌아가기</Text>
+      </Button>
     </View>
   );
 }
 
-{
-  /* <Icon name="arrow-left-circle" style={btnIcon} />
-        <Text style={btnText}>돌아가기</Text> */
-}
 
 const formStyles = StyleSheet.create({
   wrapper: {
@@ -187,16 +220,15 @@ const resultStyles = StyleSheet.create({
   },
   list: {
     borderBottomWidth: 0,
-    marginTop: 10,
-    marginBottom: 10,
-    height: 60,
+    marginTop: -10,
+    marginBottom: -10,
   },
   label: {
     width: '40%',
     color: 'rgba(0, 0, 0, 0.6)',
   },
   value: {
-    width: '90%',
+    width: '60%',
   },
   btn: {
     marginLeft: 'auto',
@@ -217,6 +249,7 @@ const resultSuccessStyles = StyleSheet.create({
   btn: {
     ...resultStyles.btn,
     borderColor: '#52c41a',
+    paddingLeft: 10
   },
   btnText: {
     color: '#52c41a',
@@ -234,6 +267,7 @@ const resultFailureStyles = StyleSheet.create({
   btn: {
     ...resultStyles.btn,
     borderColor: '#f5222d',
+    paddingLeft: 10,
   },
   btnText: {
     ...resultStyles.btnText,
@@ -241,6 +275,7 @@ const resultFailureStyles = StyleSheet.create({
   },
   btnIcon: {
     color: '#f5222d',
+    paddingRight: 10,
   },
 });
 

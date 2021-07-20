@@ -47,7 +47,7 @@ function HomeScreen(props) {
   const [uuid, setUUID] = useState(''); // 비콘 확인
   const webViewRef = useRef();  
   const device = DeviceInfo.getBrand() + ' ' + DeviceInfo.getModel(); // 휴대폰 정보
-  const sn = DeviceInfo.getUniqueId();
+  const sn = DeviceInfo.getUniqueId();  
 
   // 웹뷰 통신
   // loaded : true - 페이지 로딩완료
@@ -96,8 +96,27 @@ function HomeScreen(props) {
     };
   }, []);
 
+  const onCardPayScreen = () => {    
+    navigation.navigate('CardPay');
+  }  
+
+  const onCardPayResultScreen = () => {    
+    navigation.navigate('CardPayResult');
+  }  
+
+  // 카드결제창이 닫힐때 처리
+  const { screen, action } = ( navigation.state.params ) ? navigation.state.params:"";
+  if(screen !== undefined && action !== undefined) {
+    pr('screen:'+screen);
+    pr('action:'+action);
+  }
+
   return (
     <Container>
+      <View>
+        <Button title="결제창" onPress={onCardPayScreen}></Button>
+        <Button title="완료창" onPress={onCardPayResultScreen}></Button>
+      </View>
       {/* <View>
         <Text style={{color: 'white'}}>
           {smartkey ? <Text>Key:Y</Text> : <Text>key:N</Text>}
