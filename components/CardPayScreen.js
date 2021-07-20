@@ -81,13 +81,13 @@ function HomeScreen(props) {
 
   return (
     <Container>
-      <IMP.Payment
+      {/* <IMP.Payment
         userCode={iamport} // 가맹점 식별코드
         loading={<Loading />} // 웹뷰 로딩 컴포넌트
         data={data} // 결제 데이터
         callback={callback} // 결제 종료 후 콜백
         tierCode={store.tier_code} // 하위가맹점 코드
-      />
+      /> */}
     </Container>
   );
 }

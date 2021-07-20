@@ -66,6 +66,11 @@ function HomeScreen(props) {
     if (k === 'uuid') {
       setUUID(v);
     }
+
+    // 카드결제 시작
+    if( k=== 'pay_start') {
+      pr( v );
+    }
   };
 
   // 메시지 전달 : 앱 -> 웹뷰
