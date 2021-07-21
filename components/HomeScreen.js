@@ -22,7 +22,6 @@ import {
   Alert,
   EdgeInsetsPropType,
   Button,
-  
 } from 'react-native';
 import styled from 'styled-components/native';
 import {useNavigation} from 'react-navigation-hooks';
@@ -37,6 +36,7 @@ import {
   StatusBar,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import {initPush} from '../lib/Fcm';
 
 const Container = styled.SafeAreaView`
   background-color: #111;
@@ -51,14 +51,14 @@ const Container = styled.SafeAreaView`
 // 웹뷰처리
 
 function HomeScreen(props) {
-  const navigation = useNavigation();  
+  const navigation = useNavigation();
   const [smartkey, setSmartKey] = useState(false); // 스마트키 확인
   const [uuid, setUUID] = useState(''); // 비콘 확인
-  const webViewRef = useRef();  
+  const webViewRef = useRef();
   const device = DeviceInfo.getBrand() + ' ' + DeviceInfo.getModel(); // 휴대폰 정보
-  const sn = DeviceInfo.getUniqueId();  
-  const [uri, setUri] = useState('');  
-  
+  const sn = DeviceInfo.getUniqueId();
+  const [uri, setUri] = useState('');
+
   // 웹뷰 통신
   // loaded : true - 페이지 로딩완료
   // smartkey : true - 출입키 오류
@@ -78,20 +78,25 @@ function HomeScreen(props) {
     }
 
     // 카드결제 시작
-    if( k === 'pay_start') {      
+    if (k === 'pay_start') {
       onCardPayScreen(v);
+    }
+
+    // 회원코드 전달되면 푸시 디바이스 등록
+    if (k === 'mcd') {
+      onRegisterFcm({mcd:v});
     }
   };
 
   // 메시지 전달 : 앱 -> 웹뷰
   const onPostMessage = params => {
-    pr('PostMessage');
+    // pr('PostMessage');
     const {k, v} = params;
     const data = {
       k: k,
       v: v,
       device: device,
-      sn : sn
+      sn: sn,
     };
     webViewRef.current.postMessage(JSON.stringify(data));
   };
@@ -104,38 +109,45 @@ function HomeScreen(props) {
   }, [smartkey, uuid]);
 
   // 비콘 리스너 종료
-  useEffect(() => {    
+  useEffect(() => {
     return () => {
       DeviceEventEmitter.removeAllListeners('beaconsDidRange');
-      pr('비콘 리스너 삭제됨')
+      // pr('비콘 리스너 삭제됨');
     };
   }, []);
 
-  const onCardPayScreen = params => {    
+  const onCardPayScreen = params => {
     navigation.navigate('CardPay', params);
-  }  
+  };
 
-  const onCardPayResultScreen = () => {    
-    navigation.navigate('CardPayResult', {response: { 
-      imp_success:'false',
-      success: 'false',
-      imp_uid:'err_'+new Date().getTime(),
-      merchant_uid: 'err_'+new Date().getTime(),
-      error_msg: '결제창 테스트',
-      cid:store.cid,
-    } });
-  }  
+  const onCardPayResultScreen = () => {
+    navigation.navigate('CardPayResult', {
+      response: {
+        imp_success: 'false',
+        success: 'false',
+        imp_uid: 'err_' + new Date().getTime(),
+        merchant_uid: 'err_' + new Date().getTime(),
+        error_msg: '결제창 테스트',
+        cid: store.cid,
+      },
+    });
+  };
 
   // 홈페이지 로드 : 처음 & 카드결제창 닫힐때
   // 주소를 변경해서 페이지 리로드
-  const { pop_id } = ( navigation.state.params ) ? navigation.state.params:"";  
-  useEffect(()=>{        
-    setUri(store.web+'?cid='+store.cid+'&pop_id='+pop_id);            
-  },[pop_id]);
+  const {pop_id} = navigation.state.params ? navigation.state.params : '';
+  useEffect(() => {
+    setUri(store.web + '?cid=' + store.cid + '&pop_id=' + pop_id);
+  }, [pop_id]);
+
+  // 푸시서비스 시작
+  const onRegisterFcm = params => {
+    const {mcd} = params;
+    initPush({mcd:mcd});
+  };
 
   return (
     <Container>
-      
       {/* <View>
         <Button title="결제창" onPress={onCardPayScreen}></Button>
         <Button title="완료창" onPress={onCardPayResultScreen}></Button>
@@ -150,7 +162,7 @@ function HomeScreen(props) {
           onPress={() => onPostMessage({k: 'beacon', v: 'on'})}
         />
       </View> */}
-      
+
       <WebView
         ref={webViewRef}
         source={{uri: uri}}
