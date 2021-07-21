@@ -53,11 +53,7 @@ function HomeScreen(props) {
   // pr(response.amount);
   // pr(response.name);
   // pr(response.buyer_name);
-  pr(response.tierCode);
-  
-  const onClose = () => {
-    navigation.navigate('Home', {screen: 'card', action: 'close'});
-  };
+  // pr(response.tierCode);
 
   /* 데이타 세팅 */
   const merchant_uid = response.merchant_uid;
@@ -95,7 +91,7 @@ function HomeScreen(props) {
         loading={<Loading />} // 웹뷰 로딩 컴포넌트
         data={data} // 결제 데이터
         callback={callback} // 결제 종료 후 콜백
-        tierCode={store.tierCode} // 하위가맹점 코드
+        tierCode={tierCode} // 하위가맹점 코드
       />
     </Container>
   );
