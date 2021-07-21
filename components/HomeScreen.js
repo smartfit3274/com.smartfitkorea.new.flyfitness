@@ -1,3 +1,13 @@
+/*
+   [ {"amount": 200, "buyer_addr": "", "buyer_email": "", 
+   "buyer_name": "홍길동", "buyer_postcode": "", "buyer_tel": "",
+    "cid": "CID00000009", "couponSeq": "", 
+    "mcd": "TEST00000002", "merchant_uid": "mid_1626832370920",
+     "name": "GX 1 회권", "pay_method": "card",
+      "pg": "html5_inicis", "pid": "PRO00000021", 
+      "sdate": "2021-07-21", "userCode": "imp19424728"} ]
+*/
+
 import React, {useState, useEffect, useCallback, useRef} from 'react';
 import {
   View,
@@ -55,7 +65,7 @@ function HomeScreen(props) {
   const onWebvieMessage = event => {
     const data = event.nativeEvent.data;
     const {k, v} = JSON.parse(data);
-    console.log('onMessage.', event.nativeEvent.data);
+    // console.log('onMessage >>> ', event.nativeEvent.data);
 
     // 스마트키
     if (k === 'smartkey' && v === 'true') {
@@ -68,8 +78,8 @@ function HomeScreen(props) {
     }
 
     // 카드결제 시작
-    if( k=== 'pay_start') {
-      pr( v );
+    if( k === 'pay_start') {      
+      onCardPayScreen(v);
     }
   };
 
@@ -101,8 +111,8 @@ function HomeScreen(props) {
     };
   }, []);
 
-  const onCardPayScreen = () => {    
-    navigation.navigate('CardPay');
+  const onCardPayScreen = params => {    
+    navigation.navigate('CardPay', params);
   }  
 
   const onCardPayResultScreen = () => {    

@@ -46,17 +46,26 @@ const Container = styled.SafeAreaView`
 
 function HomeScreen(props) {
   const navigation = useNavigation();
-
+    
+  const response = navigation.state.params ? navigation.state.params : '';    
+  // pr(response.userCode);
+  // pr(response.merchant_uid);
+  // pr(response.amount);
+  // pr(response.name);
+  // pr(response.buyer_name);
+  pr(response.tierCode);
+  
   const onClose = () => {
     navigation.navigate('Home', {screen: 'card', action: 'close'});
   };
 
   /* 데이타 세팅 */
-  const merchant_uid = 'mid_'+new Date().getTime();
-  const iamport = 'imp19424728';
-  const amount = 100;
-  const buyer_name = '홍길동';
-  const name = '상품명';
+  const merchant_uid = response.merchant_uid;
+  const iamport = response.userCode;
+  const amount = response.amount;
+  const buyer_name = response.buyer_name;
+  const name = response.name;
+  const tierCode = response.tierCode
 
   /* [필수입력] 결제 종료 후, 라우터를 변경하고 결과를 전달합니다. */
   function callback(response) {
@@ -81,13 +90,13 @@ function HomeScreen(props) {
 
   return (
     <Container>
-      {/* <IMP.Payment
+      <IMP.Payment
         userCode={iamport} // 가맹점 식별코드
         loading={<Loading />} // 웹뷰 로딩 컴포넌트
         data={data} // 결제 데이터
         callback={callback} // 결제 종료 후 콜백
-        tierCode={store.tier_code} // 하위가맹점 코드
-      /> */}
+        tierCode={store.tierCode} // 하위가맹점 코드
+      />
     </Container>
   );
 }
