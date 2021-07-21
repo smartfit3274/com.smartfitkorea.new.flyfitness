@@ -14,7 +14,6 @@ import {
 import ReactNativeBiometrics from 'react-native-biometrics';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Axios from 'axios';
 import cfg from './data/cfg.json';
 import styled from 'styled-components/native';
 import IMP from 'iamport-react-native';
@@ -22,9 +21,9 @@ import Loading from './Loading';
 import {WebView} from 'react-native-webview';
 import {useSelector, useDispatch} from 'react-redux';
 import uuid from 'uuid';
-import GetApiHost from '../lib/GetApiHost';
 import axios from 'axios';
 import pr from '../lib/pr';
+import store from '../lib/Store';
 
 var access_token = '';
 
@@ -42,9 +41,9 @@ const ListItem = styled.View`
 `;
 
 function CardPayResultScreen() {
-  const host = GetApiHost();
+  const host = store.api;
   const navigation = useNavigation();
-
+  
   // 카드결제창이 닫힐때 처리
   const {response} = navigation.state.params ? navigation.state.params : '';
   const {imp_success, success, imp_uid, merchant_uid, error_msg,
@@ -57,7 +56,7 @@ function CardPayResultScreen() {
   pid,
   sdate
   } = response;
-  // console.log(response); 
+  console.log(response); 
 
   if (false) {
     const imp_success = 'false';
@@ -83,8 +82,8 @@ function CardPayResultScreen() {
 
   // 카드결제 완료처리
   const onResult = async() => {
-    pr('onResult()');
-    pr(host);
+    // pr('onResult()');
+    // pr(host);
     await axios.post(host + "/gympass/cardpay_result", {
       cid:cid,
       couponSeq:couponSeq,

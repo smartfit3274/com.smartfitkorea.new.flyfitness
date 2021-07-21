@@ -51,14 +51,14 @@ const Container = styled.SafeAreaView`
 // 웹뷰처리
 
 function HomeScreen(props) {
-  const navigation = useNavigation();
-  const {uri, cid} = store;
+  const navigation = useNavigation();  
   const [smartkey, setSmartKey] = useState(false); // 스마트키 확인
   const [uuid, setUUID] = useState(''); // 비콘 확인
   const webViewRef = useRef();  
   const device = DeviceInfo.getBrand() + ' ' + DeviceInfo.getModel(); // 휴대폰 정보
   const sn = DeviceInfo.getUniqueId();  
-
+  const [uri, setUri] = useState('');  
+  
   // 웹뷰 통신
   // loaded : true - 페이지 로딩완료
   // smartkey : true - 출입키 오류
@@ -116,15 +116,22 @@ function HomeScreen(props) {
   }  
 
   const onCardPayResultScreen = () => {    
-    navigation.navigate('CardPayResult');
+    navigation.navigate('CardPayResult', {response: { 
+      imp_success:'false',
+      success: 'false',
+      imp_uid:'err_'+new Date().getTime(),
+      merchant_uid: 'err_'+new Date().getTime(),
+      error_msg: '결제창 테스트',
+      cid:store.cid,
+    } });
   }  
 
-  // 카드결제창이 닫힐때 처리
-  const { screen, action } = ( navigation.state.params ) ? navigation.state.params:"";
-  if(screen !== undefined && action !== undefined) {
-    pr('screen:'+screen);
-    pr('action:'+action);
-  }
+  // 홈페이지 로드 : 처음 & 카드결제창 닫힐때
+  // 주소를 변경해서 페이지 리로드
+  const { pop_id } = ( navigation.state.params ) ? navigation.state.params:"";  
+  useEffect(()=>{        
+    setUri(store.web+'?cid='+store.cid+'&pop_id='+pop_id);            
+  },[pop_id]);
 
   return (
     <Container>
@@ -143,9 +150,10 @@ function HomeScreen(props) {
           onPress={() => onPostMessage({k: 'beacon', v: 'on'})}
         />
       </View> */}
+      
       <WebView
         ref={webViewRef}
-        source={{uri: uri + '?cid='+cid}}
+        source={{uri: uri}}
         onMessage={onWebvieMessage}
         javaScriptEnabled={true}
         scrollEnabled={true}
