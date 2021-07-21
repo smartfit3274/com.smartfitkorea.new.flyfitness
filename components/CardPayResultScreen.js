@@ -23,6 +23,8 @@ import {WebView} from 'react-native-webview';
 import {useSelector, useDispatch} from 'react-redux';
 import uuid from 'uuid';
 import GetApiHost from '../lib/GetApiHost';
+import axios from 'axios';
+import pr from '../lib/pr';
 
 var access_token = '';
 
@@ -40,12 +42,22 @@ const ListItem = styled.View`
 `;
 
 function CardPayResultScreen() {
-  const api_host = GetApiHost();
+  const host = GetApiHost();
   const navigation = useNavigation();
 
   // 카드결제창이 닫힐때 처리
   const {response} = navigation.state.params ? navigation.state.params : '';
-  const {imp_success, success, imp_uid, merchant_uid, error_msg} = response;
+  const {imp_success, success, imp_uid, merchant_uid, error_msg,
+  cid,
+  couponSeq,
+  mcd,
+  paid_amount,
+  buyer_name,
+  name,
+  pid,
+  sdate
+  } = response;
+  // console.log(response); 
 
   if (false) {
     const imp_success = 'false';
@@ -54,7 +66,7 @@ function CardPayResultScreen() {
     const merchant_uid = '';
     const error_msg = '';
   }
-
+  
   // [WARNING: 이해를 돕기 위한 것일 뿐, imp_success 또는 success 파라미터로 결제 성공 여부를 장담할 수 없습니다.]
   // 아임포트 서버로 결제내역 조회(GET /payments/${imp_uid})를 통해 그 응답(status)에 따라 결제 성공 여부를 판단하세요.
   const isSuccess = !(
@@ -70,7 +82,26 @@ function CardPayResultScreen() {
   const {wrapper, title, listContainer, list, label, value} = resultStyles;
 
   // 카드결제 완료처리
-  console.log('카드결제완료');
+  const onResult = async() => {
+    pr('onResult()');
+    pr(host);
+    await axios.post(host + "/gympass/cardpay_result", {
+      cid:cid,
+      couponSeq:couponSeq,
+      merchant_uid:merchant_uid,
+      success:imp_success,
+      error_msg:error_msg,
+      paid_amount:paid_amount,
+      imp_uid:imp_uid,
+      mcd:mcd,
+      buyer_name:buyer_name,
+      pid:pid,
+      sdate: sdate,
+    });
+  }
+  useEffect(()=>{
+    onResult();
+  },[]);  
 
   return (
     <View style={wrapper}>

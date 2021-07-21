@@ -128,10 +128,12 @@ function HomeScreen(props) {
 
   return (
     <Container>
-      <View>
+      
+      {/* <View>
         <Button title="결제창" onPress={onCardPayScreen}></Button>
         <Button title="완료창" onPress={onCardPayResultScreen}></Button>
-      </View>
+      </View> */}
+
       {/* <View>
         <Text style={{color: 'white'}}>
           {smartkey ? <Text>Key:Y</Text> : <Text>key:N</Text>}
