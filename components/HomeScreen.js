@@ -36,7 +36,7 @@ import {
   StatusBar,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {initPush} from '../lib/Fcm';
+import {initPush, AddForegroundListener} from '../lib/Fcm';
 
 const Container = styled.SafeAreaView`
   background-color: #111;
@@ -144,6 +144,7 @@ function HomeScreen(props) {
   const onRegisterFcm = params => {    
     const {mcd} = params;    
     initPush({mcd:mcd});
+    AddForegroundListener(); // 푸시 리스너 등록
   };
 
   return (
