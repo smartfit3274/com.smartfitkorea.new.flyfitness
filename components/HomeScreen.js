@@ -141,8 +141,8 @@ function HomeScreen(props) {
   }, [pop_id]);
 
   // 푸시서비스 시작
-  const onRegisterFcm = params => {
-    const {mcd} = params;
+  const onRegisterFcm = params => {    
+    const {mcd} = params;    
     initPush({mcd:mcd});
   };
 
