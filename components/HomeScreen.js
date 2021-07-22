@@ -116,6 +116,11 @@ function HomeScreen(props) {
     };
   }, []);
 
+  // 포그라운드 리스너
+  useEffect(()=>{
+    AddForegroundListener(); // 푸시 리스너 등록
+  },[]);  
+
   const onCardPayScreen = params => {
     navigation.navigate('CardPay', params);
   };
@@ -143,8 +148,7 @@ function HomeScreen(props) {
   // 푸시서비스 시작
   const onRegisterFcm = params => {    
     const {mcd} = params;    
-    initPush({mcd:mcd});
-    AddForegroundListener(); // 푸시 리스너 등록
+    initPush({mcd:mcd});    
   };
 
   return (
