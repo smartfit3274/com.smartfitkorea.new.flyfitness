@@ -41,3 +41,7 @@ https://material.io/resources/icons/?icon=keyboard_arrow_left&style=baseline
     - version : 앱 배포 버전
     - api : api 주소
     - web : web 주소
+
+## 릴리즈 빌드
+react-native run-android --variant=release
+ios > xcode scheme > release build
