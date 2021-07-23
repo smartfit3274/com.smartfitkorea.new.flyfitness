@@ -36,7 +36,13 @@ import {
   StatusBar,
 } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {initPush, AddForegroundListener} from '../lib/Fcm';
+import {
+  initPush,
+  AddForegroundListener,
+  getBadgeCount,
+  resetBadgeCount,
+} from '../lib/Fcm';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const Container = styled.SafeAreaView`
   background-color: #111;
@@ -84,7 +90,12 @@ function HomeScreen(props) {
 
     // 회원코드 전달되면 푸시 디바이스 등록
     if (k === 'mcd') {
-      onRegisterFcm({mcd:v});
+      onRegisterFcm({mcd: v});
+    }
+
+    // 배찌 초기화
+    if (k === 'badge') {
+      resetBadgeCount();
     }
   };
 
@@ -116,10 +127,11 @@ function HomeScreen(props) {
     };
   }, []);
 
-  // 포그라운드 리스너
-  useEffect(()=>{
-    AddForegroundListener(); // 푸시 리스너 등록
-  },[]);  
+  // 포그라운드 리스너 등록
+  // 웹뷰통신
+  useEffect(() => {
+    AddForegroundListener({onPostMessage: onPostMessage});
+  }, []);
 
   const onCardPayScreen = params => {
     navigation.navigate('CardPay', params);
@@ -146,10 +158,18 @@ function HomeScreen(props) {
   }, [pop_id]);
 
   // 푸시서비스 시작
-  const onRegisterFcm = params => {    
-    const {mcd} = params;    
-    initPush({mcd:mcd});    
+  const onRegisterFcm = params => {
+    const {mcd} = params;
+    initPush({mcd: mcd});
   };
+
+  // 시작시 푸시 카운트 전송
+  useEffect(() => {
+    setTimeout(async () => {
+      const count = await getBadgeCount();
+      onPostMessage({k: 'badge', v: count});
+    }, 3000);
+  }, []);
 
   return (
     <Container>
