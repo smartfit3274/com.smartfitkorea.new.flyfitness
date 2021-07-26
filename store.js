@@ -5,25 +5,25 @@ import { createStore } from 'redux'
 
 const INITIAL_STATE = {
   data: {
-    url     : "",      
-    mode    : "server",
-    local   : "http://192.168.76.51:80",   
-    server  : "https://api.smartg.kr",
-    sid     : "smartgym",    
-    cid     : "CT18T25131655.yADF0",
-    name    : "스마트짐 메트로자이점",
-    debug_beacon_local   : "N",
-    dubug_beacon_uuid: "0b2b0848-205f-11e9-ab14-820316983006",
-    debug_beacon_distance : "N",
-    debug_beacon_console : "N",
-    debug_door : "33",
-    app_version : "1.7.2",
-    store_id_android: "com.smartfitkorea.metroxi",
-    store_id_ios : "1534844508",
-    iamport:"imp76426114",
-    tier_code:"G08"    
-  }
-}
+    url: '',
+    mode: 'server',
+    local: 'http://192.168.76.51:80',
+    server: 'https://api.smartg.kr',
+    sid: 'smartgym',
+    cid: 'CT18T25131655.yADF0',
+    name: '두써킷 정관점',
+    debug_beacon_local: 'N',
+    dubug_beacon_uuid: '0b2b0848-205f-11e9-ab14-820316983006',
+    debug_beacon_distance: 'N',
+    debug_beacon_console: 'N',
+    debug_door: '33',
+    app_version: '1.7.2',
+    store_id_android: 'com.smartfitkorea.metroxi',
+    store_id_ios: '1534844508',
+    iamport: 'imp76426114',
+    tier_code: 'G08',
+  },
+};
 
 // iamport:"imp76426114"
 
