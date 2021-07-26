@@ -69,9 +69,10 @@ function HomeScreen(props) {
   // loaded : true - 페이지 로딩완료
   // smartkey : true - 출입키 오류
   const onWebvieMessage = event => {
-    const data = event.nativeEvent.data;
-    const {k, v} = JSON.parse(data);
+    
     // console.log('onMessage >>> ', event.nativeEvent.data);
+    const data = event.nativeEvent.data;
+    const {k, v} = JSON.parse(data);    
 
     // 스마트키
     if (k === 'smartkey' && v === 'true') {
@@ -113,7 +114,9 @@ function HomeScreen(props) {
   };
 
   // 비콘찾기 시작
-  useEffect(() => {
+  useEffect(() => {    
+    pr('smartkey='+smartkey);
+    pr('uuid='+uuid);
     if (smartkey === true && uuid !== '') {
       startBeacon({uuid: uuid, onPostMessage: onPostMessage});
     }
