@@ -12,6 +12,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		4095927A140C1825D69BEF2D /* libPods-smartpass.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5231A288E4907A400FCB06ED /* libPods-smartpass.a */; };
+		BA7C505E26AFF21500E09E38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BA7C505D26AFF21500E09E38 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		5507B06F95D7C1759B608B27 /* Pods-smartpass-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartpass-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-smartpass-tvOSTests/Pods-smartpass-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		6A76FF92BD738498B7EDD315 /* Pods-smartpassTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartpassTests.debug.xcconfig"; path = "Target Support Files/Pods-smartpassTests/Pods-smartpassTests.debug.xcconfig"; sourceTree = "<group>"; };
 		BA59056226981F9F00364084 /* 짐패스 정관점.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = "짐패스 정관점.entitlements"; path = "smartpass/짐패스 정관점.entitlements"; sourceTree = "<group>"; };
+		BA7C505D26AFF21500E09E38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		BCBFC71178BDE4E10A0F0F80 /* libPods-smartpass-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-smartpass-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C202DE21D96AB5BD8915F543 /* Pods-smartpass-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartpass-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-smartpass-tvOS/Pods-smartpass-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		C995E47B242FED0600E8AAFF /* Fontisto.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Fontisto.ttf; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				BA7C505D26AFF21500E09E38 /* GoogleService-Info.plist */,
 				C995E4EE2430023A00E8AAFF /* Fonts */,
 				13B07FAE1A68108700A75B9A /* smartpass */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -366,6 +369,7 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
+				BA7C505E26AFF21500E09E38 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
