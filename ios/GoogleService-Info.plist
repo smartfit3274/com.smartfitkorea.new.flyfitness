@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>911025684470-dbp5hnucg27h9qd2h251l4a8l69ianvj.apps.googleusercontent.com</string>
+	<string>911025684470-vajtj2p1rv4n9vshocv19anuptd0qnqc.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.911025684470-dbp5hnucg27h9qd2h251l4a8l69ianvj</string>
+	<string>com.googleusercontent.apps.911025684470-vajtj2p1rv4n9vshocv19anuptd0qnqc</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAmCz1aJ9gXUXeK9gELuUpPJN0xihR0sHU</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.smartfitkorea.docircuit</string>
+	<string>com.smartfitkorea.gympass</string>
 	<key>PROJECT_ID</key>
 	<string>smartgym-gooseo</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:911025684470:ios:1d504baaf62ba41a0d11d7</string>
+	<string>1:911025684470:ios:777e974bd5d3c1ce0d11d7</string>
 	<key>DATABASE_URL</key>
 	<string>https://smartgym-gooseo.firebaseio.com</string>
 </dict>
