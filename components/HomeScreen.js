@@ -157,6 +157,7 @@ function HomeScreen(props) {
   // 주소를 변경해서 페이지 리로드
   const {pop_id} = navigation.state.params ? navigation.state.params : '';
   useEffect(() => {
+    // console.log(store.web + '?cid=' + store.cid + '&pop_id=' + pop_id);
     setUri(store.web + '?cid=' + store.cid + '&pop_id=' + pop_id);
   }, [pop_id]);
 
