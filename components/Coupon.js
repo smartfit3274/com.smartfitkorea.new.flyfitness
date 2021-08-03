@@ -6,7 +6,7 @@ import { ViewPropTypes, Platform } from 'react-native';
 import { pr } from '../lib/pr';
 import AsyncStorage from '@react-native-community/async-storage';
 import Axios from 'axios';
-import GetApiHost from '../lib/GetApiHost';
+import store from '../lib/Store';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const Container = styled.View`
@@ -23,7 +23,7 @@ export default function Coupon(props) {
 
     const [val, setVal] = useState('');
     const [loaded, setLoaded] = useState(false);
-    const api_host = GetApiHost();
+    const api_host = store.api;
     let cid = '';
     let token = '';
     let result;

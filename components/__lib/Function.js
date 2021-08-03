@@ -4,14 +4,14 @@ import axios from 'axios';
 import { Alert } from 'react-native';
 import NetInfo from "@react-native-community/netinfo";
 import DeviceInfo from 'react-native-device-info';
-import GetApiHost from '../../lib/GetApiHost';
+import store from '../lib/Store';
 import { pr } from "../../lib/pr";
 
 let result;
 
 // 문열기 처리
 export const open_door = async (params) => {
-    const api_host = GetApiHost();
+    const api_host = store.api;
     const { sid, cid, token, url, beacon_id } = params;
     const data = {
         sid: sid,

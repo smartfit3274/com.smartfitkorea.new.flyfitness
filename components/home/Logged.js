@@ -44,7 +44,7 @@ import { getBottomSpace } from "react-native-iphone-x-helper";
 import { $Header } from '../$Header';
 import { initPush } from '../../lib/Fcm';
 import NoticeIcon from '../NoticeIcon';
-import GetApiHost from '../../lib/GetApiHost';
+import store from '../lib/Store';
 import { pr } from '../../lib/pr';
 
 
@@ -241,7 +241,7 @@ function Logged(props) {
 
     let result;
     let beacion_id = '';
-    const api_host = GetApiHost();    
+    const api_host = store.api;
 
     // 회원정보 로딩
     const member_one = () => {
