@@ -1,4 +1,4 @@
-package com.smartfitkorea.docircuit;
+package com.smartfitkorea.flyfitness;
 
 import android.app.Application;
 import android.content.Context;

@@ -129,7 +129,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.smartfitkorea.docircuit"
+        applicationId "com.smartfitkorea.flyfitness"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 10706

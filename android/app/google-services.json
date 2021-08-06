@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:911025684470:android:e020e9c5db41de8f0d11d7",
         "android_client_info": {
-          "package_name": "com.smartfitkorea.dadaepo"
+          "package_name": "com.smartfitkorea.flyfitness"
         }
       },
       "oauth_client": [
@@ -47,6 +47,78 @@
         "mobilesdk_app_id": "1:911025684470:android:5bfaf9aae4a0d3c50d11d7",
         "android_client_info": {
           "package_name": "com.smartfitkorea.docircuit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:4d356e0ee429cc4e0d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.fitvely"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrrtIuCwJ0ILf6gHIRRd6Rme-U6_k0AIg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "911025684470-p5mdbg9eiqa8af8hikg5jmmpd51jfbsl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "911025684470-82f2qpp4veepd86usean97ec12vdnhii.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smartfitkorea.gooseo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:911025684470:android:afe7bc60c7811fde0d11d7",
+        "android_client_info": {
+          "package_name": "com.smartfitkorea.flyfitness"
         }
       },
       "oauth_client": [
